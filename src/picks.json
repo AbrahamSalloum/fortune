@@ -1,0 +1,16 @@
+[{
+    "id": "0",
+    "ticker": "GOOG",
+    "units": "11"
+},
+{
+    "id": "1",
+    "ticker": "TSLA",
+    "units": "22"
+},
+{
+    "id": "2",
+    "ticker": "MSFT",
+    "units": "33"
+}
+]

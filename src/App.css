@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  padding-left: 200px;
+  padding-right: 200px;
 }
 
 .App-logo {
@@ -11,6 +13,94 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.Main-Box {
+  border: 1px solid black;
+}
+
+.wrapper-article-content {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.article-content{
+  border: 1px solid black;
+}
+
+.AddHeader {
+  min-height: 150px;
+  background-color: #adc6d2;
+}
+
+.flex-container {
+  border: 1px slategray solid;
+  display: grid;
+  flex-direction: column;
+  justify-content: stretch;
+  align-self: center;
+}
+
+.addBtn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.ticker {
+  padding: 15px;
+  border: 1px slategray solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center ;
+  justify-content: space-around;
+}
+
+.header {
+  background-color: grey !important;
+  font-weight: 900;
+  min-width: 30px;
+  align-items: stretch;
+}
+
+.item {
+  align-items: stretch;
+  min-width: 30px;
+  max-width: 30px;
+}
+
+.val-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.Liquidity {
+  background: #50ac98;
+}
+
+div.flex-container > div:nth-of-type(odd) {
+    background: #50ac98;
+}
+
+div.flex-container > div:nth-of-type(even) {
+    background: darksalmon;
+}
+
+.price-span {
+  border: 1px solid black;
+}
+
+.ticker-item {
+  border: 1px solid black;
+  border-top: none;
+  display: flex;
+  justify-content: space-around;
 }
 
 .App-header {
@@ -27,6 +117,8 @@
 .App-link {
   color: #61dafb;
 }
+
+
 
 @keyframes App-logo-spin {
   from {
