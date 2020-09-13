@@ -14,16 +14,16 @@ const LiquidityBox = (summary, classes) => {
   
     return(
       <Card className={classes.cardroot} variant="outlined">
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
-      Liquidity
-      </Typography>
-    <CardContent>  
-      <div className="val-box">
-        <span>currentRatio: {summary["summary"][0]["financialData"]["currentRatio"]["fmt"]}</span>
-        <span>quickRatio: {summary["summary"][0]["financialData"]["quickRatio"]["fmt"]}</span>
-        <span>debtToEquity: {summary["summary"][0]["financialData"]["debtToEquity"]["fmt"]}</span>
-      </div>
-      </CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          Liquidity
+        </Typography>
+        <CardContent>  
+          <div className="val-box">
+            <span>currentRatio: {summary["summary"][0]["financialData"]["currentRatio"]["fmt"]}</span>
+            <span>quickRatio: {summary["summary"][0]["financialData"]["quickRatio"]["fmt"]}</span>
+            <span>debtToEquity: {summary["summary"][0]["financialData"]["debtToEquity"]["fmt"]}</span>
+          </div>
+        </CardContent>
       </Card>      
     ) 
   }

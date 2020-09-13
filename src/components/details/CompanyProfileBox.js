@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -15,13 +14,13 @@ const CompanyProfileBox = (summary, classes) => {
   
     return (
       <Card className={classes.profilebox} variant="outlined">
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
-      Company Profile
-    </Typography>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+        Company Profile
+        </Typography>
         <CardContent>
-        {
-          summary["summary"][0]["summaryProfile"]['longBusinessSummary'] 
-        }
+          {
+            summary["summary"][0]["summaryProfile"]['longBusinessSummary'] 
+          }
         </CardContent>
       </Card>
     )

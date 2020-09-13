@@ -26,27 +26,26 @@ const arrangedata = (plotdata, ticker) => {
   const CloseChartBox = ({plotdata, ticker, getXaxis, classes}) => (
     <Card className={classes.cardroot} variant="outlined">
       <Typography className={classes.title} color="textSecondary" gutterBottom>
-    Chart
-    </Typography>
+        Chart
+      </Typography>
       <CardContent>
-    <LineChart  width={550} height={300} data={arrangedata(plotdata, ticker)}>
-      <XAxis dataKey="timestamp"  angle={5} interval="preserveStartEnd"/>
-      <YAxis domain={['auto', 'auto']}/>
-      <Tooltip/>
-      <CartesianGrid strokeDasharray="3 3"/>
-      <Line type="monotone" dataKey="close" stroke="#8884d8" activeDot={{r: 8}}/>
-      
-    </LineChart>
-    <ButtonGroup color="primary" aria-label="outlined primary Button group">
-      <Button onClick={() => {getXaxis("1d", ticker)}}>1 day</Button>
-      <Button onClick={() => {getXaxis("5d", ticker)}}>5 day</Button>
-      <Button onClick={() => {getXaxis("3mo", ticker)}}>3 Month</Button>
-      <Button onClick={() => {getXaxis("6mo", ticker)}}>6 Month</Button>
-      <Button onClick={() => {getXaxis("1y", ticker)}}>1 year</Button>
-      <Button onClick={() => {getXaxis("5y", ticker)}}>5 year</Button>
-      <Button onClick={() => {getXaxis("max", ticker)}}>Max</Button>
-     </ButtonGroup> 
-     </CardContent>
+        <LineChart  width={550} height={300} data={arrangedata(plotdata, ticker)}>
+          <XAxis dataKey="timestamp"  angle={5} interval="preserveStartEnd"/>
+          <YAxis domain={['auto', 'auto']}/>
+          <Tooltip/>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <Line type="monotone" dataKey="close" stroke="#8884d8" activeDot={{r: 8}}/>
+        </LineChart>
+        <ButtonGroup color="primary" aria-label="outlined primary Button group">
+          <Button onClick={() => {getXaxis("1d", ticker)}}>1 day</Button>
+          <Button onClick={() => {getXaxis("5d", ticker)}}>5 day</Button>
+          <Button onClick={() => {getXaxis("3mo", ticker)}}>3 Month</Button>
+          <Button onClick={() => {getXaxis("6mo", ticker)}}>6 Month</Button>
+          <Button onClick={() => {getXaxis("1y", ticker)}}>1 year</Button>
+          <Button onClick={() => {getXaxis("5y", ticker)}}>5 year</Button>
+          <Button onClick={() => {getXaxis("max", ticker)}}>Max</Button>
+        </ButtonGroup> 
+      </CardContent>
     </Card>
   )
 

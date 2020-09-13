@@ -17,15 +17,24 @@ const styles = {
   root: {
    
   },
+
   root1: {
    
   },
+
   cardroot: {
     
   },
+
   profilebox: {
     
   },
+
+  statsbox: {
+    minHieght: 250,
+    color: "red"
+  },
+
   box:{
     
   },

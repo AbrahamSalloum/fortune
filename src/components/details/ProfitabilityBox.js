@@ -12,18 +12,18 @@ const ProfitabilityBox = (summary, classes) => {
     }
   
     return(
-    <Card className={classes.cardroot} variant="outlined">
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
-      Profitability
-      </Typography>
-    <CardContent>  
-      <div className="val-box">
-        <span>returnOnEquity: {summary["summary"][0]["financialData"]["returnOnEquity"]["fmt"]}</span>
-        <span>returnOnAssets: {summary["summary"][0]["financialData"]["returnOnAssets"]["fmt"]}</span>
-        <span>profitMargins: {summary["summary"][0]["financialData"]["profitMargins"]["fmt"]}</span>
-        <span>grossMargins: {summary["summary"][0]["financialData"]["grossMargins"]["fmt"]}</span>
-      </div>
-      </CardContent>
+      <Card className={classes.cardroot} variant="outlined">
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          Profitability
+        </Typography>
+        <CardContent>  
+          <div className="val-box">
+            <span>returnOnEquity: {summary["summary"][0]["financialData"]["returnOnEquity"]["fmt"]}</span>
+            <span>returnOnAssets: {summary["summary"][0]["financialData"]["returnOnAssets"]["fmt"]}</span>
+            <span>profitMargins: {summary["summary"][0]["financialData"]["profitMargins"]["fmt"]}</span>
+            <span>grossMargins: {summary["summary"][0]["financialData"]["grossMargins"]["fmt"]}</span>
+          </div>
+        </CardContent>
       </Card>    
     ) 
   }
