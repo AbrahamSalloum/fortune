@@ -12,6 +12,12 @@ import ValuationBox from './details/ValuationBox'
 import FinSummaryBox from './details/FinSummaryBox'
 import CompanyProfileBox from './details/CompanyProfileBox'
 import CloseChartBox from './details/CloseChartBox'
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = {
   root: {
@@ -55,11 +61,26 @@ const styles = {
 }
 
 
-const DetailsHeader = ({ticker}) => (
-  <div>
-    {ticker}
-    <Link to="/">Go Back</Link>
-  </div>
+const DetailsHeader = ({ticker, classes}) => (
+  // <div>
+  //   {ticker}
+  //   
+  // </div>
+  <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+        <Link to="/">
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <KeyboardBackspaceSharpIcon />
+          </IconButton>
+          </Link>
+          <Typography variant="h6" className={classes.title}>
+            Details
+          </Typography>
+          <Button color="inherit">{ticker}</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
 )
 
 
@@ -79,7 +100,7 @@ class Details extends React.Component {
     const { classes } = this.props;
     return(
       <Container maxWidth="lg" className={classes.Container}>
-        <DetailsHeader ticker={this.props.match.params.ticker} />
+        <DetailsHeader classes={classes} ticker={this.props.match.params.ticker} />
         <Grid container spacing={1} >
           <Grid container item xs={12} spacing={1}>
             <Grid item xs={6}>  
