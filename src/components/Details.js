@@ -21,19 +21,21 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = {
   root: {
-   
+
   },
 
   root1: {
-   
+
   },
 
   cardroot: {
-    
+
+    display: 'flex',
+    height: "100%"
   },
 
   profilebox: {
-    
+
   },
 
   statsbox: {
@@ -42,10 +44,10 @@ const styles = {
   },
 
   box:{
-    
+
   },
 
-  boxnews: {  
+  boxnews: {
 
   },
 
@@ -54,18 +56,13 @@ const styles = {
   },
 
   Container: {
-    
+
   }
-
-
 }
 
 
 const DetailsHeader = ({ticker, classes}) => (
-  // <div>
-  //   {ticker}
-  //   
-  // </div>
+
   <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
@@ -85,7 +82,7 @@ const DetailsHeader = ({ticker, classes}) => (
 
 
 class Details extends React.Component {
- 
+
   componentDidMount(){
     this.props.getnews(this.props.match.params.ticker)
     this.props.getchart("1d", this.props.match.params.ticker)
@@ -95,28 +92,45 @@ class Details extends React.Component {
   getXaxis = (time, ticker) => {
     this.props.getchart(time, ticker)
   }
-  
+
+
+
   render(){
     const { classes } = this.props;
+    while (!this.props.summary.length) {
+      return "loading..."
+    }
+
     return(
       <Container maxWidth="lg" className={classes.Container}>
         <DetailsHeader classes={classes} ticker={this.props.match.params.ticker} />
-        <Grid container spacing={1} >
-          <Grid container item xs={12} spacing={1}>
-            <Grid item xs={6}>  
+        <Grid container spacing={2} alignItems="stretch">
+          <Grid container item item xs={12} spacing={2} alignItems="stretch">
+            <Grid item xs={12} sm={6}>
               <CloseChartBox classes={classes} getXaxis = {this.getXaxis} plotdata={this.props.plotdata} ticker={this.props.match.params.ticker}/>
             </Grid>
-            <Grid item xs={6}>
+            <Grid xs={12} sm={6}>
               <CompanyProfileBox summary={this.props.summary} classes={classes}/>
-            </Grid>  
+            </Grid>
           </Grid>
-        <Grid container spacing={1} direction="row" justify="space-evenly" alignItems="center">  
-          <FinSummaryBox classes={classes} stats={this.props.price} ticker={this.props.match.params.ticker} />
-          <ValuationBox summary={this.props.summary} classes={classes} />
-          <ProfitabilityBox summary={this.props.summary} classes={classes}/>
-          <LiquidityBox summary={this.props.summary} classes={classes}/>
-        </Grid>  
-          <TickerNewsBox classes={classes} newslist={this.props.newslist} ticker={this.props.match.params.ticker} />
+          <Grid xs={12} container spacing={2} direction="row" justify="space-evenly" alignItems="stretch">
+            <Grid xs={12} sm={3}>
+              <FinSummaryBox classes={classes} stats={this.props.price} ticker={this.props.match.params.ticker} />
+            </Grid>
+            <Grid xs={12} sm={3}>
+              <ValuationBox summary={this.props.summary} classes={classes} />
+            </Grid>
+            <Grid xs={12} sm={3}>
+              <ProfitabilityBox summary={this.props.summary} classes={classes}/>
+            </Grid>
+            <Grid xs={12} sm={3}>
+              <LiquidityBox summary={this.props.summary} classes={classes}/>
+            </Grid>
+          </Grid>
+          <Grid xs={12} container spacing={2} alignItems="stretch">
+            <TickerNewsBox classes={classes} newslist={this.props.newslist} ticker={this.props.match.params.ticker} />
+        </Grid>
+
         </Grid>
       </Container>
     )

@@ -8,23 +8,19 @@ import Typography from '@material-ui/core/Typography';
 
 const CompanyProfileBox = (summary, classes) => {
 
-    while(!summary["summary"].length){
-      return "loading..." 
-    }
-  
     return (
-      <Card className={classes.profilebox} variant="outlined">
+      <Card className={classes.profilebox}>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
         Company Profile
         </Typography>
         <CardContent>
           {
-            summary["summary"][0]["summaryProfile"]['longBusinessSummary'] 
+            summary["summary"][0]["summaryProfile"]['longBusinessSummary']
           }
         </CardContent>
       </Card>
     )
-  
+
   }
 
   export default CompanyProfileBox

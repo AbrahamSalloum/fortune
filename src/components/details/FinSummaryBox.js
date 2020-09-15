@@ -11,6 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
 const Summary = ({item}) => (
   <TableBody>
       <TableRow>
@@ -32,10 +33,12 @@ const Summary = ({item}) => (
   </TableBody>
   )
 
-  const FinSummaryBox = ({stats, ticker, classes}) => (
-    <Card className={classes.cardroot} variant="outlined">
+const FinSummaryBox = ({classes, stats, ticker}) => {
+
+    return (
+    <Card className={classes.cardroot}>
       <Typography className={classes.title} color="textSecondary" gutterBottom>
-        Company Stats
+        CompanyStats
       </Typography>
       <CardContent>
         <TableContainer component={Paper}>
@@ -58,6 +61,7 @@ const Summary = ({item}) => (
         </TableContainer>
       </CardContent>
     </Card>
-  )
+    )
+  }
 
   export default FinSummaryBox;

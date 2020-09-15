@@ -19,29 +19,29 @@ const NewsItems = ({title, link, summary, publisher, key}) => (
       <TableCell>{summary.slice(0, 150)}...</TableCell>
     </TableRow>
   )
-  
+
   const TickerNewsBox = ({newslist, ticker, classes}) => (
-    <Card className={classes.cardroot} variant="outlined">
+    <Card className={classes.cardroot}>
       <Typography className={classes.title} color="textSecondary" gutterBottom>
         News
       </Typography>
-      <CardContent>  
+      <CardContent>
         <div className="wrapper-article-content">
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
                   <TableRow>
-                    <TableCell>publisher</TableCell>  
+                    <TableCell>publisher</TableCell>
                     <TableCell>title</TableCell>
                     <TableCell>Summary</TableCell>
                   </TableRow>
               </TableHead>
-              <TableBody> 
+              <TableBody>
                 {
                   newslist.map((i) => {
                     if(i.ticker === ticker){
                       const newsl = i.news
-                      return newsl.map(n => <NewsItems {...n}/>) 
+                      return newsl.map(n => <NewsItems {...n}/>)
                     }
                   })
                 }
@@ -49,7 +49,7 @@ const NewsItems = ({title, link, summary, publisher, key}) => (
             </Table>
           </TableContainer>
       </div>
-      </CardContent> 
+      </CardContent>
     </Card>
   )
 

@@ -15,12 +15,8 @@ import Paper from '@material-ui/core/Paper';
 
 const ValuationBox = (summary, classes) => {
 
-    while(!summary["summary"].length){
-      return "loading..."
-    }
-
     return (
-      <Card className={classes.cardroot} variant="outlined">
+      <Card className={classes.cardroot}>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
             Valuation
         </Typography>
@@ -35,7 +31,7 @@ const ValuationBox = (summary, classes) => {
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>trailing PE </TableCell>
+                  <TableCell>Trailing PE </TableCell>
                   <TableCell>{summary["summary"][0]["summaryDetail"]["trailingPE"] ? summary["summary"][0]["summaryDetail"]["trailingPE"]["fmt"] : "NA"}</TableCell>
                 </TableRow>
                 <TableRow>
@@ -43,11 +39,11 @@ const ValuationBox = (summary, classes) => {
                   <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["pegRatio"] ? summary["summary"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"] : "NA"}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>priceToBook</TableCell>
+                  <TableCell>Price to Book</TableCell>
                   <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["priceToBook"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"] : "NA"}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Price To Sales Trailing 12Months</TableCell>
+                  <TableCell>Price To Sales (12M)</TableCell>
                   <TableCell> {summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"]["fmt"] : "NA"}</TableCell>
                 </TableRow>
                 <TableRow>

@@ -13,12 +13,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const ProfitabilityBox = (summary, classes) => {
-    while(!summary["summary"].length){
-      return "loading..."
-    }
 
     return(
-      <Card className={classes.cardroot} variant="outlined">
+      <Card className={classes.cardroot}>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           Profitability
         </Typography>
