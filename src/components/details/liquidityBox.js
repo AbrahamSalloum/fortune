@@ -12,42 +12,40 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 
-const LiquidityBox = (summary, classes) => {
+const LiquidityBox = (summary) => {
+  return(
+    <Card style={{ height: '100%' }}>
+      <Typography color="textSecondary" gutterBottom>
+        Liquidity
+      </Typography>
+      <CardContent>
+      <TableContainer component={Paper}>
+        <Table size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Item</TableCell>
+              <TableCell align="left">Number</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>Current Ratio </TableCell>
+              <TableCell>{summary["summary"][0]["financialData"]["currentRatio"]["fmt"]}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Quick Ratio</TableCell>
+              <TableCell>{summary["summary"][0]["financialData"]["quickRatio"]["fmt"]}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Debt To Equity</TableCell>
+              <TableCell>{summary["summary"][0]["financialData"]["debtToEquity"]["fmt"]}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </CardContent>
+  </Card>
+  )
+}
 
-
-    return(
-      <Card className={classes.cardroot}>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Liquidity
-        </Typography>
-        <CardContent>
-          <TableContainer component={Paper}>
-            <Table size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Item</TableCell>
-                  <TableCell align="left">Number</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Current Ratio </TableCell>
-                  <TableCell>{summary["summary"][0]["financialData"]["currentRatio"]["fmt"]}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Quick Ratio</TableCell>
-                  <TableCell>{summary["summary"][0]["financialData"]["quickRatio"]["fmt"]}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Debt To Equity</TableCell>
-                  <TableCell>{summary["summary"][0]["financialData"]["debtToEquity"]["fmt"]}</TableCell>
-                </TableRow>
-            </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  export default LiquidityBox
+export default LiquidityBox

@@ -11,23 +11,23 @@ import Typography from '@material-ui/core/Typography';
 
 
 const arrangedata = (plotdata, ticker) => {
-    const data = []
-    while(plotdata.length === 0){
-      return []
-    }
-      for(let i in plotdata[0][ticker]["timestamp"]){
-        let t = moment.unix(plotdata[0][ticker]["timestamp"][i])
-        let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0][ticker]["close"][i]}
-        data.push(o)
-      }
-    return data
+  const data = []
+  while(plotdata.length === 0){
+    return []
   }
+  for(let i in plotdata[0][ticker]["timestamp"]){
+    let t = moment.unix(plotdata[0][ticker]["timestamp"][i])
+    let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0][ticker]["close"][i]}
+    data.push(o)
+  }  
+  return data
+}
 
-const CloseChartBox = ({ plotdata, ticker, getXaxis, classes }) => (
-  <Card className={classes.cardroot} variant="outlined">
-    <Typography className={classes.title} color="textSecondary" gutterBottom>
+const CloseChartBox = ({getXaxis, plotdata, ticker }) => (
+  <Card children variant="outlined" style={{ height: '100%' }}>
+    <Typography color="textSecondary" gutterBottom>
       Chart
-      </Typography>
+    </Typography>
     <CardContent>
       <ResponsiveContainer width={"95%"} height={300} >
       <LineChart data={arrangedata(plotdata, ticker)}>

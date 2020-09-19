@@ -6,21 +6,19 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const CompanyProfileBox = (summary, classes) => {
-
-    return (
-      <Card className={classes.profilebox}>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
+const CompanyProfileBox = (summary) => {
+  return (
+    <Card style={{ height: '100%' }}>
+      <Typography color="textSecondary" gutterBottom>
         Company Profile
-        </Typography>
-        <CardContent>
-          {
-            summary["summary"][0]["summaryProfile"]['longBusinessSummary']
-          }
-        </CardContent>
-      </Card>
+      </Typography>
+      <CardContent>
+        {
+          summary["summary"][0]["summaryProfile"]['longBusinessSummary']
+        }
+      </CardContent>
+    </Card>
     )
-
-  }
+}
 
   export default CompanyProfileBox

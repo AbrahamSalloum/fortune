@@ -12,45 +12,45 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const NewsItems = ({title, link, summary, publisher, key}) => (
-    <TableRow key={key}>
-      <TableCell>{publisher}</TableCell>
-      <TableCell><a href={link}>{title}</a></TableCell>
-      <TableCell>{summary.slice(0, 150)}...</TableCell>
-    </TableRow>
-  )
+const NewsItems = ({title, link, summary, publisher}) => (
+  <TableRow>
+    <TableCell>{publisher}</TableCell>
+    <TableCell><a href={link}>{title}</a></TableCell>
+    <TableCell>{summary.slice(0, 150)}...</TableCell>
+  </TableRow>
+)
 
-  const TickerNewsBox = ({newslist, ticker, classes}) => (
-    <Card className={classes.cardroot}>
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
-        News
-      </Typography>
-      <CardContent>
-        <div className="wrapper-article-content">
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                  <TableRow>
-                    <TableCell>publisher</TableCell>
-                    <TableCell>title</TableCell>
-                    <TableCell>Summary</TableCell>
-                  </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                  newslist.map((i) => {
-                    if(i.ticker === ticker){
-                      const newsl = i.news
-                      return newsl.map(n => <NewsItems {...n}/>)
-                    }
-                  })
+const TickerNewsBox = ({newslist, ticker}) => (
+  <Card style={{ height: '100%' }}>
+    <Typography color="textSecondary" gutterBottom>
+      News
+    </Typography>
+    <CardContent>
+    <div className="wrapper-article-content">
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>publisher</TableCell>
+              <TableCell>title</TableCell>
+              <TableCell>Summary</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              newslist.map((i) => {
+                if(i.ticker === ticker){
+                  const newsl = i.news
+                  return newsl.map(n => <NewsItems key={n.uuid} {...n}/>)
                 }
-              </TableBody>
-            </Table>
-          </TableContainer>
-      </div>
-      </CardContent>
-    </Card>
-  )
+              })
+            }
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+    </CardContent>
+  </Card>
+)
 
-  export default TickerNewsBox
+export default TickerNewsBox

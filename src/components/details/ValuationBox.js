@@ -13,52 +13,51 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 
-const ValuationBox = (summary, classes) => {
-
-    return (
-      <Card className={classes.cardroot}>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-            Valuation
-        </Typography>
-        <CardContent>
-          <TableContainer component={Paper}>
-            <Table size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Item</TableCell>
-                  <TableCell align="left">Number</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Trailing PE </TableCell>
-                  <TableCell>{summary["summary"][0]["summaryDetail"]["trailingPE"] ? summary["summary"][0]["summaryDetail"]["trailingPE"]["fmt"] : "NA"}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>PEG Ratio </TableCell>
-                  <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["pegRatio"] ? summary["summary"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"] : "NA"}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Price to Book</TableCell>
-                  <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["priceToBook"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"] : "NA"}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Price To Sales (12M)</TableCell>
-                  <TableCell> {summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"]["fmt"] : "NA"}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Dividend Yield </TableCell>
-                  <TableCell>{summary["summary"][0]["summaryDetail"]["dividendYield"] ? summary["summary"][0]["summaryDetail"]["dividendYield"]['fmt'] : "NA"}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Payout Ratio</TableCell>
-                  <TableCell>{summary["summary"][0]["summaryDetail"]["payoutRatio"] ? summary["summary"][0]["summaryDetail"]["payoutRatio"]["fmt"] : "NA"}</TableCell>
-                </TableRow>
-                </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
+const ValuationBox = (summary) => {
+  return (
+    <Card style={{ height: '100%' }}>
+      <Typography color="textSecondary" gutterBottom>
+        Valuation
+      </Typography>
+      <CardContent>
+        <TableContainer component={Paper}>
+          <Table size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Item</TableCell>
+                <TableCell align="left">Number</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>Trailing PE </TableCell>
+                <TableCell>{summary["summary"][0]["summaryDetail"]["trailingPE"] ? summary["summary"][0]["summaryDetail"]["trailingPE"]["fmt"] : "NA"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>PEG Ratio </TableCell>
+                <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["pegRatio"] ? summary["summary"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"] : "NA"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Price to Book</TableCell>
+                <TableCell>{summary["summary"][0]["defaultKeyStatistics"]["priceToBook"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"] : "NA"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Price To Sales (12M)</TableCell>
+                <TableCell> {summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"] ? summary["summary"][0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"]["fmt"] : "NA"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Dividend Yield </TableCell>
+                <TableCell>{summary["summary"][0]["summaryDetail"]["dividendYield"] ? summary["summary"][0]["summaryDetail"]["dividendYield"]['fmt'] : "NA"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Payout Ratio</TableCell>
+                <TableCell>{summary["summary"][0]["summaryDetail"]["payoutRatio"] ? summary["summary"][0]["summaryDetail"]["payoutRatio"]["fmt"] : "NA"}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   )
 }
 

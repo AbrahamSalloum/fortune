@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from "react-router-dom"
+import React, {useState, useEffect} from 'react';
+import { Link, useParams } from "react-router-dom"
 import {fetchNews, fetchChart, fetchSummary} from '../redux/actions.js'
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -18,60 +18,26 @@ import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+const styles = {}
+
+const useStyles = makeStyles({
   root: {
 
-  },
-
-  root1: {
-
-  },
-
-  cardroot: {
-
-    display: 'flex',
-    height: "100%"
-  },
-
-  profilebox: {
-
-  },
-
-  statsbox: {
-    minHieght: 250,
-    color: "red"
-  },
-
-  box:{
-
-  },
-
-  boxnews: {
-
-  },
-
-  title: {
-    fontSize: 14,
-  },
-
-  Container: {
-
   }
-}
+})
+const DetailsHeader = ({ticker}) => (
 
-
-const DetailsHeader = ({ticker, classes}) => (
-
-  <div className={classes.root}>
+  <div>
       <AppBar position="static">
         <Toolbar>
         <Link to="/">
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" color="inherit" aria-label="menu">
             <KeyboardBackspaceSharpIcon />
           </IconButton>
           </Link>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6">
             Details
           </Typography>
           <Button color="inherit">{ticker}</Button>
@@ -80,81 +46,74 @@ const DetailsHeader = ({ticker, classes}) => (
     </div>
 )
 
+//class Details extends React.Component
 
-class Details extends React.Component {
+const Details = () => {
+  
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const tickerlist = useSelector(state => state.AddTickers.tickerlist)
+  const price = useSelector(state => state.AddTickers.price)
+  const uid = useSelector(state => state.AddTickers.uid)
+  const newslist= useSelector(state => state.AddTickers.news)
+  const plotdata= useSelector(state => state.AddTickers.plotdata)
+  const summary= useSelector(state => state.AddTickers.summary)
+  const {ticker} = useParams(); 
+ 
+  useEffect(() => dispatch(fetchNews(ticker)), []);
+  useEffect(() => dispatch(fetchChart("1d",ticker)), []);
+  useEffect(() => dispatch(fetchSummary(ticker)), []);  
 
-  componentDidMount(){
-    this.props.getnews(this.props.match.params.ticker)
-    this.props.getchart("1d", this.props.match.params.ticker)
-    this.props.getsummary(this.props.match.params.ticker)
+  const getXaxis = (time,ticker) => {
+    dispatch(fetchChart(time,ticker))
   }
-  c
-  getXaxis = (time, ticker) => {
-    this.props.getchart(time, ticker)
+  
+    
+  if (!summary.length) {
+      return ("loading...")
   }
 
-
-
-  render(){
-    const { classes } = this.props;
-    while (!this.props.summary.length) {
-      return "loading..."
-    }
-
+    
+    
     return(
-      <Container maxWidth="lg" className={classes.Container}>
-        <DetailsHeader classes={classes} ticker={this.props.match.params.ticker} />
-        <Grid container spacing={2} alignItems="stretch">
-          <Grid container item item xs={12} spacing={2} alignItems="stretch">
+      
+      <Container maxWidth="lg">
+        <Grid container spacing={2} justify="space-evenly" className={classes.summaryrow}>
+          <Grid item container spacing={2}>
+            <Grid item xs={12}>
+              <DetailsHeader ticker={ticker} />
+            </Grid>
+          </Grid>
+          <Grid item container spacing={2} >
             <Grid item xs={12} sm={6}>
-              <CloseChartBox classes={classes} getXaxis = {this.getXaxis} plotdata={this.props.plotdata} ticker={this.props.match.params.ticker}/>
+              <CloseChartBox getXaxis={getXaxis} plotdata={plotdata} ticker={ticker}/>
             </Grid>
-            <Grid xs={12} sm={6}>
-              <CompanyProfileBox summary={this.props.summary} classes={classes}/>
-            </Grid>
-          </Grid>
-          <Grid xs={12} container spacing={2} direction="row" justify="space-evenly" alignItems="stretch">
-            <Grid xs={12} sm={3}>
-              <FinSummaryBox classes={classes} stats={this.props.price} ticker={this.props.match.params.ticker} />
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <ValuationBox summary={this.props.summary} classes={classes} />
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <ProfitabilityBox summary={this.props.summary} classes={classes}/>
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <LiquidityBox summary={this.props.summary} classes={classes}/>
+            <Grid item xs={12} sm={6}>
+              <CompanyProfileBox summary={summary} />
             </Grid>
           </Grid>
-          <Grid xs={12} container spacing={2} alignItems="stretch">
-            <TickerNewsBox classes={classes} newslist={this.props.newslist} ticker={this.props.match.params.ticker} />
-        </Grid>
-
+          <Grid item container spacing={2}>
+            <Grid item xs={12} sm={3}>
+              <ValuationBox summary={summary} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <FinSummaryBox  stats={price} ticker={ticker} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <ProfitabilityBox summary={summary} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <LiquidityBox summary={summary} />
+            </Grid>
+          </Grid>
+          <Grid item container spacing={2}>
+            <Grid item xs={12}>
+              <TickerNewsBox newslist={newslist} ticker={ticker} />
+            </Grid>
+          </Grid>
         </Grid>
       </Container>
     )
   }
-}
 
-const mapStateToProps = (state) => {
-  return {
-    tickerlist: state.AddTickers.tickerlist,
-    price: state.AddTickers.price,
-    uid: state.AddTickers.uid,
-    newslist: state.AddTickers.news,
-    plotdata: state.AddTickers.plotdata,
-    summary: state.AddTickers.summary
-  };
-};
-
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    getnews: (ticker) => dispatch(fetchNews(ticker)),
-    getchart: (range, ticker) => dispatch(fetchChart(range,ticker)),
-    getsummary: (ticker) => dispatch(fetchSummary(ticker))
-  }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Details))
+export default Details

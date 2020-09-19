@@ -33,11 +33,11 @@ const Summary = ({item}) => (
   </TableBody>
   )
 
-const FinSummaryBox = ({classes, stats, ticker}) => {
+const FinSummaryBox = ({stats, ticker}) => {
 
-    return (
-    <Card className={classes.cardroot}>
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
+  return (
+    <Card style={{ height: '100%' }}>
+      <Typography color="textSecondary" gutterBottom>
         CompanyStats
       </Typography>
       <CardContent>
@@ -49,19 +49,19 @@ const FinSummaryBox = ({classes, stats, ticker}) => {
                 <TableCell align="left">Number</TableCell>
               </TableRow>
             </TableHead>
-        {
-          stats.map((s) => {
-            if(s.ticker === ticker){
-              return <Summary key={s.ticker} item={s} />
-            }
-            return false
-          })
-        }
+              {
+                stats.map((s,i) => {
+                  if(s.ticker === ticker){
+                    return <Summary key={i} item={s} />
+                  }
+                  return false
+                })
+              }
           </Table>
         </TableContainer>
       </CardContent>
     </Card>
-    )
-  }
+  )
+}
 
   export default FinSummaryBox;
