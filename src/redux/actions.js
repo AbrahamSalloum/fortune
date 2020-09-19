@@ -142,6 +142,20 @@ export const StorePrice = (ticker) => {
     }
   }
 
+export const dodelticker = (id) => {
+  return(dispatch, getState) => {
+    const uid = getState().AddTickers.uid
+    database.ref(`users/${uid}/tickers/${id}`).remove().then((ref) => {
+      dispatch(delticker(id));
+    });
+  }
+}
+
+export const delticker = (r) => ({
+  type: 'DEL_TICKER',
+  payload: r
+})
+
   export const fetchSummary = (ticker) => {
     return(dispatch, getState) => {
       fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=${ticker}`, {
@@ -174,6 +188,9 @@ export const StorePrice = (ticker) => {
     })
   
 
+export const getlist = () => ({
+  type: 'GET_LIST'
+}) 
 
 
 export const login = (uid) => ({

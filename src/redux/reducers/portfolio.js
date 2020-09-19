@@ -27,6 +27,14 @@ export default function(state=initialState, action){
             }
         }
 
+        case "DEL_TICKER": {
+            const idd = action.payload
+            return {
+                ...state,
+                tickerlist: state.tickerlist.filter(({ id }) => id !== idd)
+            }
+        }
+
         case "SET_CHART": {
             const chart = action.payload
             return {
@@ -59,6 +67,11 @@ export default function(state=initialState, action){
 
         case 'LOGOUT':
             return {}
+
+        case 'GET_LIST': {
+            return state
+        }
+                
         default: {
             return state
         }

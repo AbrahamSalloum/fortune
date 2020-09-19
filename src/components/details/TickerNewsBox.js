@@ -9,15 +9,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse';
 
-
+let open = true; 
 
 const NewsItems = ({title, link, summary, publisher}) => (
   <TableRow>
     <TableCell>{publisher}</TableCell>
     <TableCell><a href={link}>{title}</a></TableCell>
     <TableCell>{summary.slice(0, 150)}...</TableCell>
-  </TableRow>
+    </TableRow>
 )
 
 const TickerNewsBox = ({newslist, ticker}) => (
@@ -36,7 +37,9 @@ const TickerNewsBox = ({newslist, ticker}) => (
               <TableCell>Summary</TableCell>
             </TableRow>
           </TableHead>
+  
           <TableBody>
+          
             {
               newslist.map((i) => {
                 if(i.ticker === ticker){
@@ -46,7 +49,7 @@ const TickerNewsBox = ({newslist, ticker}) => (
               })
             }
           </TableBody>
-        </Table>
+          </Table>
       </TableContainer>
     </div>
     </CardContent>

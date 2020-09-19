@@ -69,7 +69,7 @@ class Add extends React.Component {
               <button>Add</button>
             </div>
             <div>
-              <Link to="/dashboard">Home</Link>
+              <Link to="/">Home</Link>
             </div>
           </div>
         </form>

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from "react-router-dom"
-import { connect } from 'react-redux';
-
+import {useSelector, useDispatch} from 'react-redux';
+import {dodelticker, getlist} from '../redux/actions.js'
 const TickerItem = (
-{ 
+  { 
   price = 0, 
   units = 0, 
   ticker = "NA", 
@@ -13,9 +13,14 @@ const TickerItem = (
   daylow = 0, 
   volume = 0, 
   daychange = 0, 
-  additional = 0
-}
-  ) => (
+  additional = 0,
+  id
+},
+
+  ) => {
+    const dispatch = useDispatch();  
+    return(
+  
   <div className="ticker">
         <span className="item">{ticker} ({additional.longName})</span>
         <span className="item">{units}</span>
@@ -27,15 +32,19 @@ const TickerItem = (
         <span className="item">{volume}</span>
         <span className="item">{daychange}%</span>
         <span className="item"><Link to={`/details/${ticker}`}>Details ({ticker})</Link></span>
+        <span className="item"><button onClick={()=>{dispatch(dodelticker(id))} }>Delete</button></span>
   </div>
 )
 
+    }
 
 
-
-class LoadTickers extends React.Component {
-
-  render() {
+const LoadTickers = () => {
+  const price = useSelector(state => state.AddTickers.price)
+  const tickerlist = useSelector(state => state.AddTickers.tickerlist)
+  const uid = useSelector(state => state.AddTickers.uid)
+  const dispatch = useDispatch();
+  dispatch(getlist())
 
     return(
       <div className="flex-container">
@@ -49,29 +58,21 @@ class LoadTickers extends React.Component {
           <span>Day Low</span>
           <span>Volume</span>
           <span>Day Change</span>
+          <span>Action</span>
         </div>
         {
-          this.props.tickerlist.map((item) => {
-            for(let z in this.props.price){
-              if(this.props.price[z]['ticker'] === item.ticker.toUpperCase()){  
+          tickerlist.map((item) => {
+            for(let z in price){
+              if(price[z]['ticker'] === item.ticker.toUpperCase()){  
                 console.log(item)
-                return <TickerItem key={item.id} {...this.props.price[z]}/>
+                return <TickerItem key={item.id} {...price[z]} id={item.id}/>
               }
             }
           })
         }
       </div>
     )
-  }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    tickerlist: state.AddTickers.tickerlist,
-    price: state.AddTickers.price,
-    uid: state.AddTickers.uid
-  };
-};
 
-
-export default connect(mapStateToProps)(LoadTickers)
+export default LoadTickers

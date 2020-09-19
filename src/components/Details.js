@@ -46,15 +46,12 @@ const DetailsHeader = ({ticker}) => (
     </div>
 )
 
-//class Details extends React.Component
 
 const Details = () => {
   
   const classes = useStyles();
   const dispatch = useDispatch();
-  const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const price = useSelector(state => state.AddTickers.price)
-  const uid = useSelector(state => state.AddTickers.uid)
   const newslist= useSelector(state => state.AddTickers.news)
   const plotdata= useSelector(state => state.AddTickers.plotdata)
   const summary= useSelector(state => state.AddTickers.summary)
