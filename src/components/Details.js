@@ -78,7 +78,7 @@ const Details = () => {
         <Grid container spacing={2} justify="space-evenly" className={classes.summaryrow}>
           <Grid item container spacing={2}>
             <Grid item xs={12}>
-              <DetailsHeader ticker={ticker} />
+              <DetailsHeader ticker={ticker} header="Details" />
             </Grid>
           </Grid>
           <Grid item container spacing={2} >
