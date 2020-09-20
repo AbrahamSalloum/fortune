@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
 import {dodelticker, startsetTickers} from '../redux/actions.js'
@@ -21,59 +21,44 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-const TickerItem = (
-  { 
-  price = 0, 
-  units = 0, 
-  ticker = "NA", 
-  dayopen = 0, 
-  dayclose = 0, 
-  dayhigh = 0, 
-  daylow = 0, 
-  volume = 0, 
-  daychange = 0, 
-  additional = 0,
-  id
-},
 
+const TickerItem = 
+  (
+  {price = 0,units = 0,ticker = "NA",dayopen = 0,dayclose = 0,dayhigh = 0,daylow = 0,volume = 0,daychange = 0,additional = 0,id}
   ) => {
-    const dispatch = useDispatch();  
-    return(
-  
-  <TableRow>
-        <TableCell>{ticker} ({additional.longName})</TableCell>
-        <TableCell>{units}</TableCell>
-        <TableCell>{price}</TableCell>
-        <TableCell>{dayopen}</TableCell>
-        <TableCell>{dayclose}</TableCell>
-        <TableCell>{dayhigh}</TableCell>
-        <TableCell>{daylow}</TableCell>
-        <TableCell>{volume}</TableCell>
-        <TableCell>{daychange}%</TableCell>
-        <TableCell><Link to={`/details/${ticker}`}>Details ({ticker})</Link></TableCell>
-        <TableCell><button onClick={()=>{dispatch(dodelticker(id))} }>Delete</button></TableCell>
-  </TableRow>
-)
-
+  const dispatch = useDispatch();  
+  return(
+    <TableRow>
+      <TableCell>{ticker} ({additional.longName})</TableCell>
+      <TableCell>{units}</TableCell>
+      <TableCell>{price}</TableCell>
+      <TableCell>{dayopen}</TableCell>
+      <TableCell>{dayclose}</TableCell>
+      <TableCell>{dayhigh}</TableCell>
+      <TableCell>{daylow}</TableCell>
+      <TableCell>{volume}</TableCell>
+      <TableCell>{daychange}%</TableCell>
+      <TableCell><Link to={`/details/${ticker}`}>Details ({ticker})</Link></TableCell>
+      <TableCell><button onClick={()=>{dispatch(dodelticker(id))} }>Delete</button></TableCell>
+    </TableRow>
+  )
 }
 
-    const DetailsHeader = ({ticker, header = ""}) => (
-      <div>
-          <AppBar position="static">
-            <Toolbar>
-            <Link to="/add">
-            <IconButton edge="start" color="inherit" aria-label="menu">
-              <AddBoxIcon />
-            </IconButton>
-            </Link>
-            <Typography variant="h6">
-              {header}
-            </Typography>
-            <Button color="inherit">{ticker}</Button>
-          </Toolbar>
-        </AppBar>
-      </div>
-    )    
+const DetailsHeader = ({ticker, header = ""}) => (
+    <AppBar position="static">
+      <Toolbar>
+        <Link to="/add">
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <AddBoxIcon />
+          </IconButton>
+        </Link>
+        <Typography variant="h6">
+          {header}
+        </Typography>
+        <Button color="inherit">{ticker}</Button>
+      </Toolbar>
+    </AppBar>
+)    
 
 
 const LoadTickers = () => {
@@ -81,55 +66,52 @@ const LoadTickers = () => {
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const uid = useSelector(state => state.AddTickers.uid)
   const dispatch = useDispatch();
-  dispatch(startsetTickers())
-    return(
-    <Container maxWidth="lg">
-      <Grid container spacing={2} justify="space-evenly">
-          <Grid item container spacing={2}>
-            <Grid item xs={12}>
-              <DetailsHeader ticker="Dashboard" />
-            </Grid>          
-          </Grid>
-          <Grid item container spacing={2} >
-            <Grid item xs={12}>
-              <TableContainer component={Paper}>
-                <Table size="small" aria-label="a dense table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Units</TableCell>
-                      <TableCell>Price</TableCell>
-                      <TableCell>Day Open</TableCell>
-                      <TableCell>Day Close</TableCell>
-                      <TableCell>Day High</TableCell>
-                      <TableCell>Day Low</TableCell>
-                      <TableCell>Volume</TableCell>
-                      <TableCell>Day Change</TableCell>
-                      <TableCell>Details</TableCell>
-                      <TableCell>Action</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {
-                      tickerlist.map((item) => {
-                        for(let z in price){
-                          if(price[z]['ticker'] === item.ticker.toUpperCase()){  
-                            return <TickerItem key={item.id} {...price[z]} id={item.id}/>
-                          }
+  
+  return(
+    <Container>
+      <Grid container spacing={2}>
+        <Grid item container xs={12}>
+          <Grid item xs={12}>
+            <DetailsHeader ticker="Dashboard" />
+          </Grid>          
+        </Grid>
+        <Grid item container xs={12}>
+          <Grid item xs={12}>
+            <TableContainer component={Paper}>
+              <Table size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Units</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Day Open</TableCell>
+                    <TableCell>Day Close</TableCell>
+                    <TableCell>Day High</TableCell>
+                    <TableCell>Day Low</TableCell>
+                    <TableCell>Volume</TableCell>
+                    <TableCell>Day Change</TableCell>
+                    <TableCell>Details</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    tickerlist.map((item) => {
+                      for(let z in price){
+                        if(price[z]['ticker'] === item.ticker.toUpperCase()){  
+                          return <TickerItem key={item.id} {...price[z]} id={item.id}/>
                         }
-                      })
-                    }
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                      }
+                    })
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid> 
        </Grid> 
     </Grid> 
   </Container>
-
-      
-    )
+  )
 }
-
 
 export default LoadTickers

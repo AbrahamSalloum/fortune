@@ -73,7 +73,6 @@ const Details = () => {
     
     
     return(
-      
       <Container maxWidth="lg">
         <Grid container spacing={2} justify="space-evenly" className={classes.summaryrow}>
           <Grid item container spacing={2}>

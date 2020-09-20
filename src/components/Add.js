@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import { connect } from "react-redux";
-import {StartaddTicker, fetchPrice} from '../redux/actions.js'
+import {StartaddTicker, fetchPrice, startsetTickers} from '../redux/actions.js'
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -11,6 +11,7 @@ class Add extends React.Component {
     e.preventDefault()
     console.log(this.state)
     this.props.StartaddTicker(this.state)
+    this.props.startsetTickers()
   }
 
   onIdChange = (e) => {
@@ -82,7 +83,8 @@ class Add extends React.Component {
 const mapDispatchToProps = (dispatch, props) => {
   return{
     StartaddTicker: (tickerinfo) => dispatch(StartaddTicker(tickerinfo)),
-    fetchPrice: (ticker) => dispatch(fetchPrice(ticker))
+    fetchPrice: (ticker) => dispatch(fetchPrice(ticker)),
+    startsetTickers: () => dispatch(startsetTickers())
   }
 }
 export default connect(null, mapDispatchToProps)(Add)
