@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import { connect } from "react-redux";
-import {StartaddTicker, fetchPrice, startsetTickers} from '../redux/actions.js'
+import {StartaddTicker, fetchPrice, startsetTickers, loadsuggestions, storesearchticker} from '../redux/actions.js'
 import { v4 as uuidv4 } from 'uuid';
-
+import Autosuggest from 'react-autosuggest';
 
 class Add extends React.Component {
 
@@ -44,7 +44,39 @@ class Add extends React.Component {
     })
   }
 
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.props.loadsuggestions(value)
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.props.loadsuggestions([])
+  };
+
+  getSuggestionValue = (suggestion) => {
+    return suggestion.symbol;
+  }
+
+  renderSuggestion = (suggestion) => {
+    return(
+      <div> {suggestion.shortname} - {suggestion.symbol}
+    </div>
+    )
+  }
+
+  searchtickerChange = (event, { newValue }) => {
+    console.log(newValue)
+    this.props.storesearchticker(newValue)
+  }
+  
+  
+
   render(){
+    const {searchticker} = this.props
+    const inputProps = {
+      placeholder: 'Type a company',
+      value: searchticker,
+      onChange: this.searchtickerChange
+    };
     return(
 <div>
           <div>
@@ -55,7 +87,15 @@ class Add extends React.Component {
         <form onSubmit={this.onSubmit}>
           <div className="flex-container">
             <div>
-              Ticker: <input name="ticker" type="text" placeholder="ASX:A2M" onChange={this.onTickerChange} />
+              
+            <Autosuggest
+            suggestions={this.props.suggestion}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={this.getSuggestionValue}
+            renderSuggestion={this.renderSuggestion}
+            inputProps={inputProps}
+          />
             </div>
             <div>
               Amount: <input name="amount" type="number" placeholder="111" onChange={this.onAmountChange} />
@@ -80,11 +120,20 @@ class Add extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    suggestion: state.AddTickers.suggestion,
+    searchticker: state.AddTickers.searchticker
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return{
     StartaddTicker: (tickerinfo) => dispatch(StartaddTicker(tickerinfo)),
     fetchPrice: (ticker) => dispatch(fetchPrice(ticker)),
-    startsetTickers: () => dispatch(startsetTickers())
+    startsetTickers: () => dispatch(startsetTickers()),
+    loadsuggestions: (w) => dispatch(loadsuggestions(w)),
+    storesearchticker: (s) => dispatch(storesearchticker(s))
   }
 }
-export default connect(null, mapDispatchToProps)(Add)
+export default connect(mapStateToProps, mapDispatchToProps)(Add)

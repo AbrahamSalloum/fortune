@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import {dodelticker, startsetTickers} from '../redux/actions.js'
+import {dodelticker, toggledraw} from '../redux/actions.js'
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -20,8 +20,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
-
+import Drawer from '@material-ui/core/Drawer';
+import Add from './Add.js'
 const TickerItem = 
   (
   {price = 0,units = 0,ticker = "NA",dayopen = 0,dayclose = 0,dayhigh = 0,daylow = 0,volume = 0,daychange = 0,additional = 0,id}
@@ -44,13 +44,20 @@ const TickerItem =
   )
 }
 
-const DetailsHeader = ({ticker, header = ""}) => (
+const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer}) => (
     <AppBar position="static">
       <Toolbar>
+      <React.Fragment key={'top'}>
+      <Button onClick={()=>{toggleDrawer()}} >
+      <IconButton edge="start" color="inherit" aria-label="menu">
+      <AddBoxIcon />
+    </IconButton></Button>
+      <Drawer anchor={'top'} open={istoggledrawer} onClose={()=>{toggleDrawer()}}>
+        <Add />
+      </Drawer>
+    </React.Fragment>
         <Link to="/add">
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <AddBoxIcon />
-          </IconButton>
+          
         </Link>
         <Typography variant="h6">
           {header}
@@ -65,15 +72,22 @@ const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const uid = useSelector(state => state.AddTickers.uid)
+  const istoggledrawer = useSelector(state => state.AddTickers.toggledrawer)
   const dispatch = useDispatch();
-  
+
+  const toggleDrawer = () => {
+    dispatch(toggledraw())
+  }
   return(
     <Container>
       <Grid container spacing={2}>
         <Grid item container xs={12}>
           <Grid item xs={12}>
-            <DetailsHeader ticker="Dashboard" />
-          </Grid>          
+            <DetailsHeader ticker="Dashboard" istoggledrawer={istoggledrawer} toggleDrawer={toggleDrawer}/>
+          </Grid>    
+          <Grid>
+
+          </Grid>      
         </Grid>
         <Grid item container xs={12}>
           <Grid item xs={12}>
