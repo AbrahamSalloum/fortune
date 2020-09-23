@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import {StartaddTicker, fetchPrice, startsetTickers, loadsuggestions, storesearchticker} from '../redux/actions.js'
 import { v4 as uuidv4 } from 'uuid';
 import Autosuggest from 'react-autosuggest';
+import Chip from '@material-ui/core/Chip';
 
 class Add extends React.Component {
 
@@ -20,9 +21,9 @@ class Add extends React.Component {
     })
   }
 
-  onTickerChange = (e) => {
+  onTickerChange = (val) => {
     this.setState({
-      ticker: e.target.value
+      ticker: val
     })
   }
 
@@ -58,17 +59,21 @@ class Add extends React.Component {
 
   renderSuggestion = (suggestion) => {
     return(
-      <div> {suggestion.shortname} - {suggestion.symbol}
-    </div>
+      <div>
+          <Chip
+          label={`${suggestion.shortname} - ${suggestion.symbol} (${suggestion.exchange})`}
+      />
+      </div>
     )
   }
 
   searchtickerChange = (event, { newValue }) => {
     console.log(newValue)
     this.props.storesearchticker(newValue)
+    this.onTickerChange(newValue)
   }
-  
-  
+
+
 
   render(){
     const {searchticker} = this.props
@@ -87,7 +92,7 @@ class Add extends React.Component {
         <form onSubmit={this.onSubmit}>
           <div className="flex-container">
             <div>
-              
+
             <Autosuggest
             suggestions={this.props.suggestion}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
