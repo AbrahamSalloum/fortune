@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import {dodelticker, toggledraw} from '../redux/actions.js'
+import {dodelticker, toggledraw, startsetTickers} from '../redux/actions.js'
 import '../App.css'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -33,8 +33,6 @@ const TickerItem = ({price, tickerlist}) => {
     )
   }
   
-
-  const dispatch = useDispatch();  
   
    let data = tickerlist.map((item) => {
       for(let j in price){
@@ -64,7 +62,7 @@ const TickerItem = ({price, tickerlist}) => {
   
   return(
     <div style={{ height: 400, width: '100%' }}>
-    <DataGrid rows={data} columns={columns} pageSize={10} checkboxSelection autoHeight={true} autoPageSize={true} rowHeight={38} />
+    <DataGrid rows={data} columns={columns} pageSize={10} autoHeight={true} autoPageSize={true} rowHeight={38} />
     </div>
     )
 }
@@ -94,13 +92,11 @@ const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer}) => (
 const useStyles = makeStyles({
   root: {
     '& .daychange.negative': {
-      backgroundColor: 'rgba(157, 255, 118, 0.49)',
-      color: '#1a3e72',
-
+      backgroundColor: '#d47483',
     },
     '& .daychange.positive': {
-      backgroundColor: '#d47483',
-      color: '#1a3e72',
+      backgroundColor: 'rgba(157, 255, 118, 0.49)',
+      
 
     },
   },
@@ -112,11 +108,22 @@ const LoadTickers = () => {
   const uid = useSelector(state => state.AddTickers.uid)
 
   const istoggledrawer = useSelector(state => state.AddTickers.toggledrawer)
+  
   const dispatch = useDispatch();
 
   const toggleDrawer = () => {
     dispatch(toggledraw())
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(startsetTickers())
+      console.log('dd')
+    }, 600000);
+
+    return () => clearInterval(interval);
+  });
+
   const classes = useStyles();
   return(
     <Container>

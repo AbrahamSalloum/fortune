@@ -4,13 +4,7 @@
   padding-right: 200px;
 }
 
-.daychange .negative {
-  background-color: 'rgba(157, 255, 118, 0.49)',
-}
 
-.daychange .positive {
-  background-color: '#d47483',
-}
 
 .App-logo {
   height: 40vmin;
