@@ -1,5 +1,5 @@
 const initialState = {
-    tickerlist: [], isloaded: undefined, price:[], news: [], plotdata: [], summary: [], toggledrawer: false, suggestion: [], searchticker: ''
+    tickerlist: [], isloaded: undefined, price:[], news: [], plotdata: [], summary: [], suggestion: [], searchticker: '', lastpriceupdate: ''
 }
 
 export default function(state=initialState, action){
@@ -65,13 +65,6 @@ export default function(state=initialState, action){
             }
         }
 
-        case 'TOGGLE_DRAW': {
-            return {
-                ...state, 
-                toggledrawer: !state.toggledrawer
-            }
-        }
-
         case 'GET_SUGGESTION': {
             return {
                 ...state, 
@@ -85,6 +78,14 @@ export default function(state=initialState, action){
                 searchticker: action.payload
             }
         }
+
+        case 'SET_TIMESTAMP': {
+            return {
+                ...state, 
+                lastpriceupdate: action.payload
+            }
+        }
+
 
         case 'LOGOUT':
             return {}

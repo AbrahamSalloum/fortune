@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import {dodelticker, toggledraw, startsetTickers} from '../redux/actions.js'
+import {startsetTickers} from '../redux/actions.js'
 import '../App.css'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -18,7 +18,6 @@ import Drawer from '@material-ui/core/Drawer';
 import Add from './Add.js'
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { googleAuthProvider } from '../firebase/firebase.js';
 import Tooltip from '@material-ui/core/Tooltip';
 
 
@@ -64,27 +63,33 @@ const TickerItem = ({price, tickerlist}) => {
     <div style={{ height: 400, width: '100%' }}>
     <DataGrid rows={data} columns={columns} pageSize={10} autoHeight={true} autoPageSize={true} rowHeight={38} />
     </div>
-    )
+  )
 }
 
-const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer}) => (
-    <AppBar position="static">
+const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate}) => (
+    <AppBar position="static" >
       <Toolbar>
-      <React.Fragment key={'top'}>
-      <IconButton edge="start" color="inherit" aria-label="menu" onClick={()=>{toggleDrawer()}}>
-      <AddBoxIcon />
-    </IconButton>
-      <Drawer anchor={'top'} open={istoggledrawer} onClose={()=>{toggleDrawer()}}>
-        <Add />
-      </Drawer>
-    </React.Fragment>
-        <Link to="/add">
-          
-        </Link>
-        <Typography variant="h6">
-          {header}
-        </Typography>
-        <Button color="inherit">{ticker}</Button>
+      <div className={classes.navbar}>
+        <React.Fragment key={'top'}>
+        <IconButton edge="start" color="inherit" aria-label="menu" onClick={()=>{toggleDrawer()}}>
+        <AddBoxIcon />
+      </IconButton>
+        <Drawer anchor={'top'} open={istoggledrawer} onClose={()=>{toggleDrawer()}}>
+          <Add />
+        </Drawer>
+      </React.Fragment>
+          <Link to="/add">
+          </Link>
+          <Typography variant="h6">
+            {header}
+          </Typography>
+          <Button color="inherit">{ticker}</Button>
+      </div>
+          <div >
+          <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography> 
+          <div><Typography variant="caption" display="block">updates every 10 mins</Typography></div>
+          </div>
+        
       </Toolbar>
     </AppBar>
 )    
@@ -96,23 +101,25 @@ const useStyles = makeStyles({
     },
     '& .daychange.positive': {
       backgroundColor: 'rgba(157, 255, 118, 0.49)',
-      
-
     },
   },
+
+  navbar: {
+    display: "flex",
+    flexGrow: 1
+  }
 });
 
 const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
-  const uid = useSelector(state => state.AddTickers.uid)
-
-  const istoggledrawer = useSelector(state => state.AddTickers.toggledrawer)
-  
+  const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
+  const [showbox, toggleshowbox] = useState(true)
+  const [showdrawer, toggleDrawerstate] = useState(false)
   const dispatch = useDispatch();
 
   const toggleDrawer = () => {
-    dispatch(toggledraw())
+    toggleDrawerstate(!showdrawer)
   }
 
   useEffect(() => {
@@ -120,7 +127,6 @@ const LoadTickers = () => {
       dispatch(startsetTickers())
       console.log('dd')
     }, 600000);
-
     return () => clearInterval(interval);
   });
 
@@ -130,18 +136,23 @@ const LoadTickers = () => {
       <Grid container spacing={2}>
         <Grid item container xs={12}>
           <Grid item xs={12}>
-            <DetailsHeader ticker="Dashboard" istoggledrawer={istoggledrawer} toggleDrawer={toggleDrawer}/>
+            <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
           </Grid>          
         </Grid>
+        <Grid item xs={12} >
+<button onClick={()=> {toggleshowbox(!showbox)}}>click to toggle</button>
+{!showbox && "hello"}
+</Grid> 
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
-          
              <TickerItem price={price} tickerlist={tickerlist} />
           </Grid> 
-       </Grid> 
-    </Grid> 
-  </Container>
+        </Grid>
+        </Grid> 
+    </Container>
   )
 }
 
 export default LoadTickers
+
+ 

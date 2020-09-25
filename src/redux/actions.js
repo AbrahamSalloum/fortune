@@ -2,6 +2,7 @@ import {firebase, googleAuthProvider} from '../firebase/firebase'
 import database from '../firebase/firebase'
 
 
+
 export const addTicker = (tickerinfo) => {
     // tickerinfo should be object of {id, ticker, quantity}
     return {
@@ -46,6 +47,7 @@ export const startsetTickers = () => {
       })
       dispatch(fetchPrice(tickers))
       dispatch(setTickers(tickers))
+      dispatch(setTimeStamp())
       
     })
   }
@@ -55,6 +57,13 @@ export const GetSuggestions = (w) => {
   return {
     type: "GET_SUGGESTION",
     payload: w
+  }
+}
+
+export const setTimeStamp = () => {
+  return {
+    type: "SET_TIMESTAMP",
+    payload: Date.now()
   }
 }
 
@@ -232,10 +241,6 @@ export const login = (uid) => ({
 
 export const logout = () => ({
     type: 'LOGOUT',
-})
-
-export const toggledraw = () => ({
-  type: 'TOGGLE_DRAW',
 })
 
 export const startLogin = () => {
