@@ -1,57 +1,45 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Link } from "react-router-dom"
-import { connect } from "react-redux";
-import {StartaddTicker, fetchPrice, startsetTickers, loadsuggestions, storesearchticker} from '../redux/actions.js'
+import {useDispatch } from "react-redux";
+import {StartaddTicker, startsetTickers} from '../redux/actions.js'
 import { v4 as uuidv4 } from 'uuid';
 import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
 
-class Add extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      suggestion: [],
-      searchticker: ''
-    };
-  }
-  onSubmit = (e) => {
+const Add = () => {
+
+  const [suggestion, addsuggestions] = useState([])
+  const [searchticker, savesearchticker] = useState('')
+  const [ticker, setticker] = useState('')
+  const [amount, setamount] = useState('')
+  const [date, setdate] = useState('')
+  const [purchaseprice, setpurchaseprice] = useState('')
+  const dispatch = useDispatch();
+
+  const onSubmit = (e) => {
     e.preventDefault()
-    console.log(this.state)
-    this.props.StartaddTicker(this.state)
-    this.props.startsetTickers()
+    const id = uuidv4()
+    dispatch(StartaddTicker({id, ticker,amount, date, purchaseprice}))
+    dispatch(startsetTickers())
   }
 
-  onIdChange = (e) => {
-    this.setState({
-      id: uuidv4()
-    })
+  const onTickerChange = (val) => {
+    setticker(val)
   }
 
-  onTickerChange = (val) => {
-    this.setState({
-      ticker: val
-    })
+  const onAmountChange = (e) => {
+    setamount(e.target.value)
   }
 
-  onAmountChange = (e) => {
-      this.setState({
-        amount: e.target.value
-    })
+  const onDateChange = (e) => {
+    setdate(e.target.value)
   }
 
-  onDateChange = (e) => {
-    this.setState({
-      date: e.target.value
-    })
+  const onPurPriceChange = (e) => {
+    setpurchaseprice(e.target.value)
   }
 
-  onPurPriceChange = (e) => {
-    this.setState({
-      purchaseprice: e.target.value
-    })
-  }
-
-  onSuggestionsFetchRequested = ({ value }) => {
+  const onSuggestionsFetchRequested = ({ value }) => {
     fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q=${value}`, {
       "method": "GET",
       "headers": {
@@ -61,67 +49,65 @@ class Add extends React.Component {
     })
     .then(res => res.json())
     .then((r) => {
-      this.setState({ suggestion: r.quotes })
+      addsuggestions(r.quotes)
     })
   };
 
-  onSuggestionsClearRequested = () => {
-    this.setState({ suggestion: [] })
+  const onSuggestionsClearRequested = () => {
+    addsuggestions([])
   };
 
-  getSuggestionValue = (suggestion) => {
+  const getSuggestionValue = (suggestion) => {
     return suggestion.symbol;
   }
 
-  renderSuggestion = (suggestion) => {
+  const renderSuggestion = (suggestion) => {
     return(
       <div>
-          <Chip
+        <Chip
           label={`${suggestion.shortname} - ${suggestion.symbol} (${suggestion.exchange})`}
-      />
+        />
       </div>
     )
   }
 
-  searchtickerChange = (event, { newValue }) => {
+  const searchtickerChange = (event, { newValue }) => {
     console.log(newValue)
-    this.setState({searchticker: newValue})
-    this.onTickerChange(newValue)
+    savesearchticker(newValue)
+    onTickerChange(newValue)
   }
 
+  const inputProps = {
+    placeholder: 'Type a company',
+    value: searchticker,
+    onChange: searchtickerChange
+  };
 
-
-  render(){
-    const inputProps = {
-      placeholder: 'Type a company',
-      value: this.state.searchticker,
-      onChange: this.searchtickerChange
-    };
     return(
     <div>
       <div>
         <h1>Add</h1>
       </div>
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={onSubmit}>
         <div className="flex-container">
           <div>
             <Autosuggest
-              suggestions={this.state.suggestion}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={this.getSuggestionValue}
-              renderSuggestion={this.renderSuggestion}
+              suggestions={suggestion}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={onSuggestionsClearRequested}
+              getSuggestionValue={getSuggestionValue}
+              renderSuggestion={renderSuggestion}
               inputProps={inputProps}
             />
           </div>
           <div>
-            Amount: <input name="amount" type="number" placeholder="111" onChange={this.onAmountChange} />
+            Amount: <input name="amount" type="number" placeholder="111" onChange={onAmountChange} />
           </div>
           <div>
-            Purchase Price: <input name="amount" type="number" placeholder="0" onChange={this.onPurPriceChange} />
+            Purchase Price: <input name="amount" type="number" placeholder="0" onChange={onPurPriceChange} />
           </div>
           <div>
-            Purchase Date: <input name="amount" type="date" placeholder="14/06/1990" onChange={this.onDateChange} />
+            Purchase Date: <input name="amount" type="date" placeholder="14/06/1990" onChange={onDateChange} />
           </div>
           <div>
             <button>Add</button>
@@ -133,14 +119,7 @@ class Add extends React.Component {
       </form>
     </div>
     )
-  }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return{
-    StartaddTicker: (tickerinfo) => dispatch(StartaddTicker(tickerinfo)),
-    fetchPrice: (ticker) => dispatch(fetchPrice(ticker)),
-    startsetTickers: () => dispatch(startsetTickers()),
-  }
-}
-export default connect(null, mapDispatchToProps)(Add)
+
+export default Add

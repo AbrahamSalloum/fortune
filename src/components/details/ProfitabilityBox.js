@@ -1,6 +1,5 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
@@ -11,8 +10,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {useSelector} from 'react-redux';
 
-const ProfitabilityBox = (summary) => {
+const ProfitabilityBox = () => {
+  const summary= useSelector(state => state.AddTickers.summary)
   return(
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
@@ -30,19 +31,19 @@ const ProfitabilityBox = (summary) => {
             <TableBody>
               <TableRow>
                 <TableCell>Return on Equity </TableCell>
-                <TableCell> {summary["summary"][0]["financialData"]["returnOnEquity"]["fmt"] && summary["summary"][0]["financialData"]["returnOnEquity"]["fmt"]}</TableCell>
+                <TableCell> {summary[0]["financialData"]["returnOnEquity"]["fmt"] && summary[0]["financialData"]["returnOnEquity"]["fmt"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell> Return on Assets </TableCell>
-                <TableCell>{summary["summary"][0]["financialData"]["returnOnAssets"]["fmt"]}</TableCell>
+                <TableCell>{summary[0]["financialData"]["returnOnAssets"]["fmt"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Profit Margins</TableCell>
-                <TableCell>{summary["summary"][0]["financialData"]["profitMargins"]["fmt"]}</TableCell>
+                <TableCell>{summary[0]["financialData"]["profitMargins"]["fmt"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Gross Margins</TableCell>
-                <TableCell>{summary["summary"][0]["financialData"]["grossMargins"]["fmt"]}</TableCell>
+                <TableCell>{summary[0]["financialData"]["grossMargins"]["fmt"]}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

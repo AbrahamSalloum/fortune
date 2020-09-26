@@ -1,5 +1,5 @@
 const initialState = {
-    tickerlist: [], isloaded: undefined, price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', storesearchticker:''
+    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: ''
 }
 
 export default function(state=initialState, action){

@@ -1,12 +1,12 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import {useSelector} from 'react-redux';
 
 
-
-const CompanyProfileBox = (summary) => {
+const CompanyProfileBox = () => {
+  const summary= useSelector(state => state.AddTickers.summary)
   return (
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
@@ -14,7 +14,7 @@ const CompanyProfileBox = (summary) => {
       </Typography>
       <CardContent>
         {
-          summary["summary"][0]["summaryProfile"]['longBusinessSummary']
+          summary[0]["summaryProfile"]['longBusinessSummary']
         }
       </CardContent>
     </Card>

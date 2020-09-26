@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -11,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {useSelector} from 'react-redux';
 
 const Summary = ({item}) => (
   <TableBody>
@@ -33,8 +33,8 @@ const Summary = ({item}) => (
   </TableBody>
   )
 
-const FinSummaryBox = ({stats, ticker}) => {
-
+const FinSummaryBox = ({ticker}) => {
+  const stats= useSelector(state => state.AddTickers.price)
   return (
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>

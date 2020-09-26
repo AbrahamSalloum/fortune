@@ -7,11 +7,7 @@ import './index.css';
 import App from './App';
 import AddPage from './components/Add';
 import Details from './components/Details'
-import LoginPage from './components/LoginPage'
-import {firebase} from './firebase/firebase';
 import {login, logout, startsetTickers} from './redux/actions'
-import { createBrowserHistory } from "history"
-import { render } from '@testing-library/react';
 import GoogleLogin from 'react-google-login';
 
 

@@ -9,7 +9,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 import clsx from 'clsx'
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,7 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 
 
-const TickerItem = ({price, tickerlist, showbox, toggleshowbox, classes}) => {
+const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
 
   const RenderTicker = ({params}) => {
     return(
@@ -37,7 +36,7 @@ const TickerItem = ({price, tickerlist, showbox, toggleshowbox, classes}) => {
   
    let data = tickerlist.map((item) => {
       for(let j in price){
-        if (price[j]['ticker'] == item['ticker']){
+        if (price[j]['ticker'] === item['ticker']){
           return {...price[j], ...item}
         }
       }
@@ -86,7 +85,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
   } 
   return(
     <div style={{display: "flex"}}>
-      <div style={{"margin-left": "5px", "margin-right": "5px"}} >
+      <div style={{"marginLeft": "5px", "marginRight": "5px"}} >
         <Button
           variant="contained"
           color="secondary"
@@ -94,14 +93,14 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
           onClick={() => {dispatch(dodelticker(showbox.data.id)) ; toggleshowbox(false)}}
         >Delete ({showbox.data.ticker})</Button>
       </div>
-      <div style={{"margin-left": "5px", "margin-right": "5px"}}>
+      <div style={{"marginLeft": "5px", "marginRight": "5px"}}>
        <Button
           variant="contained"
           color="primary"
           startIcon={<EditIcon />}
         >Edit</Button>
       </div>
-      <div style={{"margin-left": "5px", "margin-right": "5px"}}>
+      <div style={{"marginLeft": "5px", "marginRight": "5px"}}>
         <Button
           variant="contained"
           onClick={() => {dispatch(dodelticker(false)) ; toggleshowbox(false)}}
@@ -196,7 +195,7 @@ const LoadTickers = () => {
         </Grid>
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
-             <TickerItem price={price} tickerlist={tickerlist} showbox={showbox} toggleshowbox={toggleshowbox} classes={classes}/> 
+             <TickerItem price={price} tickerlist={tickerlist} toggleshowbox={toggleshowbox} classes={classes}/> 
           </Grid> 
         </Grid>
         </Grid> 

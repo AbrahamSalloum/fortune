@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { Link, useParams } from "react-router-dom"
-import {fetchNews, fetchChart, fetchSummary} from '../redux/actions.js'
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { withStyles } from '@material-ui/styles';
+import {fetchSummary} from '../redux/actions.js'
+import { useDispatch, useSelector } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LiquidityBox from './details/liquidityBox';
@@ -52,19 +51,11 @@ const Details = () => {
   
   const classes = useStyles();
   const dispatch = useDispatch();
-  const price = useSelector(state => state.AddTickers.price)
-  const newslist= useSelector(state => state.AddTickers.news)
-  const plotdata= useSelector(state => state.AddTickers.plotdata)
-  const summary= useSelector(state => state.AddTickers.summary)
   const {ticker} = useParams(); 
+  
+  useEffect(() => dispatch(fetchSummary(ticker)), []); 
+  const summary= useSelector(state => state.AddTickers.summary)
  
-  useEffect(() => dispatch(fetchNews(ticker)), []);
-  useEffect(() => dispatch(fetchChart("1d",ticker)), []);
-  useEffect(() => dispatch(fetchSummary(ticker)), []);  
-
-  const getXaxis = (time,ticker) => {
-    dispatch(fetchChart(time,ticker))
-  }
   
     
   if (!summary.length) {
@@ -83,21 +74,21 @@ const Details = () => {
           </Grid>
           <Grid item container spacing={2} >
             <Grid item xs={12} sm={6}>
-              <CloseChartBox getXaxis={getXaxis} plotdata={plotdata} ticker={ticker}/>
+              <CloseChartBox ticker={ticker}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <CompanyProfileBox summary={summary} />
+              <CompanyProfileBox/>
             </Grid>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} sm={3}>
-              <ValuationBox summary={summary} />
+              <ValuationBox/>
             </Grid>
             <Grid item xs={12} sm={3}>
-              <FinSummaryBox  stats={price} ticker={ticker} />
+              <FinSummaryBox ticker={ticker}/>
             </Grid>
             <Grid item xs={12} sm={3}>
-              <ProfitabilityBox summary={summary} />
+              <ProfitabilityBox/>
             </Grid>
             <Grid item xs={12} sm={3}>
               <LiquidityBox summary={summary} />
@@ -105,7 +96,7 @@ const Details = () => {
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12}>
-              <TickerNewsBox newslist={newslist} ticker={ticker} />
+              <TickerNewsBox ticker={ticker} />
             </Grid>
           </Grid>
         </Grid>

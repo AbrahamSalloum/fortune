@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,7 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
+import { useDispatch, useSelector} from 'react-redux';
+import {fetchNews} from '../../redux/actions.js'
 
 const NewsItems = ({title, link, summary, publisher}) => (
   <TableRow>
@@ -19,7 +20,11 @@ const NewsItems = ({title, link, summary, publisher}) => (
   </TableRow>
 )
 
-const TickerNewsBox = ({newslist, ticker}) => (
+const TickerNewsBox = ({ticker}) => {
+  const dispatch = useDispatch()
+  useEffect(() => dispatch(fetchNews(ticker)), []);
+  const newslist= useSelector(state => state.AddTickers.news)
+  return(
   <Card style={{ height: '100%' }}>
     <Typography color="textSecondary" gutterBottom>
       News
@@ -50,6 +55,7 @@ const TickerNewsBox = ({newslist, ticker}) => (
     </div>
   </CardContent>
   </Card>
-)
+  )
+            }
 
 export default TickerNewsBox
