@@ -1,5 +1,5 @@
 const initialState = {
-    tickerlist: [], isloaded: undefined, price:[], news: [], plotdata: [], summary: [], suggestion: [], searchticker: '', lastpriceupdate: ''
+    tickerlist: [], isloaded: undefined, price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', storesearchticker:''
 }
 
 export default function(state=initialState, action){
@@ -62,20 +62,6 @@ export default function(state=initialState, action){
             return {
                 ...state, 
                 summary: [...state.summary, summary]
-            }
-        }
-
-        case 'GET_SUGGESTION': {
-            return {
-                ...state, 
-                suggestion: action.payload
-            }
-        }
-
-        case 'GET_SEARCHTICKER': {
-            return {
-                ...state, 
-                searchticker: action.payload
             }
         }
 

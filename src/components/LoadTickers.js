@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import {startsetTickers} from '../redux/actions.js'
+import {startsetTickers, dodelticker} from '../redux/actions.js'
 import '../App.css'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
+import EditIcon from '@material-ui/icons/Edit';
 import clsx from 'clsx'
-
+import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,7 +24,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 
 
-const TickerItem = ({price, tickerlist}) => {
+const TickerItem = ({price, tickerlist, showbox, toggleshowbox, classes}) => {
 
   const RenderTicker = ({params}) => {
     return(
@@ -61,7 +63,51 @@ const TickerItem = ({price, tickerlist}) => {
   
   return(
     <div style={{ height: 400, width: '100%' }}>
-    <DataGrid rows={data} columns={columns} pageSize={10} autoHeight={true} autoPageSize={true} rowHeight={38} />
+    <DataGrid 
+      disableMultipleSelection={true} 
+      rows={data} columns={columns} 
+      pageSize={10} 
+      autoHeight={true} 
+      autoPageSize={true} 
+      rowHeight={38} 
+      className={classes.root}
+      onRowClick={(param) => {toggleshowbox(param)}}
+      
+      />
+    </div>
+  )
+}
+
+const ToggleBox = ({showbox, toggleshowbox}) => {
+  
+  const dispatch = useDispatch();
+  if(!showbox){
+    return false
+  } 
+  return(
+    <div style={{display: "flex"}}>
+      <div style={{"margin-left": "5px", "margin-right": "5px"}} >
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<DeleteIcon />}
+          onClick={() => {dispatch(dodelticker(showbox.data.id)) ; toggleshowbox(false)}}
+        >Delete ({showbox.data.ticker})</Button>
+      </div>
+      <div style={{"margin-left": "5px", "margin-right": "5px"}}>
+       <Button
+          variant="contained"
+          color="primary"
+          startIcon={<EditIcon />}
+        >Edit</Button>
+      </div>
+      <div style={{"margin-left": "5px", "margin-right": "5px"}}>
+        <Button
+          variant="contained"
+          onClick={() => {dispatch(dodelticker(false)) ; toggleshowbox(false)}}
+          startIcon={<CloseIcon />}
+        >Close</Button>
+      </div>
     </div>
   )
 }
@@ -87,7 +133,7 @@ const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, class
       </div>
           <div >
           <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography> 
-          <div><Typography variant="caption" display="block">updates every 10 mins</Typography></div>
+          <div><Typography variant="caption" display="block">Updates every 10 mins</Typography></div>
           </div>
         
       </Toolbar>
@@ -97,11 +143,17 @@ const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, class
 const useStyles = makeStyles({
   root: {
     '& .daychange.negative': {
-      backgroundColor: '#d47483',
+      color: '#ef3f5b',
     },
     '& .daychange.positive': {
-      backgroundColor: 'rgba(157, 255, 118, 0.49)',
+      color: '#139313',
     },
+
+    '& .MuiDataGrid-columnsContainer': {
+      fontWeight: "900",
+      "font-weight": "900",
+      color: "black"
+    }
   },
 
   navbar: {
@@ -114,7 +166,7 @@ const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
-  const [showbox, toggleshowbox] = useState(true)
+  const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
   const dispatch = useDispatch();
 
@@ -139,13 +191,12 @@ const LoadTickers = () => {
             <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
           </Grid>          
         </Grid>
-        <Grid item xs={12} >
-<button onClick={()=> {toggleshowbox(!showbox)}}>click to toggle</button>
-{!showbox && "hello"}
-</Grid> 
+        <Grid item>
+        <ToggleBox showbox={showbox} toggleshowbox={toggleshowbox}/>
+        </Grid>
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
-             <TickerItem price={price} tickerlist={tickerlist} />
+             <TickerItem price={price} tickerlist={tickerlist} showbox={showbox} toggleshowbox={toggleshowbox} classes={classes}/> 
           </Grid> 
         </Grid>
         </Grid> 

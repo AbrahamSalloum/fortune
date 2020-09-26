@@ -53,40 +53,12 @@ export const startsetTickers = () => {
   }
 }
 
-export const GetSuggestions = (w) => {
-  return {
-    type: "GET_SUGGESTION",
-    payload: w
-  }
-}
-
 export const setTimeStamp = () => {
   return {
     type: "SET_TIMESTAMP",
     payload: Date.now()
   }
 }
-
-export const loadsuggestions = (w) => {
-  return(dispatch, getState) => {
-    if(w.length == 0){
-      dispatch(GetSuggestions([]))
-      return 
-    }
-    fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q=${w}`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-      }
-    })
-    .then(res => res.json())
-    .then((r) => {
-      dispatch(GetSuggestions(r.quotes))
-    })
-  }
-}
-
 
 export const StorePrice = (ticker) => {
     return {
@@ -213,11 +185,6 @@ export const delticker = (r) => ({
     payload: r
   })
 
-  export const storesearchticker = (r) => ({
-    type: 'GET_SEARCHTICKER',
-    payload: r
-  })
-
   export const StorChart = (r) => ({
     type: 'SET_CHART',
     payload: r
@@ -232,7 +199,6 @@ export const delticker = (r) => ({
 export const getlist = () => ({
   type: 'GET_LIST'
 }) 
-
 
 export const login = (uid) => ({
     type: 'LOGIN',

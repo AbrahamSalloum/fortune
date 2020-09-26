@@ -7,7 +7,13 @@ import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
 
 class Add extends React.Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      suggestion: [],
+      searchticker: ''
+    };
+  }
   onSubmit = (e) => {
     e.preventDefault()
     console.log(this.state)
@@ -46,11 +52,21 @@ class Add extends React.Component {
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.loadsuggestions(value)
+    fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q=${value}`, {
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
+        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
+      }
+    })
+    .then(res => res.json())
+    .then((r) => {
+      this.setState({ suggestion: r.quotes })
+    })
   };
 
   onSuggestionsClearRequested = () => {
-    this.props.loadsuggestions([])
+    this.setState({ suggestion: [] })
   };
 
   getSuggestionValue = (suggestion) => {
@@ -69,76 +85,62 @@ class Add extends React.Component {
 
   searchtickerChange = (event, { newValue }) => {
     console.log(newValue)
-    this.props.storesearchticker(newValue)
+    this.setState({searchticker: newValue})
     this.onTickerChange(newValue)
   }
 
 
 
   render(){
-    const {searchticker} = this.props
     const inputProps = {
       placeholder: 'Type a company',
-      value: searchticker,
+      value: this.state.searchticker,
       onChange: this.searchtickerChange
     };
     return(
-<div>
-          <div>
-          <h1>Add</h1>
-        </div>
-
-
-        <form onSubmit={this.onSubmit}>
-          <div className="flex-container">
-            <div>
-
-            <Autosuggest
-            suggestions={this.props.suggestion}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={this.getSuggestionValue}
-            renderSuggestion={this.renderSuggestion}
-            inputProps={inputProps}
-          />
-            </div>
-            <div>
-              Amount: <input name="amount" type="number" placeholder="111" onChange={this.onAmountChange} />
-            </div>
-            <div>
-              Purchase Price: <input name="amount" type="number" placeholder="0" onChange={this.onPurPriceChange} />
-            </div>
-            <div>
-              Purchase Date: <input name="amount" type="date" placeholder="14/06/1990" onChange={this.onDateChange} />
-            </div>
-            <div>
-              <button>Add</button>
-            </div>
-            <div>
-              <Link to="/">Home</Link>
-            </div>
-          </div>
-        </form>
-
+    <div>
+      <div>
+        <h1>Add</h1>
       </div>
+      <form onSubmit={this.onSubmit}>
+        <div className="flex-container">
+          <div>
+            <Autosuggest
+              suggestions={this.state.suggestion}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              getSuggestionValue={this.getSuggestionValue}
+              renderSuggestion={this.renderSuggestion}
+              inputProps={inputProps}
+            />
+          </div>
+          <div>
+            Amount: <input name="amount" type="number" placeholder="111" onChange={this.onAmountChange} />
+          </div>
+          <div>
+            Purchase Price: <input name="amount" type="number" placeholder="0" onChange={this.onPurPriceChange} />
+          </div>
+          <div>
+            Purchase Date: <input name="amount" type="date" placeholder="14/06/1990" onChange={this.onDateChange} />
+          </div>
+          <div>
+            <button>Add</button>
+          </div>
+          <div>
+            <Link to="/">Home</Link>
+          </div>
+        </div>
+      </form>
+    </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    suggestion: state.AddTickers.suggestion,
-    searchticker: state.AddTickers.searchticker
-  };
-};
-
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
   return{
     StartaddTicker: (tickerinfo) => dispatch(StartaddTicker(tickerinfo)),
     fetchPrice: (ticker) => dispatch(fetchPrice(ticker)),
     startsetTickers: () => dispatch(startsetTickers()),
-    loadsuggestions: (w) => dispatch(loadsuggestions(w)),
-    storesearchticker: (s) => dispatch(storesearchticker(s))
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Add)
+export default connect(null, mapDispatchToProps)(Add)
