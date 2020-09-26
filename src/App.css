@@ -86,23 +86,33 @@
   background: #50ac98;
 }
 
-div.flex-container > div:nth-of-type(odd) {
-    background: #50ac98;
-}
-
-div.flex-container > div:nth-of-type(even) {
-    background: darksalmon;
-}
-
 .price-span {
   border: 1px solid black;
 }
 
-.ticker-item {
-  border: 1px solid black;
-  border-top: none;
-  display: flex;
-  justify-content: space-around;
+.react-autosuggest__input {
+  width: 185px;
+  height: 30px;
+  padding: 10px 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.form-box{
+  display:flex;
+  justify-content:center;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 600px) {
+  .form-box {
+    display:flex;
+    justify-content:center;
+    flex-direction: column;
+  }
 }
 
 .App-header {

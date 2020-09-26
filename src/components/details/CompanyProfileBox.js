@@ -18,7 +18,7 @@ const CompanyProfileBox = () => {
         }
       </CardContent>
     </Card>
-    )
+  )
 }
 
   export default CompanyProfileBox

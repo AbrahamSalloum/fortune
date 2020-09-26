@@ -91,7 +91,7 @@ const Details = () => {
               <ProfitabilityBox/>
             </Grid>
             <Grid item xs={12} sm={3}>
-              <LiquidityBox summary={summary} />
+              <LiquidityBox />
             </Grid>
           </Grid>
           <Grid item container spacing={2}>

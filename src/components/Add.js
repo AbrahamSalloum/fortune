@@ -1,10 +1,13 @@
 import React, {useState} from 'react'
-import { Link } from "react-router-dom"
 import {useDispatch } from "react-redux";
 import {StartaddTicker, startsetTickers} from '../redux/actions.js'
 import { v4 as uuidv4 } from 'uuid';
 import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
+import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const Add = () => {
 
@@ -31,8 +34,9 @@ const Add = () => {
     setamount(e.target.value)
   }
 
-  const onDateChange = (e) => {
-    setdate(e.target.value)
+  const onDateChange = (date) => {
+    setSelectedDate(date)
+    setdate(date)
   }
 
   const onPurPriceChange = (e) => {
@@ -72,7 +76,6 @@ const Add = () => {
   }
 
   const searchtickerChange = (event, { newValue }) => {
-    console.log(newValue)
     savesearchticker(newValue)
     onTickerChange(newValue)
   }
@@ -83,13 +86,17 @@ const Add = () => {
     onChange: searchtickerChange
   };
 
+  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+
+
     return(
     <div>
       <div>
         <h1>Add</h1>
       </div>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <form onSubmit={onSubmit}>
-        <div className="flex-container">
+        <div className="form-box">
           <div>
             <Autosuggest
               suggestions={suggestion}
@@ -101,24 +108,32 @@ const Add = () => {
             />
           </div>
           <div>
-            Amount: <input name="amount" type="number" placeholder="111" onChange={onAmountChange} />
+           <TextField name="amount" id="outlined-basic" type="number" label="Amount" variant="outlined" onChange={onAmountChange} />
           </div>
           <div>
-            Purchase Price: <input name="amount" type="number" placeholder="0" onChange={onPurPriceChange} />
+            <TextField name="ppice" id="outlined-basic" type="number" label="Purchase Price" variant="outlined" onChange={onPurPriceChange} />
           </div>
           <div>
-            Purchase Date: <input name="amount" type="date" placeholder="14/06/1990" onChange={onDateChange} />
+            <KeyboardDatePicker
+              margin="normal"
+              id="date-picker-dialog"
+              label="Select Purchase Date"
+              format="MM/dd/yyyy"
+              value={selectedDate}
+              onChange={onDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
           </div>
           <div>
-            <button>Add</button>
-          </div>
-          <div>
-            <Link to="/">Home</Link>
+            <Button variant="contained" color="Primary" type="submit">Save</Button>
           </div>
         </div>
       </form>
+      </MuiPickersUtilsProvider>
     </div>
-    )
+  )
 }
 
 

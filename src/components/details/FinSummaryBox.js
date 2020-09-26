@@ -31,7 +31,7 @@ const Summary = ({item}) => (
         <TableCell>{item.daychange}</TableCell>
       </TableRow>
   </TableBody>
-  )
+)
 
 const FinSummaryBox = ({ticker}) => {
   const stats= useSelector(state => state.AddTickers.price)

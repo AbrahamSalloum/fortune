@@ -16,12 +16,16 @@ const arrangedata = (plotdata, ticker) => {
   while(plotdata.length == 0){
     return []
   }
-
-  for(let i in plotdata[0][ticker]["timestamp"]){
-    let t = moment.unix(plotdata[0][ticker]["timestamp"][i])
-    let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0][ticker]["close"][i]}
-    data.push(o)
-  }  
+  try {
+    for(let i in plotdata[0][ticker]["timestamp"]){
+      let t = moment.unix(plotdata[0][ticker]["timestamp"][i])
+      let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0][ticker]["close"][i]}
+      data.push(o)
+    }
+  }
+  catch(err){
+    console.log(err)
+  }
   return data
 }
 
@@ -61,7 +65,7 @@ const CloseChartBox = ({ticker }) => {
       </ButtonGroup>
     </CardContent>
   </Card>
-)
+  )
 }
 
   export default CloseChartBox

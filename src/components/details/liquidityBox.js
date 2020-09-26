@@ -9,9 +9,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {useSelector} from 'react-redux';
 
-
-const LiquidityBox = (summary) => {
+const LiquidityBox = () => {
+  const summary= useSelector(state => state.AddTickers.summary)
   return(
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
@@ -29,15 +30,15 @@ const LiquidityBox = (summary) => {
           <TableBody>
             <TableRow>
               <TableCell>Current Ratio </TableCell>
-              <TableCell>{summary["summary"][0]["financialData"]["currentRatio"]["fmt"]}</TableCell>
+              <TableCell>{summary[0]["financialData"]["currentRatio"]["fmt"]}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Quick Ratio</TableCell>
-              <TableCell>{summary["summary"][0]["financialData"]["quickRatio"]["fmt"]}</TableCell>
+              <TableCell>{summary[0]["financialData"]["quickRatio"]["fmt"]}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Debt To Equity</TableCell>
-              <TableCell>{summary["summary"][0]["financialData"]["debtToEquity"]["fmt"]}</TableCell>
+              <TableCell>{summary[0]["financialData"]["debtToEquity"]["fmt"]}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
