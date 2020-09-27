@@ -134,7 +134,6 @@ export const StorePrice = (ticker) => {
         interval = "1d"
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
-      console.log(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=${interval[range]}&range=${range}&symbols=${ticker}`)
       fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=${interval[range]}&range=${range}&symbols=${ticker}`, {
       "method": "GET",
       "headers": {

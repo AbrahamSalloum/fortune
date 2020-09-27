@@ -28,8 +28,6 @@ const useStyles = makeStyles({
   }
 })
 const DetailsHeader = ({ticker}) => (
-
-  <div>
       <AppBar position="static">
         <Toolbar>
         <Link to="/">
@@ -43,7 +41,6 @@ const DetailsHeader = ({ticker}) => (
           <Button color="inherit">{ticker}</Button>
         </Toolbar>
       </AppBar>
-    </div>
 )
 
 

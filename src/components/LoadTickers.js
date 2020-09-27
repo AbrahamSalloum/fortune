@@ -22,7 +22,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import SimplePieChart from './loadTicker/tickerchart.js'
 import SimpleLineChartfrom from './loadTicker/tickerlinechart.js'
-
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 
 const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
 
@@ -113,7 +116,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
 }
 
 const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate}) => (
-    <AppBar position="static" >
+    <AppBar position="static">
       <Toolbar>
       <div className={classes.navbar}>
         <React.Fragment key={'top'}>
@@ -168,19 +171,53 @@ const LoadTickers = () => {
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
+  const [tabValue, settabValue] = useState(0);
   const dispatch = useDispatch();
 
   const toggleDrawer = () => {
     toggleDrawerstate(!showdrawer)
   }
 
+  const handleChange = (event, tabValue) => {
+    settabValue(tabValue);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(startsetTickers())
-      console.log('dd')
     }, 600000);
     return () => clearInterval(interval);
   });
+
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+  };
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+        style={{"min-height":"300"}}
+      >
+      {value === index && (<Box p={3}><Typography>{children}</Typography></Box>)}
+      </div>
+    );
+  }
+  
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
   const classes = useStyles();
   return(
@@ -195,7 +232,16 @@ const LoadTickers = () => {
           <SimplePieChart/>
         </Grid>
         <Grid item xs={12} sm={9}>
-        <SimpleLineChartfrom />
+          <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
+            <Tab label="Item One" {...a11yProps(0)} />
+            <Tab label="Item Two" {...a11yProps(1)} />
+          </Tabs>
+          <TabPanel value={tabValue} index={0}>
+            <SimpleLineChartfrom />
+          </TabPanel>
+          <TabPanel value={tabValue} index={1}>
+            {"hello"}
+          </TabPanel>
         </Grid>
          
         <Grid item container xs={12}>
