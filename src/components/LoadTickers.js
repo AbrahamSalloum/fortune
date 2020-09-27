@@ -21,7 +21,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import SimplePieChart from './loadTicker/tickerchart.js'
-
+import SimpleLineChartfrom from './loadTicker/tickerlinechart.js'
 
 
 const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
@@ -194,7 +194,10 @@ const LoadTickers = () => {
         <Grid item xs={12} sm={3}>
           <SimplePieChart/>
         </Grid>
-
+        <Grid item xs={12} sm={9}>
+        <SimpleLineChartfrom />
+        </Grid>
+         
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
           <Grid item xs={12} sm={4}>
