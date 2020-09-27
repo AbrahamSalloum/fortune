@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {useDispatch } from "react-redux";
 import {StartaddTicker, startsetTickers} from '../redux/actions.js'
-import { v4 as uuidv4 } from 'uuid';
 import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
@@ -21,8 +20,7 @@ const Add = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const id = uuidv4()
-    dispatch(StartaddTicker({id, ticker,amount, date, purchaseprice}))
+    dispatch(StartaddTicker({ticker,amount, date, purchaseprice}))
     dispatch(startsetTickers())
   }
 

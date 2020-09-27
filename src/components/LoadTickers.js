@@ -20,6 +20,7 @@ import Add from './Add.js'
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import SimplePieChart from './loadTicker/tickerchart.js'
 
 
 
@@ -62,16 +63,15 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
   
   return(
     <div style={{ height: 400, width: '100%' }}>
-    <DataGrid 
-      disableMultipleSelection={true} 
-      rows={data} columns={columns} 
-      pageSize={10} 
-      autoHeight={true} 
-      autoPageSize={true} 
-      rowHeight={38} 
-      className={classes.root}
-      onRowClick={(param) => {toggleshowbox(param)}}
-      
+      <DataGrid 
+        disableMultipleSelection={true} 
+        rows={data} columns={columns} 
+        pageSize={10} 
+        autoHeight={true} 
+        autoPageSize={true} 
+        rowHeight={38} 
+        className={classes.root}
+        onRowClick={(param) => {console.log(param); toggleshowbox(param)}}
       />
     </div>
   )
@@ -86,6 +86,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
   return(
     <div style={{display: "flex"}}>
       <div style={{"marginLeft": "5px", "marginRight": "5px"}} >
+      
         <Button
           variant="contained"
           color="secondary"
@@ -103,7 +104,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
       <div style={{"marginLeft": "5px", "marginRight": "5px"}}>
         <Button
           variant="contained"
-          onClick={() => {dispatch(dodelticker(false)) ; toggleshowbox(false)}}
+          onClick={() => {toggleshowbox(false)}}
           startIcon={<CloseIcon />}
         >Close</Button>
       </div>
@@ -190,11 +191,15 @@ const LoadTickers = () => {
             <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
           </Grid>          
         </Grid>
-        <Grid item>
-        <ToggleBox showbox={showbox} toggleshowbox={toggleshowbox}/>
+        <Grid item xs={12} sm={3}>
+          <SimplePieChart/>
         </Grid>
+
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
+          <Grid item xs={12} sm={4}>
+          <ToggleBox showbox={showbox} toggleshowbox={toggleshowbox}/>
+        </Grid>
              <TickerItem price={price} tickerlist={tickerlist} toggleshowbox={toggleshowbox} classes={classes}/> 
           </Grid> 
         </Grid>

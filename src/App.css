@@ -102,15 +102,20 @@
 }
 
 .form-box{
+  width: 90%;
   display:flex;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
   flex-direction: row;
+
 }
 
 @media only screen and (max-width: 600px) {
   .form-box {
+    width: 90%;
     display:flex;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
   }
 }
