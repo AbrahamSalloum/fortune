@@ -24,8 +24,8 @@ import SimplePieChart from './loadTicker/tickerchart.js'
 import SimpleLineChartfrom from './loadTicker/tickerlinechart.js'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
+import PositionSummary from './loadTicker/PositionSummary';
 
 const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
 
@@ -36,8 +36,8 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
       </Tooltip>
     )
   }
-  
-  
+
+
    let data = tickerlist.map((item) => {
       for(let j in price){
         if (price[j]['ticker'] === item['ticker']){
@@ -63,16 +63,16 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
     })},
     {field: 'details', headerName: 'Details',  width: 100 ,renderCell: (params) => <Link to={`/details/${params.getValue('ticker')}`}>Details</Link> }
   ]
-  
+
   return(
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid 
-        disableMultipleSelection={true} 
-        rows={data} columns={columns} 
-        pageSize={10} 
-        autoHeight={true} 
-        autoPageSize={true} 
-        rowHeight={38} 
+      <DataGrid
+        disableMultipleSelection={true}
+        rows={data} columns={columns}
+        pageSize={10}
+        autoHeight={true}
+        autoPageSize={true}
+        rowHeight={38}
         className={classes.root}
         onRowClick={(param) => {console.log(param); toggleshowbox(param)}}
       />
@@ -81,15 +81,15 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
 }
 
 const ToggleBox = ({showbox, toggleshowbox}) => {
-  
+
   const dispatch = useDispatch();
   if(!showbox){
     return false
-  } 
+  }
   return(
     <div style={{display: "flex"}}>
       <div style={{"marginLeft": "5px", "marginRight": "5px"}} >
-      
+
         <Button
           variant="contained"
           color="secondary"
@@ -135,13 +135,13 @@ const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, class
           <Button color="inherit">{ticker}</Button>
       </div>
           <div >
-          <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography> 
+          <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography>
           <div><Typography variant="caption" display="block">Updates every 10 mins</Typography></div>
           </div>
-        
+
       </Toolbar>
     </AppBar>
-)    
+)
 
 const useStyles = makeStyles({
   root: {
@@ -187,13 +187,8 @@ const LoadTickers = () => {
       dispatch(startsetTickers())
     }, 600000);
     return () => clearInterval(interval);
-  });
+  }, []);
 
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-  };
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -204,13 +199,13 @@ const LoadTickers = () => {
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
         {...other}
-        style={{"min-height":"300"}}
+        style={{"minHeight":"300"}}
       >
-      {value === index && (<Box p={3}><Typography>{children}</Typography></Box>)}
+        {value === index && (<Box p={3}><Typography component={'span'}>{children}</Typography></Box>)}
       </div>
     );
   }
-  
+
 
   function a11yProps(index) {
     return {
@@ -226,7 +221,7 @@ const LoadTickers = () => {
         <Grid item container xs={12}>
           <Grid item xs={12}>
             <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
-          </Grid>          
+          </Grid>
         </Grid>
         <Grid item xs={12} sm={3}>
           <SimplePieChart/>
@@ -240,23 +235,23 @@ const LoadTickers = () => {
             <SimpleLineChartfrom />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            {"hello"}
+            <PositionSummary />
           </TabPanel>
         </Grid>
-         
+
         <Grid item container xs={12}>
           <Grid item xs={12} className={classes.root}>
           <Grid item xs={12} sm={4}>
           <ToggleBox showbox={showbox} toggleshowbox={toggleshowbox}/>
         </Grid>
-             <TickerItem price={price} tickerlist={tickerlist} toggleshowbox={toggleshowbox} classes={classes}/> 
-          </Grid> 
+             <TickerItem price={price} tickerlist={tickerlist} toggleshowbox={toggleshowbox} classes={classes}/>
+          </Grid>
         </Grid>
-        </Grid> 
+        </Grid>
     </Container>
   )
 }
 
 export default LoadTickers
 
- 
+
