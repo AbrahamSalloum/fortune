@@ -1,5 +1,5 @@
 const initialState = {
-    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: ''
+    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', linedata: []
 }
 
 export default function(state=initialState, action){
@@ -27,6 +27,14 @@ export default function(state=initialState, action){
             }
         }
 
+        case "SET_LINECHART": {
+            const line = action.payload
+            return {
+                ...state,
+                linedata: [...line]
+            }
+        }
+
         case "DEL_TICKER": {
             const idd = action.payload
             return {
@@ -43,12 +51,12 @@ export default function(state=initialState, action){
             }
         }
         case 'LOGIN': {
-            return { 
+            return {
                 ...state,
-                uid: action.uid, 
+                uid: action.uid,
             }
         }
-        
+
         case 'SET_NEWS': {
             const newsitem = action.payload
             return {
@@ -60,14 +68,14 @@ export default function(state=initialState, action){
         case 'SET_SUMMARY': {
             const summary = action.payload
             return {
-                ...state, 
+                ...state,
                 summary: [...state.summary, summary]
             }
         }
 
         case 'SET_TIMESTAMP': {
             return {
-                ...state, 
+                ...state,
                 lastpriceupdate: action.payload
             }
         }
@@ -79,7 +87,7 @@ export default function(state=initialState, action){
         case 'GET_LIST': {
             return state
         }
-                
+
         default: {
             return state
         }

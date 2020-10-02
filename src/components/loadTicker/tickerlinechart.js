@@ -1,43 +1,16 @@
 
 import React, {useState, useEffect} from 'react'
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
-import moment from 'moment'
+import { useSelector, useDispatch } from 'react-redux';
+import { getLineData } from '../../redux/actions.js'
 
 const SimpleLineChart = () => {
-  const [chartdata, setchartdata] = useState([])
 
+  const dispatch = useDispatch();
+  const chartdata = useSelector(state => state.AddTickers.linedata)
   useEffect(() => {
-    const getdata = async () => {
-      let isActive = true
-      const plotdatareq = await fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=1wk&range=max&symbols=^AXKO`, {
-        "method": "GET",
-        "headers": {
-          "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-          "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-        }
-      })
-      const plotdata = await plotdatareq.json()
-      console.log(plotdata)
-      const data = []
-      try {
-        for (let i in plotdata["^AXKO"]["timestamp"]) {
-          let t = moment.unix(plotdata["^AXKO"]["timestamp"][i])
-          let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata["^AXKO"]["close"][i] }
-          data.push(o)
-        }
-          setchartdata(data)
-
-      } catch (err) {
-        console.log(err)
-      }
-
-      return () => {
-        return isActive = false
-      };
-    }
-    getdata()
-  }
-    , [chartdata]);
+    dispatch(getLineData(""))
+  }, []);
 
   	return (
       <ResponsiveContainer width="100%" height={300}>

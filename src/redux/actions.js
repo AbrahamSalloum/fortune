@@ -1,6 +1,6 @@
 import {firebase, googleAuthProvider} from '../firebase/firebase'
 import database from '../firebase/firebase'
-
+import moment from 'moment'
 
 
 export const addTicker = (tickerinfo) => {
@@ -16,6 +16,39 @@ export const setTickers = (tickers) => {
   return {
       type: "SET_TICKER",
       payload: tickers
+  }
+}
+
+export const getLineData = (line) => {
+  return async (dispatch, getState) =>  {
+    const plotdatareq = await fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=1wk&range=max&symbols=^AXKO`, {
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
+        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
+      }
+    })
+    const plotdata = await plotdatareq.json()
+    console.log(plotdata)
+    const data = []
+    try {
+      for (let i in plotdata["^AXKO"]["timestamp"]) {
+        let t = moment.unix(plotdata["^AXKO"]["timestamp"][i])
+        let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata["^AXKO"]["close"][i] }
+        data.push(o)
+      }
+      dispatch(SetLineChartData(data))
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const SetLineChartData = (line) => {
+  return {
+    type: "SET_LINECHART",
+    payload: line
   }
 }
 
@@ -48,7 +81,7 @@ export const startsetTickers = () => {
       dispatch(fetchPrice(tickers))
       dispatch(setTickers(tickers))
       dispatch(setTimeStamp())
-      
+
     })
   }
 }
@@ -123,7 +156,7 @@ export const StorePrice = (ticker) => {
         dispatch(StoreNews(item))
       })
     }
-    
+
   }
 
   export const fetchChart = (range, ticker) => {
@@ -193,11 +226,11 @@ export const delticker = (r) => ({
       type: "SET_NEWS",
       payload: news
     })
-  
+
 
 export const getlist = () => ({
   type: 'GET_LIST'
-}) 
+})
 
 export const login = (uid) => ({
     type: 'LOGIN',

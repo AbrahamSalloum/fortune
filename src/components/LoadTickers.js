@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import {startsetTickers, dodelticker} from '../redux/actions.js'
+import { startsetTickers, dodelticker} from '../redux/actions.js'
 import '../App.css'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -20,12 +20,8 @@ import Add from './Add.js'
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import TabbedInfo from './loadTicker/TabbedInfo'
 import SimplePieChart from './loadTicker/tickerchart.js'
-import SimpleLineChartfrom from './loadTicker/tickerlinechart.js'
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import PositionSummary from './loadTicker/PositionSummary';
 
 const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
 
@@ -74,7 +70,7 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
         autoPageSize={true}
         rowHeight={38}
         className={classes.root}
-        onRowClick={(param) => {console.log(param); toggleshowbox(param)}}
+        onRowClick={(param) => {toggleshowbox(param)}}
       />
     </div>
   )
@@ -171,16 +167,14 @@ const LoadTickers = () => {
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
-  const [tabValue, settabValue] = useState(0);
+
   const dispatch = useDispatch();
 
   const toggleDrawer = () => {
     toggleDrawerstate(!showdrawer)
   }
 
-  const handleChange = (event, tabValue) => {
-    settabValue(tabValue);
-  };
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -190,29 +184,9 @@ const LoadTickers = () => {
   }, []);
 
 
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-        style={{"minHeight":"300"}}
-      >
-        {value === index && (<Box p={3}><Typography component={'span'}>{children}</Typography></Box>)}
-      </div>
-    );
-  }
 
 
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
+
 
   const classes = useStyles();
   return(
@@ -227,16 +201,7 @@ const LoadTickers = () => {
           <SimplePieChart/>
         </Grid>
         <Grid item xs={12} sm={9}>
-          <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-          </Tabs>
-          <TabPanel value={tabValue} index={0}>
-            <SimpleLineChartfrom />
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <PositionSummary />
-          </TabPanel>
+          <TabbedInfo />
         </Grid>
 
         <Grid item container xs={12}>
