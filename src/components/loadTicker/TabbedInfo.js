@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 
 import SimpleLineChartfrom from './tickerlinechart.js'
-import PositionSummary from './PositionSummary';
+
+import SimplePieChart from './tickerchart.js'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
-
-
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -20,7 +18,7 @@ const TabPanel = (props) => {
       {...other}
       style={{ "minHeight": "300" }}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box p={1}>{children}</Box>}
     </div>
   );
 }
@@ -42,15 +40,15 @@ const TabbedInfo = () => {
 
   return(
     <div>
-    <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
-    <Tab label="Item One" {...a11yProps(0)} />
-    <Tab label="Item Two" {...a11yProps(1)} />
-    </Tabs>
+      <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
+        <Tab label="Item One" {...a11yProps(0)} />
+        <Tab label="Item Two" {...a11yProps(1)} />
+      </Tabs>
       <TabPanel value={tabValue} index={0}>
         <SimpleLineChartfrom />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <PositionSummary />
+      <SimplePieChart/>
       </TabPanel>
     </div>
   )
