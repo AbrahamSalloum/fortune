@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
 import { startsetTickers} from '../redux/actions.js'
-import '../App.css'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-
+import '../App.css'
 
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,7 +17,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Add from './Add.js'
 import TabbedInfo from './loadTicker/TabbedInfo'
-import SimplePieChart from './loadTicker/tickerchart.js'
 import TickerItem from './loadTicker/TickerItem.js'
 import ToggleBox from './loadTicker/ToggleBox.js'
 import PositionSummary from './loadTicker/PositionSummary';
@@ -95,10 +93,10 @@ const LoadTickers = () => {
             <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={3}>
-          <PositionSummary />
+        <Grid item xs={12} sm={4}>
+          <PositionSummary price={price} tickerlist={tickerlist}/>
         </Grid>
-        <Grid item xs={12} sm={9}>
+        <Grid item xs={12} sm={8}>
           <TabbedInfo />
         </Grid>
         <Grid item container xs={12}>

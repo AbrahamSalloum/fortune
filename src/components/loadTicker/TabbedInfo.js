@@ -24,7 +24,7 @@ const TabPanel = (props) => {
 }
 
 const a11yProps = (index) => {
-
+  
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
@@ -32,8 +32,8 @@ const a11yProps = (index) => {
 }
 
 const TabbedInfo = () => {
-  const [tabValue, settabValue] = useState(0);
 
+  const [tabValue, settabValue] = useState(0);
   const handleChange = (event, tabValue) => {
     settabValue(tabValue);
   };
@@ -41,8 +41,8 @@ const TabbedInfo = () => {
   return(
     <div>
       <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
+        <Tab label="Line Chart" {...a11yProps(0)} />
+        <Tab label="Pie Chart" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={tabValue} index={0}>
         <SimpleLineChartfrom />

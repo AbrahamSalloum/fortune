@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {useDispatch} from 'react-redux';
 import {dodelticker} from '../../redux/actions.js'
 import DeleteIcon from '@material-ui/icons/Delete';

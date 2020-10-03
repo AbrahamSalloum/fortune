@@ -30,6 +30,7 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
       { field: 'ticker', headerName: 'Ticker', width: 150, renderCell: (params) => <RenderTicker params={params} />},
       { field: 'amount', headerName: 'Units' , width: 100, },
       { field: 'price', headerName: 'Price' , width: 100},
+      { field: 'purchaseprice', headerName: 'Purchase Price' , width: 100},
       { field: 'dayopen', headerName: 'Day Open' ,width: 100},
       { field: 'dayclose', headerName: 'Day Close' ,width: 100},
       { field: 'dayhigh', headerName: 'Day High' , width: 100},

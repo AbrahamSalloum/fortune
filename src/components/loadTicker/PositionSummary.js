@@ -8,32 +8,48 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const PositionSummary = () => {
+const PositionSummary = ({price, tickerlist}) => {
+  
+  const CurrentValue = () => {
+    let curr = 0
+    for(let ticker in tickerlist){
+      for(let p in price){
+        if(tickerlist[ticker]["ticker"] === price[p]['ticker']){
+          curr += price[p]['price'] * tickerlist[ticker]['amount']
+        }
+      }  
+    }
+    return curr
+  }
+
+  const pchasevalue = tickerlist.reduce((acc, a) => {return acc + a.amount*a.purchaseprice}, 0)
+
   return(
-    <Box component="span" m={1}>
-    <TableContainer component={Paper}>
-      <Table size="small" aria-label="a list">
-        <TableHead>
-          <TableRow>
-            <TableCell>category</TableCell>
-            <TableCell>Value</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>a</TableCell>
-            <TableCell>1</TableCell>
-          </TableRow>
-          <TableRow>
-          <TableCell>b</TableCell>
-          <TableCell>2</TableCell>
-        </TableRow>
-        <TableRow>
-        <TableCell>c</TableCell>
-        <TableCell>3</TableCell>
-      </TableRow>
-        </TableBody>
-      </Table>
+    <Box m={1}>
+      <TableContainer component={Paper}>
+        <Table size="small" aria-label="a list">
+          <TableHead>
+            <TableRow>
+              <TableCell>Type</TableCell>
+              <TableCell>Value</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <TableCell>{CurrentValue()}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Purchase Value</TableCell>
+              <TableCell>{pchasevalue}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Gain</TableCell>
+              <TableCell>{Math.round((pchasevalue-CurrentValue()/pchasevalue)*100 * 1000)/1000}%</TableCell>
+              <TableCell>{pchasevalue-CurrentValue()}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </TableContainer>
     </Box>
   )
