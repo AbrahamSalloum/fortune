@@ -21,13 +21,7 @@ export const setTickers = (tickers) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-    const plotdatareq = await fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=1wk&range=max&symbols=^AXKO`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-      }
-    })
+    const plotdatareq = await fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`)
     const plotdata = await plotdatareq.json()
     console.log(plotdata)
     const data = []
@@ -107,13 +101,7 @@ export const StorePrice = (ticker) => {
       tickerlist.forEach((t) => {
         commaedlist = commaedlist + t.ticker + ","
       })
-      fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols=${commaedlist}`, {
-        "method": "GET",
-        "headers": {
-          "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-          "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-        }
-      })
+      fetch(`http://10.1.1.11.xip.io:5000/gettickerprices/${commaedlist}`)
       .then(res => res.json())
       .then((r) => {
         const prices = []
@@ -142,15 +130,10 @@ export const StorePrice = (ticker) => {
 
   export const fetchNews = (ticker) => {
     return(dispatch, getState) => {
-      fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-news?region=US&category=${ticker}`, {
-        "method": "GET",
-        "headers": {
-          "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-          "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-        }
-      })
+      fetch(`http://10.1.1.11.xip.io:5000/gettickernews/${ticker}`)
       .then(res => res.json())
       .then((r) =>{
+        console.log(r)
         const news = r.items.result
         const item = {ticker, news}
         dispatch(StoreNews(item))
@@ -167,13 +150,8 @@ export const StorePrice = (ticker) => {
         interval = "1d"
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
-      fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=${interval[range]}&range=${range}&symbols=${ticker}`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-      }
-    })
+
+      fetch(`http://10.1.1.11.xip.io:5000/getfetchchart/${interval[range]}/${range}/${ticker}`)
     .then(res => res.json())
     .then((r) => {
       console.log(r)
@@ -198,13 +176,9 @@ export const delticker = (r) => ({
 
   export const fetchSummary = (ticker) => {
     return(dispatch, getState) => {
-      fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=${ticker}`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-      }
-    })
+      fetch(`http://10.1.1.11.xip.io:5000/gettickersummary/${ticker}`, {
+        method: 'GET'
+      })
     .then(res => res.json())
     .then((r) => {
       dispatch(StoreSummary(r))

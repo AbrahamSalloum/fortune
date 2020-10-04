@@ -19,28 +19,25 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-const styles = {}
-
 const useStyles = makeStyles({
   root: {
-
   }
 })
+
 const DetailsHeader = ({ticker}) => (
-      <AppBar position="static">
-        <Toolbar>
-        <Link to="/">
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <KeyboardBackspaceSharpIcon />
-          </IconButton>
-          </Link>
-          <Typography variant="h6">
-            Details
-          </Typography>
-          <Button color="inherit">{ticker}</Button>
-        </Toolbar>
-      </AppBar>
+  <AppBar position="static">
+    <Toolbar>
+      <Link to="/">
+        <IconButton edge="start" color="inherit" aria-label="menu">
+          <KeyboardBackspaceSharpIcon />
+        </IconButton>
+      </Link>
+      <Typography variant="h6">
+        Details
+      </Typography>
+      <Button color="inherit">{ticker}</Button>
+    </Toolbar>
+  </AppBar>
 )
 
 
@@ -53,14 +50,10 @@ const Details = () => {
   useEffect(() => dispatch(fetchSummary(ticker)), []); 
   const summary= useSelector(state => state.AddTickers.summary)
  
-  
-    
   if (!summary.length) {
       return ("loading...")
   }
 
-    
-    
     return(
       <Container maxWidth="lg">
         <Grid container spacing={2} justify="space-evenly" className={classes.summaryrow}>

@@ -1,5 +1,5 @@
 
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {LineChart, Line, Brush, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
 import { getLineData } from '../../redux/actions.js'
@@ -9,7 +9,7 @@ const SimpleLineChart = () => {
   const dispatch = useDispatch();
   const chartdata = useSelector(state => state.AddTickers.linedata)
   useEffect(() => {
-    dispatch(getLineData(""))
+    dispatch(getLineData("^AXKO"))
   }, []);
 
   	return (
@@ -18,8 +18,8 @@ const SimpleLineChart = () => {
           <XAxis dataKey="timestamp" scaleToFit={true}/>
           <YAxis domain={['auto', 'auto']}/>
           <CartesianGrid strokeDasharray="3 3"/>
-          <Tooltip/>
           <Legend />
+          <Tooltip/>
           <Line type="monotone" dataKey="close" stroke="#8884d8" dot={false} />
           <Brush dataKey="timestamp" travellerWidth={15} />
           </LineChart>

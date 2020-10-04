@@ -1,5 +1,5 @@
 import React from 'react'
-import  { PieChart, Pie, Sector, Cell, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import  { PieChart, Pie, Cell, Tooltip, ResponsiveContainer} from 'recharts';
 import {useSelector} from 'react-redux';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];

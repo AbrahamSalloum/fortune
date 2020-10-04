@@ -13,7 +13,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
       return false
     }
     return(
-      <div style={{display: "flex", padding: "5px"}}>
+      <div style={{display: "flex", padding: "5px", "white-space": "nowrap"}}>
         <div style={{"marginLeft": "5px", "marginRight": "5px"}} >
           <Button
             variant="contained"
@@ -40,4 +40,4 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
     )
   }
 
-  export default ToggleBox
+export default ToggleBox

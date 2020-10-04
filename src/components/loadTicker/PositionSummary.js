@@ -37,16 +37,15 @@ const PositionSummary = ({price, tickerlist}) => {
           <TableBody>
             <TableRow>
               <TableCell>Total</TableCell>
-              <TableCell>{CurrentValue()}</TableCell>
+              <TableCell>${CurrentValue()}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Purchase Value</TableCell>
-              <TableCell>{pchasevalue}</TableCell>
+              <TableCell>${pchasevalue}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Gain</TableCell>
-              <TableCell>{Math.round((pchasevalue-CurrentValue()/pchasevalue)*100 * 1000)/1000}%</TableCell>
-              <TableCell>{pchasevalue-CurrentValue()}</TableCell>
+              <TableCell>{Math.round((pchasevalue-CurrentValue()/pchasevalue)*100 * 1000)/1000}% (${pchasevalue-CurrentValue()})</TableCell>
             </TableRow>
           </TableBody>
         </Table>
