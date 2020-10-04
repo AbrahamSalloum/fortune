@@ -49,15 +49,24 @@ def checksummarycollection(ticker, url):
 
 def checkchartcollection(interval, rnge, ticker, url):
     print(interval, rnge, ticker)
+    rticker = ticker.replace('.', '-')
+    o = {}
     global chart
-    res = chart.find_one({'symbol': ticker, 'range': rnge, 'interval': interval})
+    params = {}
+    params[rticker+".symbol"] = ticker
+    params[rticker+".range"] = rnge
+    params[rticker+".interval"] = interval
+    res = chart.find_one(params)
+    print(res)
     if res is None:
+        print(url)
         chartsummary = fetch(url)
-        chartsummary['range'] = rnge
-        chartsummary['interval'] = interval
-        chartsummary['symbol'] = ticker
-        s = chart.insert_one(chartsummary)      
-        res = chart.find_one({'symbol': ticker, 'range': rnge, 'interval': interval})
+        chartsummary[ticker]['range'] = rnge
+        chartsummary[ticker]['interval'] = interval
+        o[rticker] = chartsummary[ticker]
+        s = chart.insert_one(o)      
+        print(s)
+        res = chart.find_one(params)
     else:
         print("NO FETCH CHART")
     return json.loads(json_util.dumps(res))
