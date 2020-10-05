@@ -13,7 +13,7 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
       return false
     }
     return(
-      <div style={{display: "flex", padding: "5px", "white-space": "nowrap"}}>
+      <div style={{display: "flex", padding: "5px", "whiteSpace": "nowrap"}}>
         <div style={{"marginLeft": "5px", "marginRight": "5px"}} >
           <Button
             variant="contained"

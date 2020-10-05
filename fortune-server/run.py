@@ -22,6 +22,10 @@ headers = {
     "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
 }
 
+x = prices.create_index([("symbol", "text")], unique=True, language_override="en")
+y = news.create_index([("symbol", "text")], unique=True, language_override="en")
+z = summary.create_index([("symbol", "text")], unique=True, language_override="en")
+
 def fetch(url):
     r = requests.get(url, headers=headers)
     return json.loads(r.text)
@@ -48,11 +52,11 @@ def checksummarycollection(ticker, url):
     return json.loads(json_util.dumps(res))
 
 def checkchartcollection(interval, rnge, ticker, url):
+    global chart
     rticker = ticker.replace('.', '-')
     o = {}
     p = {}
     params = {}
-    global chart
     params[rticker+".symbol"] = ticker
     params[rticker+".range"] = rnge
     params[rticker+".interval"] = interval
@@ -121,4 +125,4 @@ def getlinedata(line):
 #
 @app.route('/')
 def defaultroute():
-    return "NO!"    
+    return "Quoth the Server 404"    

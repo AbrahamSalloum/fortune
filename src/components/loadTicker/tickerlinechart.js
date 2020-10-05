@@ -1,6 +1,6 @@
 
 import React, {useEffect} from 'react'
-import {LineChart, Line, Brush, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import {LineChart, Line, Brush, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
 import { getLineData } from '../../redux/actions.js'
 
@@ -15,7 +15,6 @@ const SimpleLineChart = () => {
   	return (
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartdata} margin={{top: 0, right: 0, left: 0, bottom: 0}}>
-          <XAxis dataKey="timestamp" scaleToFit={true}/>
           <YAxis domain={['auto', 'auto']}/>
           <CartesianGrid strokeDasharray="3 3"/>
           <Legend />
