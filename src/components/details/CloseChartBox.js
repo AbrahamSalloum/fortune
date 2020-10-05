@@ -29,9 +29,9 @@ const arrangedata = (plotdata, ticker) => {
   return data
 }
 
-const CloseChartBox = ({ticker }) => {
+const CloseChartBox = ({ticker}) => {
   const dispatch = useDispatch()
-  useEffect(() => dispatch(fetchChart("1d",ticker)), [])
+  useEffect(() => dispatch(fetchChart("1d", ticker)), [])
 
   const plotdata= useSelector(state => state.AddTickers.plotdata)
   

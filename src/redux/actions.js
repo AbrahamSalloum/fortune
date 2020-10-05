@@ -26,9 +26,9 @@ export const getLineData = (line) => {
     console.log(plotdata)
     const data = []
     try {
-      for (let i in plotdata["^AXKO"]["timestamp"]) {
-        let t = moment.unix(plotdata["^AXKO"]["timestamp"][i])
-        let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata["^AXKO"]["close"][i] }
+      for (let i in plotdata[line]["timestamp"]) {
+        let t = moment.unix(plotdata[line]["timestamp"][i])
+        let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[line]["close"][i] }
         data.push(o)
       }
       dispatch(SetLineChartData(data))
@@ -88,11 +88,11 @@ export const setTimeStamp = () => {
 }
 
 export const StorePrice = (ticker) => {
-    return {
-        type: "ADD_PRICE",
-        payload: ticker
-    }
+  return {
+    type: "ADD_PRICE",
+    payload: ticker
   }
+}
 
   export const fetchPrice = (tickerlist) => {
 
@@ -101,11 +101,13 @@ export const StorePrice = (ticker) => {
       tickerlist.forEach((t) => {
         commaedlist = commaedlist + t.ticker + ","
       })
+      commaedlist = commaedlist.slice(0,-1);
+      console.log(commaedlist)
       fetch(`http://10.1.1.11.xip.io:5000/gettickerprices/${commaedlist}`)
       .then(res => res.json())
       .then((r) => {
         const prices = []
-        r.quoteResponse.result.forEach((q) => {
+        r.price.forEach((q) => {
           let price = {
             ticker: q.symbol,
             price: q.ask,
@@ -124,7 +126,6 @@ export const StorePrice = (ticker) => {
       .catch(err => {
         console.log(err);
       });
-
     }
   }
 
@@ -139,7 +140,6 @@ export const StorePrice = (ticker) => {
         dispatch(StoreNews(item))
       })
     }
-
   }
 
   export const fetchChart = (range, ticker) => {
@@ -174,55 +174,54 @@ export const delticker = (r) => ({
   payload: r
 })
 
-  export const fetchSummary = (ticker) => {
-    return(dispatch, getState) => {
-      fetch(`http://10.1.1.11.xip.io:5000/gettickersummary/${ticker}`, {
-        method: 'GET'
-      })
+export const fetchSummary = (ticker) => {
+  return(dispatch, getState) => {
+    fetch(`http://10.1.1.11.xip.io:5000/gettickersummary/${ticker}`, {
+      method: 'GET'
+    })
     .then(res => res.json())
     .then((r) => {
       dispatch(StoreSummary(r))
     })
-    }
   }
+}
 
-  export const StoreSummary = (r) => ({
-    type: 'SET_SUMMARY',
-    payload: r
-  })
+export const StoreSummary = (r) => ({
+  type: 'SET_SUMMARY',
+  payload: r
+})
 
-  export const StorChart = (r) => ({
-    type: 'SET_CHART',
-    payload: r
-  })
+export const StorChart = (r) => ({
+  type: 'SET_CHART',
+  payload: r
+})
 
-  export const StoreNews = (news) => ({
-      type: "SET_NEWS",
-      payload: news
-    })
-
+export const StoreNews = (news) => ({
+  type: "SET_NEWS",
+  payload: news
+})
 
 export const getlist = () => ({
   type: 'GET_LIST'
 })
 
 export const login = (uid) => ({
-    type: 'LOGIN',
-    uid
+  type: 'LOGIN',
+  uid
 })
 
 export const logout = () => ({
-    type: 'LOGOUT',
+  type: 'LOGOUT',
 })
 
 export const startLogin = () => {
-    return () => {
-        return firebase.auth().signInWithPopup(googleAuthProvider)
-    }
+  return () => {
+    return firebase.auth().signInWithPopup(googleAuthProvider)
+  }
 }
 
 export const startLogout= () => {
-    return () => {
-        return firebase.auth().signOut();
-    }
+  return () => {
+    return firebase.auth().signOut();
+  }
 }
