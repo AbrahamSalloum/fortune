@@ -4,7 +4,9 @@ import requests
 import json
 from flask_cors import CORS
 from bson import json_util
-print(pymongo.version)
+import time
+
+
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client['fortunedb']
 prices = db['prices']
@@ -14,9 +16,10 @@ summary = db['summary']
 app = Flask(__name__)
 CORS(app)
 
+
 headers = {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
+    "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
+    "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
 }
 
 def fetch(url):
@@ -29,10 +32,9 @@ def checknewscollection(ticker, url):
     if res is None:
         recnews = fetch(url)
         recnews['ticker'] = ticker
+        recnews['lastupdate'] = time.time()
         news.insert_one(recnews)
         res = news.find_one({"ticker": ticker})
-    else:
-        print("NO FETCH NEWS")
     return json.loads(json_util.dumps(res))
 
 def checksummarycollection(ticker, url):
@@ -40,10 +42,9 @@ def checksummarycollection(ticker, url):
     res = summary.find_one({'symbol': ticker})
     if res is None:
         recsummary = fetch(url)
+        recsummary['lastupdate'] = time.time()
         summary.insert_one(recsummary)
         res = summary.find_one({"symbol": ticker})
-    else:
-        print("NO FETCH SUMMARY")
     return json.loads(json_util.dumps(res))
 
 def checkchartcollection(interval, rnge, ticker, url):
@@ -60,11 +61,10 @@ def checkchartcollection(interval, rnge, ticker, url):
         chartsummary = fetch(url)
         chartsummary[ticker]['range'] = rnge
         chartsummary[ticker]['interval'] = interval
+        chartsummary[ticker]['lastupdate'] = time.time()
         o[rticker] = chartsummary[ticker]
         s = chart.insert_one(o)     
         res = chart.find_one(params)
-    else:
-        print("NO FETCH CHART")
     p[ticker] = res[rticker]    
     return json.loads(json_util.dumps(p))
 
@@ -81,6 +81,8 @@ def checkpricecollection(tickerlist):
         ftickers = ','.join(notfound)
         url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols={tickerlist}".format(tickerlist = ftickers)
         d = fetch(url)
+        for t in d['quoteResponse']["result"]:
+            t["lastupdate"] = time.time()
         prices.insert_many(d['quoteResponse']["result"])
     res = prices.find({'symbol':{"$in":tickerlist_arr}})
     s['price'] = res

@@ -23,7 +23,6 @@ export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
     const plotdatareq = await fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`)
     const plotdata = await plotdatareq.json()
-    console.log(plotdata)
     const data = []
     try {
       for (let i in plotdata[line]["timestamp"]) {
@@ -101,8 +100,7 @@ export const StorePrice = (ticker) => {
       tickerlist.forEach((t) => {
         commaedlist = commaedlist + t.ticker + ","
       })
-      commaedlist = commaedlist.slice(0,-1);
-      console.log(commaedlist)
+      commaedlist = commaedlist.slice(0,-1)
       fetch(`http://10.1.1.11.xip.io:5000/gettickerprices/${commaedlist}`)
       .then(res => res.json())
       .then((r) => {
@@ -134,7 +132,6 @@ export const StorePrice = (ticker) => {
       fetch(`http://10.1.1.11.xip.io:5000/gettickernews/${ticker}`)
       .then(res => res.json())
       .then((r) =>{
-        console.log(r)
         const news = r.items.result
         const item = {ticker, news}
         dispatch(StoreNews(item))
@@ -143,7 +140,6 @@ export const StorePrice = (ticker) => {
   }
 
   export const fetchChart = (range, ticker) => {
-    console.log(range)
     return(dispatch, getState) => {
       let interval = "15m"
       if(range === "3mo"){
@@ -154,7 +150,6 @@ export const StorePrice = (ticker) => {
       fetch(`http://10.1.1.11.xip.io:5000/getfetchchart/${interval[range]}/${range}/${ticker}`)
     .then(res => res.json())
     .then((r) => {
-      console.log(r)
       dispatch(StorChart(r))
     })
     }
