@@ -132,7 +132,7 @@ export const StorePrice = (ticker) => {
       fetch(`http://10.1.1.11.xip.io:5000/gettickernews/${ticker}`)
       .then(res => res.json())
       .then((r) =>{
-        const news = r.items.result
+        const news = r[0].items.result
         const item = {ticker, news}
         dispatch(StoreNews(item))
       })
@@ -176,7 +176,7 @@ export const fetchSummary = (ticker) => {
     })
     .then(res => res.json())
     .then((r) => {
-      dispatch(StoreSummary(r))
+      dispatch(StoreSummary(r[0]))
     })
   }
 }

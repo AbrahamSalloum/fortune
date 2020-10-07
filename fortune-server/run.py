@@ -16,6 +16,8 @@ summary = db['summary']
 app = Flask(__name__)
 CORS(app)
 
+UPDATE_INTERVAL= 1200
+
 
 headers = {
     "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
@@ -27,49 +29,68 @@ y = news.create_index([("symbol", "text")], unique=True, language_override="en")
 z = summary.create_index([("symbol", "text")], unique=True, language_override="en")
 
 def fetch(url):
+    print('fetch...', url)
     r = requests.get(url, headers=headers)
     return json.loads(r.text)
 
+
+
 def checknewscollection(ticker, url):
     global news
-    res = news.find_one({"ticker": ticker})
-    if res is None:
+    now = int(time.time())
+    res = news.find({"ticker":ticker, "nextupdate":{"$gt": now}})
+    res = json.loads(json_util.dumps(res))
+    if len(res) <= 0:
         recnews = fetch(url)
         recnews['ticker'] = ticker
-        recnews['lastupdate'] = time.time()
-        news.insert_one(recnews)
-        res = news.find_one({"ticker": ticker})
-    return json.loads(json_util.dumps(res))
+        recnews['nextupdate'] = now + int(UPDATE_INTERVAL)
+        update = news.update({"ticker": ticker}, recnews,  upsert=True)
+        res = news.find({"ticker": ticker})
+    else:
+        print("NO NEWS IS GOOD NEWS")
+    return json_util.dumps(res)
+
 
 def checksummarycollection(ticker, url):
     global summary
-    res = summary.find_one({'symbol': ticker})
-    if res is None:
+    now = int(time.time())
+    res = summary.find({"symbol":ticker, "nextupdate":{"$gt": now}})
+    res = json.loads(json_util.dumps(res))
+    if len(res) <= 0:
         recsummary = fetch(url)
-        recsummary['lastupdate'] = time.time()
-        summary.insert_one(recsummary)
-        res = summary.find_one({"symbol": ticker})
-    return json.loads(json_util.dumps(res))
+        recsummary['nextupdate'] = time.time() + UPDATE_INTERVAL
+        update = summary.update({"symbol": ticker}, recsummary,  upsert=True)
+        res = summary.find({"symbol": ticker})
+    else:
+        print("NO NEW SUMMARY")
+    return json_util.dumps(res)
+
 
 def checkchartcollection(interval, rnge, ticker, url):
     global chart
     rticker = ticker.replace('.', '-')
+    now = int(time.time())
     o = {}
     p = {}
     params = {}
     params[rticker+".symbol"] = ticker
     params[rticker+".range"] = rnge
     params[rticker+".interval"] = interval
-    res = chart.find_one(params)
-    if res is None:
+    params[rticker+".nextupdate"] = {"$gt": now}
+    res = chart.find(params)
+    res = json.loads(json_util.dumps(res))
+    if len(res) <= 0:
         chartsummary = fetch(url)
         chartsummary[ticker]['range'] = rnge
         chartsummary[ticker]['interval'] = interval
-        chartsummary[ticker]['lastupdate'] = time.time()
+        chartsummary[ticker]['nextupdate'] = now + UPDATE_INTERVAL
         o[rticker] = chartsummary[ticker]
-        s = chart.insert_one(o)     
-        res = chart.find_one(params)
-    p[ticker] = res[rticker]    
+        update = chart.update({rticker+".symbol": ticker}, o, upsert=True)
+        res = chart.find({rticker+".symbol": ticker})
+        res = json.loads(json_util.dumps(res))
+    else:
+        print("MMMM pie...")
+    p[ticker] = res[0][rticker]
     return json.loads(json_util.dumps(p))
 
 def checkpricecollection(tickerlist):
@@ -81,19 +102,17 @@ def checkpricecollection(tickerlist):
         res = prices.find_one({'symbol': ticker})
         if res is None:
             notfound.append(ticker)
-    if len(notfound) > 0: 
+    if len(notfound) > 0:
         ftickers = ','.join(notfound)
         url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols={tickerlist}".format(tickerlist = ftickers)
         d = fetch(url)
         for t in d['quoteResponse']["result"]:
-            t["lastupdate"] = time.time()
+            t['nextupdate'] = time.time() + UPDATE_INTERVAL
         prices.insert_many(d['quoteResponse']["result"])
     res = prices.find({'symbol':{"$in":tickerlist_arr}})
     s['price'] = res
     return json.loads(json_util.dumps(s))
-#
-#
-#
+
 @app.route('/gettickerprices/<tickerlist>')
 def tickerrequest(tickerlist):
     res = checkpricecollection(tickerlist)
@@ -103,19 +122,19 @@ def tickerrequest(tickerlist):
 def tickernews(ticker):
     url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-news?region=US&category={ticker}".format(ticker = ticker)
     res = checknewscollection(ticker, url)
-    return res 
+    return res
 #
 @app.route('/getfetchchart/<interval>/<rnge>/<ticker>')
 def fetchchart(interval, rnge, ticker):
     url ="https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval={interval}&range={rnge}&symbols={ticker}".format(interval = interval, rnge=rnge,ticker=ticker)
     res = checkchartcollection(interval, rnge, ticker, url)
-    return res 
+    return res
 #
 @app.route('/gettickersummary/<ticker>')
 def tickersummary(ticker):
     url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol={ticker}".format(ticker = ticker)
     res = checksummarycollection(ticker, url)
-    return res 
+    return res
 #
 @app.route('/getlinedata/<line>')
 def getlinedata(line):
@@ -125,4 +144,4 @@ def getlinedata(line):
 #
 @app.route('/')
 def defaultroute():
-    return "Quoth the Server 404"    
+    return "Quoth the Server 404"
