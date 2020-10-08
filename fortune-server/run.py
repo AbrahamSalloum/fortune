@@ -33,8 +33,6 @@ def fetch(url):
     r = requests.get(url, headers=headers)
     return json.loads(r.text)
 
-
-
 def checknewscollection(ticker, url):
     global news
     now = int(time.time())
@@ -50,7 +48,6 @@ def checknewscollection(ticker, url):
         print("NO NEWS IS GOOD NEWS")
     return json_util.dumps(res)
 
-
 def checksummarycollection(ticker, url):
     global summary
     now = int(time.time())
@@ -64,7 +61,6 @@ def checksummarycollection(ticker, url):
     else:
         print("NO NEW SUMMARY")
     return json_util.dumps(res)
-
 
 def checkchartcollection(interval, rnge, ticker, url):
     global chart
@@ -94,21 +90,25 @@ def checkchartcollection(interval, rnge, ticker, url):
     return json.loads(json_util.dumps(p))
 
 def checkpricecollection(tickerlist):
+    global prices
+    now = int(time.time())
     tickerlist_arr = tickerlist.split(',')
     s = {}
     notfound = []
-    global prices
     for ticker in tickerlist_arr:
-        res = prices.find_one({'symbol': ticker})
-        if res is None:
+        res = prices.find({'symbol': ticker, "nextupdate":{"$gt": now}})
+        res = json.loads(json_util.dumps(res))
+        if len(res) <= 0:
             notfound.append(ticker)
     if len(notfound) > 0:
         ftickers = ','.join(notfound)
         url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols={tickerlist}".format(tickerlist = ftickers)
         d = fetch(url)
         for t in d['quoteResponse']["result"]:
-            t['nextupdate'] = time.time() + UPDATE_INTERVAL
-        prices.insert_many(d['quoteResponse']["result"])
+            t['nextupdate'] = now + UPDATE_INTERVAL
+            up = prices.update({"symbol":t["symbol"]}, t, upsert=True)
+    else:
+        print("I GIVE YOU GOOD PRICE")
     res = prices.find({'symbol':{"$in":tickerlist_arr}})
     s['price'] = res
     return json.loads(json_util.dumps(s))
