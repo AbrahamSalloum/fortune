@@ -13,8 +13,6 @@ class LoginPage extends React.Component {
             </div>
         )
     }
-
-
 }
 
 const mapDistpatchToProps = (dispatch) => ({

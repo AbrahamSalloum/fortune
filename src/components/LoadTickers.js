@@ -69,7 +69,7 @@ const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
-  
+
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
 
@@ -87,6 +87,7 @@ const LoadTickers = () => {
   }, []);
 
   const classes = useStyles();
+
   return(
     <Container>
       <Grid container spacing={2}>

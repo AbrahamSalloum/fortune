@@ -40,7 +40,7 @@ const LoadGoogleLogin = () => {
   }
 
   return(
-    <div style={{"backgroundColor": "#557ff6", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center","textAlign": "center","minHeight": "100vh"}}>
+    <div style={{"backgroundColor": "#e2e4a5", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center","textAlign": "center","minHeight": "100vh"}}>
       <GoogleLogin
       clientId="653707267747-4vntcc7pvm0cc26t503u6trnt04da2bl.apps.googleusercontent.com"
       buttonText="Login"

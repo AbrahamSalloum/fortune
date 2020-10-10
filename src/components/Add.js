@@ -14,13 +14,15 @@ const Add = () => {
   const [searchticker, savesearchticker] = useState('')
   const [ticker, setticker] = useState('')
   const [amount, setamount] = useState('')
-  const [date, setdate] = useState('')
   const [purchaseprice, setpurchaseprice] = useState('')
   const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
 
   const onSubmit = (e) => {
     e.preventDefault()
-    dispatch(StartaddTicker({ticker,amount, date, purchaseprice}))
+    const dateadded = Date.now()
+    const pprce = new Date(selectedDate).getTime() / 1000
+    dispatch(StartaddTicker({ticker,amount, pprce, purchaseprice, dateadded}))
     dispatch(startsetTickers())
   }
 
@@ -34,7 +36,6 @@ const Add = () => {
 
   const onDateChange = (date) => {
     setSelectedDate(date)
-    setdate(date)
   }
 
   const onPurPriceChange = (e) => {
@@ -84,9 +85,7 @@ const Add = () => {
     onChange: searchtickerChange
   };
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-
-
+  
     return(
     <div>
       <div>
@@ -119,9 +118,7 @@ const Add = () => {
               format="MM/dd/yyyy"
               value={selectedDate}
               onChange={onDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
+              KeyboardButtonProps={{'aria-label': 'change date',}}
             />
           </div>
           <div>

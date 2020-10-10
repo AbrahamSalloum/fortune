@@ -5,6 +5,7 @@ import json
 from flask_cors import CORS
 from bson import json_util
 import time
+from flask import request
 
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -145,3 +146,11 @@ def getlinedata(line):
 @app.route('/')
 def defaultroute():
     return "Quoth the Server 404"
+
+@app.before_request
+def checkauth():
+    secret = request.headers.get('secretkey')
+    if secret == "thisisasecret":
+        pass
+    else:
+        return "Auth Required"
