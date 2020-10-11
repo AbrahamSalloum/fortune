@@ -10,4 +10,4 @@ const reducer = {
 }
 
 
-export default configureStore({reducer, middleware, devTools:true});
+export default configureStore({reducer, middleware, devTools:true, serializableCheck: false,});

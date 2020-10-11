@@ -8,8 +8,8 @@ class LoginPage extends React.Component {
     render(){
         return (
             <div>
-                    <h1>Login with Google</h1>
-                    <button onClick={this.props.startLogin} className="button">Login with Google</button>
+                <h1>Login with Google</h1>
+                <button onClick={this.props.startLogin} className="button">Login with Google</button>
             </div>
         )
     }

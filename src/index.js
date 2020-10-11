@@ -1,30 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Switch, Route, BrowserRouter, useHistory, Redirect   } from "react-router-dom" //BrowserRouter as Router
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "./redux/store";
 import './index.css';
 import App from './App';
 import AddPage from './components/Add';
 import Details from './components/Details'
-import {login, startsetTickers} from './redux/actions'
+import {startLogin, startsetTickers} from './redux/actions'
 import GoogleLogin from 'react-google-login';
 
 
 const LoadGoogleLogin = () => {
 
   const load = (response) => { 
-    store.dispatch(login(response.googleId))
+    const userinfo = {userid: response.profileObj.googleId, username: response.profileObj.email, password: response.googleId}
+    store.dispatch(startLogin(JSON.stringify(userinfo)))
     store.dispatch(startsetTickers())
-    ReactDOM.render(<Start />, document.getElementById('root'));
+    
+    while(!true){
+      return false
+    }
+    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));
+
+    
+      
     
   }
 
   const Start = () =>  {
     let history = useHistory();
-    
+    const jwt =  useSelector(state => state.AddTickers.jwt)
+    while(!jwt){
+      return false
+    }
     return(
-      <Provider store={store}>
         <BrowserRouter history={history}>
           <Switch>
             <Route path='/dashboard' component={App} />
@@ -35,7 +45,7 @@ const LoadGoogleLogin = () => {
             </Route>
           </Switch>
         </BrowserRouter>
-        </Provider>
+
     )
   }
 

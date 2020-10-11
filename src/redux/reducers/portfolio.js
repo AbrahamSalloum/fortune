@@ -1,5 +1,5 @@
 const initialState = {
-    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', linedata: []
+    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', linedata: [], logindata: [], jwt: false
 }
 
 export default function(state=initialState, action){
@@ -51,9 +51,18 @@ export default function(state=initialState, action){
             }
         }
         case 'LOGIN': {
+            const login = action.payload
             return {
                 ...state,
-                uid: action.uid,
+                logindata: [login]
+            }
+        }
+
+        case 'STORE_JWT': {
+            const jwt = action.payload
+            return {
+                ...state,
+                jwt: jwt
             }
         }
 

@@ -1,9 +1,10 @@
-import {firebase, googleAuthProvider} from '../firebase/firebase'
+import {firebase} from '../firebase/firebase'
 import database from '../firebase/firebase'
 import moment from 'moment'
 
 let authheader = {
   "secretkey": process.env.REACT_APP_SERVER_KEY
+  
 }
 
 
@@ -25,25 +26,32 @@ export const setTickers = (tickers) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-
-    const plotdatareq = await fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`, {
+    console.log(getState())
+    fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`, {
+      withCredentials: true,
+      credentials: 'include',
         method: 'GET',
-        headers:authheader
+        headers: {
+          Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+          
+        }
       }
-    )
-    const plotdata = await plotdatareq.json()
-    const data = []
-    try {
-      for (let i in plotdata[line]["timestamp"]) {
-        let t = moment.unix(plotdata[line]["timestamp"][i])
-        let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[line]["close"][i] }
-        data.push(o)
-      }
-      dispatch(SetLineChartData(data))
+    ).then(plotdatareq => plotdatareq.json())
+    .then((plotdata) => {
+      const data = []
+      try {
+        for (let i in plotdata[line]["timestamp"]) {
+          let t = moment.unix(plotdata[line]["timestamp"][i])
+          let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[line]["close"][i] }
+          data.push(o)
+        }
+        dispatch(SetLineChartData(data))
+  
+      } catch (err) {
+        console.log(err)
+      }      
+    })  
 
-    } catch (err) {
-      console.log(err)
-    }
   }
 }
 
@@ -105,14 +113,19 @@ export const StorePrice = (ticker) => {
   export const fetchPrice = (tickerlist) => {
 
     return(dispatch, getState) => {
+      console.log(`Bearer ${getState().AddTickers.jwt.access_token}`)
       let commaedlist = ""
       tickerlist.forEach((t) => {
         commaedlist = commaedlist + t.ticker + ","
       })
       commaedlist = commaedlist.slice(0,-1)
       fetch(`http://10.1.1.11.xip.io:5000/gettickerprices/${commaedlist}`,  {
+        withCredentials: true,
+        credentials: 'include',
         method: 'GET',
-        headers: authheader
+        headers: {
+          Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+        }
       }
     )
       .then(res => res.json())
@@ -132,6 +145,7 @@ export const StorePrice = (ticker) => {
           }
           prices.push(price)
         })
+        console.log(prices)
         dispatch(StorePrice(prices))
       })
       .catch(err => {
@@ -142,9 +156,12 @@ export const StorePrice = (ticker) => {
 
   export const fetchNews = (ticker) => {
     return(dispatch, getState) => {
+      
       fetch(`http://10.1.1.11.xip.io:5000/gettickernews/${ticker}`, {
         method: 'GET',
-        headers: authheader
+        headers: {
+          Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+        }
       }
     )
       .then(res => res.json())
@@ -166,7 +183,9 @@ export const StorePrice = (ticker) => {
 
       fetch(`http://10.1.1.11.xip.io:5000/getfetchchart/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
-        headers: authheader
+        headers: {
+          Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+        }
       }
     )
     .then(res => res.json())
@@ -194,7 +213,9 @@ export const fetchSummary = (ticker) => {
   return(dispatch, getState) => {
     fetch(`http://10.1.1.11.xip.io:5000/gettickersummary/${ticker}`, {
       method: 'GET',
-      headers: authheader
+      headers: {
+        Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+      }
     })
     .then(res => res.json())
     .then((r) => {
@@ -222,18 +243,50 @@ export const getlist = () => ({
   type: 'GET_LIST'
 })
 
-export const login = (uid) => ({
+export const login = (response) => ({
   type: 'LOGIN',
-  uid
+  payload: response
+})
+
+export const storejwt = (jwt) => ({
+  type: 'STORE_JWT',
+  payload: jwt
 })
 
 export const logout = () => ({
   type: 'LOGOUT',
 })
 
-export const startLogin = () => {
-  return () => {
-    return firebase.auth().signInWithPopup(googleAuthProvider)
+
+
+export const startLogin = (response) => {
+  return (dispatch, getState) => {
+    fetch(`http://10.1.1.11.xip.io:5000/storelogin`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+      },
+      method: 'POST',
+      body: response
+    }).then(res => res.json())
+    .then((s) => {
+      dispatch(login(JSON.stringify(s)))
+      console.log(s)
+      return s
+    })
+      .then((r) => {
+        fetch(`http://10.1.1.11.xip.io:5000/auth`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+          },
+          method: 'POST',
+          body: JSON.stringify(r)
+        }).then(jwt => jwt.json())
+        .then((jwt) => {
+          dispatch(storejwt(jwt))
+        })
+    })
   }
 }
 
