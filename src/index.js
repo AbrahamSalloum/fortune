@@ -21,11 +21,7 @@ const LoadGoogleLogin = () => {
     while(!true){
       return false
     }
-    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));
-
-    
-      
-    
+    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));  
   }
 
   const Start = () =>  {
@@ -52,12 +48,12 @@ const LoadGoogleLogin = () => {
   return(
     <div style={{"backgroundColor": "#e2e4a5", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center","textAlign": "center","minHeight": "100vh"}}>
       <GoogleLogin
-      clientId="653707267747-4vntcc7pvm0cc26t503u6trnt04da2bl.apps.googleusercontent.com"
-      buttonText="Login"
-      onSuccess={load}
-      onFailure={err => console.log('fail', err)}
-      isSignedIn={true}
-      cookiePolicy={'single_host_origin'}
+        clientId="653707267747-4vntcc7pvm0cc26t503u6trnt04da2bl.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={load}
+        onFailure={err => console.log('fail', err)}
+        isSignedIn={true}
+        cookiePolicy={'single_host_origin'}
       />
     </div>
   )

@@ -37,6 +37,10 @@ export const getLineData = (line) => {
         }
       }
     ).then(plotdatareq => plotdatareq.json())
+    .then((m) => {
+      console.log("22", m)
+      return m
+    })
     .then((plotdata) => {
       const data = []
       try {
