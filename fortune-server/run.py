@@ -6,10 +6,7 @@ from flask_cors import CORS
 from bson import json_util
 import time
 from flask import request, jsonify
-from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    get_jwt_identity
-)
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
 
 UPDATE_INTERVAL= 1200
 key = "1234567890"
@@ -59,7 +56,6 @@ def addlogin():
 @app.route('/auth', methods=['POST'])
 def authtoken():
     content = request.get_json()
-    print(content)
     isuser = users.find_one({"userid": content["userid"]})
     if isuser:
         access_token = create_access_token(identity=isuser["userid"])
@@ -69,7 +65,7 @@ def authtoken():
 
 
 def fetch(url):
-    print('fetch...', url)
+    print('fetch:', url)
     r = requests.get(url, headers=headers)
     return json.loads(r.text)
 
@@ -172,7 +168,7 @@ def tickernews(ticker):
 @app.route('/getfetchchart/<interval>/<rnge>/<ticker>')
 @jwt_required
 def fetchchart(interval, rnge, ticker):
-    url ="https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval={interval}&range={rnge}&symbols={ticker}".format(interval = interval, rnge=rnge,ticker=ticker)
+    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval={interval}&range={rnge}&symbols={ticker}".format(interval = interval, rnge=rnge,ticker=ticker)
     res = checkchartcollection(interval, rnge, ticker, url)
     return res
 #
@@ -193,4 +189,3 @@ def getlinedata(line):
 @app.route('/')
 def defaultroute():
     return "Quoth the Server 404"
-
