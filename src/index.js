@@ -17,10 +17,6 @@ const LoadGoogleLogin = () => {
     const userinfo = {userid: response.profileObj.googleId, username: response.profileObj.email, password: response.googleId}
     store.dispatch(startLogin(JSON.stringify(userinfo)))
     store.dispatch(startsetTickers())
-    
-    while(!true){
-      return false
-    }
     ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));  
   }
 
@@ -31,6 +27,7 @@ const LoadGoogleLogin = () => {
       return false
     }
     return(
+      <Provider store={store}>
         <BrowserRouter history={history}>
           <Switch>
             <Route path='/dashboard' component={App} />
@@ -41,8 +38,9 @@ const LoadGoogleLogin = () => {
             </Route>
           </Switch>
         </BrowserRouter>
-
+        </Provider>
     )
+    
   }
 
   return(

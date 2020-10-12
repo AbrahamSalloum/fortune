@@ -26,7 +26,6 @@ export const setTickers = (tickers) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-    console.log(getState())
     fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`, {
       withCredentials: true,
       credentials: 'include',
@@ -38,7 +37,6 @@ export const getLineData = (line) => {
       }
     ).then(plotdatareq => plotdatareq.json())
     .then((m) => {
-      console.log("22", m)
       return m
     })
     .then((plotdata) => {
@@ -69,7 +67,6 @@ export const SetLineChartData = (line) => {
 export const StartaddTicker = (tickerinfo) => {
   return(dispatch, getState) => {
     const uid = getState().AddTickers.uid
-
     database.ref(`users/${uid}/tickers`).push(tickerinfo).then((ref) => {
       dispatch(addTicker({
         id: ref.key,
@@ -252,6 +249,11 @@ export const login = (response) => ({
   payload: response
 })
 
+export const setUid = (response) => ({
+  type: 'SET_UID',
+  payload: response
+})
+
 export const storejwt = (jwt) => ({
   type: 'STORE_JWT',
   payload: jwt
@@ -274,8 +276,8 @@ export const startLogin = (response) => {
       body: response
     }).then(res => res.json())
     .then((s) => {
-      dispatch(login(JSON.stringify(s)))
-      console.log(s)
+      dispatch(login(s))
+      dispatch(setUid(s.userid))
       return s
     })
       .then((r) => {

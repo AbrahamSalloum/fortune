@@ -1,5 +1,15 @@
 const initialState = {
-    tickerlist: [], price:[], news: [], plotdata: [], summary: [], searchticker: '', lastpriceupdate: '', linedata: [], logindata: [], jwt: false
+    tickerlist: [], 
+    price:[], 
+    news: [], 
+    plotdata: [], 
+    summary: [], 
+    searchticker: '', 
+    lastpriceupdate: '', 
+    linedata: [], 
+    logindata: [], 
+    jwt: false,
+    uid: ''
 }
 
 export default function(state=initialState, action){
@@ -55,6 +65,14 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 logindata: [login]
+            }
+        }
+
+        case 'SET_UID': {
+            const uid = action.payload
+            return {
+                ...state,
+                uid: uid
             }
         }
 
