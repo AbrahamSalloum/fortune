@@ -1,13 +1,13 @@
 const initialState = {
-    tickerlist: [], 
-    price:[], 
-    news: [], 
-    plotdata: [], 
-    summary: [], 
-    searchticker: '', 
-    lastpriceupdate: '', 
-    linedata: [], 
-    logindata: [], 
+    tickerlist: [],
+    price:[],
+    news: [],
+    plotdata: [],
+    summary: [],
+    searchticker: '',
+    lastpriceupdate: '',
+    linedata: [],
+    logindata: [],
     jwt: false,
     uid: ''
 }

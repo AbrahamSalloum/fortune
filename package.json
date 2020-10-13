@@ -36,6 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage": "http://10.1.1.11.xip.io:8008/build",
   "eslintConfig": {
     "extends": "react-app"
   },

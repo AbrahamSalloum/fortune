@@ -23,7 +23,7 @@ users = db['users']
 
 app = Flask(__name__)
 
-app.config['CORS_ORIGINS'] = ["http://10.1.1.11.xip.io:3000", "http://10.1.1.11:3000", "http://localhost:3000"]
+app.config['CORS_ORIGINS'] = ["http://10.1.1.11.xip.io:3000", "http://10.1.1.11:3000", "http://localhost:3000", "http://10.1.1.11.xip.io:5000", "https://pi.heycitizen.com", "http://pi.heycitizen.com:8008"]
 app.config['CORS_SUPPORTS_CREDENTIALS'] = True
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 app.config['CORS_EXPOSE_HEADERS'] = ['Authorization']
@@ -154,7 +154,6 @@ def checkpricecollection(tickerlist):
 @app.route('/gettickerprices/<tickerlist>')
 @jwt_required
 def tickerrequest(tickerlist):
-    print(request.headers)
     res = checkpricecollection(tickerlist)
     return res
 #

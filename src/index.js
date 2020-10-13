@@ -13,16 +13,17 @@ import GoogleLogin from 'react-google-login';
 
 const LoadGoogleLogin = () => {
 
-  const load = (response) => { 
+  const load = (response) => {
     const userinfo = {userid: response.profileObj.googleId, username: response.profileObj.email, password: response.googleId}
     store.dispatch(startLogin(JSON.stringify(userinfo)))
-    store.dispatch(startsetTickers())
-    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));  
+
+    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));
   }
 
   const Start = () =>  {
     let history = useHistory();
     const jwt =  useSelector(state => state.AddTickers.jwt)
+    store.dispatch(startsetTickers())
     while(!jwt){
       return false
     }
@@ -40,7 +41,7 @@ const LoadGoogleLogin = () => {
         </BrowserRouter>
         </Provider>
     )
-    
+
   }
 
   return(

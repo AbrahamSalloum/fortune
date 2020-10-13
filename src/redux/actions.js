@@ -2,10 +2,9 @@ import {firebase} from '../firebase/firebase'
 import database from '../firebase/firebase'
 import moment from 'moment'
 
-let authheader = {
-  "secretkey": process.env.REACT_APP_SERVER_KEY
-  
-}
+
+  const serverhost = process.env.REACT_APP_SERVER_HOST
+
 
 
 export const addTicker = (tickerinfo) => {
@@ -26,13 +25,15 @@ export const setTickers = (tickers) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-    fetch(`http://10.1.1.11.xip.io:5000/getlinedata/${line}`, {
+    dispatch(checkJWT())
+    fetch(`${serverhost}:5000/getlinedata/${line}`, {
       withCredentials: true,
       credentials: 'include',
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
-          
+
         }
       }
     ).then(plotdatareq => plotdatareq.json())
@@ -48,11 +49,11 @@ export const getLineData = (line) => {
           data.push(o)
         }
         dispatch(SetLineChartData(data))
-  
+
       } catch (err) {
         console.log(err)
-      }      
-    })  
+      }
+    })
 
   }
 }
@@ -79,6 +80,7 @@ export const StartaddTicker = (tickerinfo) => {
 export const startsetTickers = () => {
   return (dispatch, getState) => {
     const uid = getState().AddTickers.uid
+
     database.ref(`users/${uid}/tickers`)
     .once('value')
     .then((snapshot) => {
@@ -112,19 +114,19 @@ export const StorePrice = (ticker) => {
 }
 
   export const fetchPrice = (tickerlist) => {
-
     return(dispatch, getState) => {
-      console.log(`Bearer ${getState().AddTickers.jwt.access_token}`)
+      dispatch(checkJWT())
       let commaedlist = ""
       tickerlist.forEach((t) => {
         commaedlist = commaedlist + t.ticker + ","
       })
       commaedlist = commaedlist.slice(0,-1)
-      fetch(`http://10.1.1.11.xip.io:5000/gettickerprices/${commaedlist}`,  {
+      fetch(`${serverhost}:5000/gettickerprices/${commaedlist}`,  {
         withCredentials: true,
         credentials: 'include',
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
         }
       }
@@ -146,7 +148,6 @@ export const StorePrice = (ticker) => {
           }
           prices.push(price)
         })
-        console.log(prices)
         dispatch(StorePrice(prices))
       })
       .catch(err => {
@@ -157,10 +158,11 @@ export const StorePrice = (ticker) => {
 
   export const fetchNews = (ticker) => {
     return(dispatch, getState) => {
-      
-      fetch(`http://10.1.1.11.xip.io:5000/gettickernews/${ticker}`, {
+      dispatch(checkJWT())
+      fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
         }
       }
@@ -181,10 +183,11 @@ export const StorePrice = (ticker) => {
         interval = "1d"
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
-
-      fetch(`http://10.1.1.11.xip.io:5000/getfetchchart/${interval[range]}/${range}/${ticker}`, {
+      dispatch(checkJWT())
+      fetch(`${serverhost}:5000/getfetchchart/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
         }
       }
@@ -212,9 +215,11 @@ export const delticker = (r) => ({
 
 export const fetchSummary = (ticker) => {
   return(dispatch, getState) => {
-    fetch(`http://10.1.1.11.xip.io:5000/gettickersummary/${ticker}`, {
+    dispatch(checkJWT())
+    fetch(`${serverhost}:5000/gettickersummary/${ticker}`, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
       }
     })
@@ -267,7 +272,7 @@ export const logout = () => ({
 
 export const startLogin = (response) => {
   return (dispatch, getState) => {
-    fetch(`http://10.1.1.11.xip.io:5000/storelogin`, {
+    fetch(`${serverhost}:5000/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
@@ -278,26 +283,52 @@ export const startLogin = (response) => {
     .then((s) => {
       dispatch(login(s))
       dispatch(setUid(s.userid))
-      return s
     })
-      .then((r) => {
-        fetch(`http://10.1.1.11.xip.io:5000/auth`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
-          },
-          method: 'POST',
-          body: JSON.stringify(r)
-        }).then(jwt => jwt.json())
-        .then((jwt) => {
-          dispatch(storejwt(jwt))
-        })
+      .then(() => {
+        dispatch(checkJWT())
     })
+  }
+}
+
+export const createJWT = () => {
+  return(dispatch, getState) => {
+    const r = getState().AddTickers.logindata[0]
+    console.log(`${serverhost}:5000/auth`)
+    fetch(`${serverhost}:5000/auth`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+      },
+      method: 'POST',
+      body: JSON.stringify(r)
+    }).then(jwt => jwt.json())
+      .then((jwt) => {
+        dispatch(storejwt(jwt))
+      })
   }
 }
 
 export const startLogout= () => {
   return () => {
     return firebase.auth().signOut();
+  }
+}
+
+
+export const checkJWT = () => {
+  return (dispatch, getState) => {
+    const jwt = getState().AddTickers.jwt.access_token
+    if(!jwt){
+      dispatch(createJWT())
+      console.log("creating jwt")
+      return
+    }
+    const now = new Date();
+    const time = Math.round(now.getTime() / 1000)
+    const jwt_part = jwt.split(".")
+    const data = atob(jwt_part[1])
+    if (data['exp'] > time - 300 ){
+      dispatch(startLogin())
+    }
   }
 }
