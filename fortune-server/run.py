@@ -157,6 +157,13 @@ def tickerrequest(tickerlist):
     res = checkpricecollection(tickerlist)
     return res
 #
+@app.route('/getsuggestions/<ticker>')
+@jwt_required
+def suggestionrequest(ticker):
+    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q={ticker}".format(ticker = ticker)
+    suggestions = fetch(url)
+    return suggestions
+#
 @app.route('/gettickernews/<ticker>')
 @jwt_required
 def tickernews(ticker):

@@ -36,7 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://10.1.1.11.xip.io:8008/build",
+  "homepage": "http://pi.heycitizen.com:8008/",
   "eslintConfig": {
     "extends": "react-app"
   },

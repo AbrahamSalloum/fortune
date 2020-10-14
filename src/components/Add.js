@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useDispatch } from "react-redux";
+import {useDispatch, useSelector } from "react-redux";
 import {StartaddTicker, startsetTickers} from '../redux/actions.js'
 import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const Add = () => {
-
+  const serverhost = process.env.REACT_APP_SERVER_HOST
   const [suggestion, addsuggestions] = useState([])
   const [searchticker, savesearchticker] = useState('')
   const [ticker, setticker] = useState('')
@@ -17,7 +17,7 @@ const Add = () => {
   const [purchaseprice, setpurchaseprice] = useState('')
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
-
+  const jwt =  useSelector(state => state.AddTickers.jwt)
   const onSubmit = (e) => {
     e.preventDefault()
     const dateadded = Date.now()
@@ -43,17 +43,28 @@ const Add = () => {
   }
 
   const onSuggestionsFetchRequested = ({ value }) => {
-    fetch(`https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q=${value}`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
-      }
+    if(value.length < 3){
+      addsuggestions([])
+      return 
+    }
+    fetch(`${serverhost}:5000/getsuggestions/${value}`, {
+      withCredentials: true,
+      credentials: 'include',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt.access_token}`
+        }
     })
     .then(res => res.json())
     .then((r) => {
-      addsuggestions(r.quotes)
+      if(r.quotes){
+        addsuggestions(r.quotes)
+      }
     })
+    .catch(err => {
+      console.log(err);
+    });
   };
 
   const onSuggestionsClearRequested = () => {
