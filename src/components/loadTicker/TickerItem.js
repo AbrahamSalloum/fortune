@@ -14,8 +14,8 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
         </Tooltip>
       )
     }
-  
-  
+
+
      let data = tickerlist.map((item) => {
         for(let j in price){
           if (price[j]['ticker'] === item['ticker']){
@@ -24,8 +24,8 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
         }
     })
     data = data.filter(i => i !== undefined);
-  
-  
+
+
     const columns = [
       { field: 'ticker', headerName: 'Ticker', width: 150, renderCell: (params) => <RenderTicker params={params} />},
       { field: 'amount', headerName: 'Units' , width: 100, },
@@ -42,7 +42,7 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
       })},
       {field: 'details', headerName: 'Details',  width: 100 ,renderCell: (params) => <Link to={`/details/${params.getValue('ticker')}`}>Details</Link> }
     ]
-  
+
     return(
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid

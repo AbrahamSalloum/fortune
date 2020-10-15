@@ -23,10 +23,11 @@ const LoadGoogleLogin = () => {
   const Start = () =>  {
     let history = useHistory();
     const jwt =  useSelector(state => state.AddTickers.jwt)
-    store.dispatch(startsetTickers())
+
     while(!jwt){
       return false
     }
+    store.dispatch(startsetTickers())
     return(
       <Provider store={store}>
         <BrowserRouter history={history}>

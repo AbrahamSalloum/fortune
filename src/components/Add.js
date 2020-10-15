@@ -45,7 +45,7 @@ const Add = () => {
   const onSuggestionsFetchRequested = ({ value }) => {
     if(value.length < 3){
       addsuggestions([])
-      return 
+      return
     }
     fetch(`${serverhost}:5000/getsuggestions/${value}`, {
       withCredentials: true,
@@ -96,7 +96,7 @@ const Add = () => {
     onChange: searchtickerChange
   };
 
-  
+
     return(
     <div>
       <div>
@@ -119,7 +119,7 @@ const Add = () => {
            <TextField name="amount" id="outlined-basic" type="number" label="Amount" variant="outlined" onChange={onAmountChange} />
           </div>
           <div>
-            <TextField name="ppice" id="outlined-basic" type="number" label="Purchase Price" variant="outlined" onChange={onPurPriceChange} />
+            <TextField name="purchaseprice" id="outlined-basic" label="Purchase Price" variant="outlined" onChange={onPurPriceChange} />
           </div>
           <div>
             <KeyboardDatePicker

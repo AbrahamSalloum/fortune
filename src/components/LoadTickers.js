@@ -20,6 +20,7 @@ import TabbedInfo from './loadTicker/TabbedInfo'
 import TickerItem from './loadTicker/TickerItem.js'
 import ToggleBox from './loadTicker/ToggleBox.js'
 import PositionSummary from './loadTicker/PositionSummary';
+import Totals from './loadTicker/Totals'
 
 
 const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate}) => (
@@ -96,8 +97,9 @@ const LoadTickers = () => {
             <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item container xs={12} sm={4}>
           <PositionSummary price={price} tickerlist={tickerlist}/>
+          <Totals />
         </Grid>
         <Grid item xs={12} sm={8}>
           <TabbedInfo />
