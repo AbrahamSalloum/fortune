@@ -5,17 +5,20 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-const Totals = ({selected}) => {
+const Totals = ({showbox}) => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
-
+  
+  if(!showbox){
+    return false
+  }
   return(
     <Card style={{ width: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
         Info
       </Typography>
       <CardContent>
-      BLAH
+      {showbox.data.ticker}
       </CardContent>
     </Card>
   )

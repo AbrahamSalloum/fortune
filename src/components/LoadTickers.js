@@ -98,8 +98,12 @@ const LoadTickers = () => {
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={4}>
-          <PositionSummary price={price} tickerlist={tickerlist}/>
-          <Totals />
+          <Grid item  xs={12}>
+            <PositionSummary price={price} tickerlist={tickerlist}/>
+          </Grid>
+          <Grid item  xs={12}>
+          <Totals showbox={showbox}/>
+          </Grid>
         </Grid>
         <Grid item xs={12} sm={8}>
           <TabbedInfo />
