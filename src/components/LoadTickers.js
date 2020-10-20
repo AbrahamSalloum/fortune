@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Link } from "react-router-dom"
 import {useSelector, useDispatch} from 'react-redux';
-import { startsetTickers} from '../redux/actions.js'
+import { startsetTickers, SignOut} from '../redux/actions.js'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import '../App.css'
@@ -23,7 +23,7 @@ import PositionSummary from './loadTicker/PositionSummary';
 import Totals from './loadTicker/Totals'
 
 
-const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate}) => (
+const DetailsHeader = ({ ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate, username, SignOut}) => (
   <AppBar position="static">
     <Toolbar>
     <div className={classes.navbar}>
@@ -38,6 +38,7 @@ const DetailsHeader = ({ticker, header = "", istoggledrawer, toggleDrawer, class
     <div >
       <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography>
       <div><Typography variant="caption" display="block">Updates every 10 mins</Typography></div>
+        <div><Typography variant="caption" display="block"><Button onClick={() => { SignOut()}}>Sign Out</Button></Typography></div>
     </div>
     </Toolbar>
   </AppBar>
@@ -70,7 +71,6 @@ const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
-
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
 
@@ -78,6 +78,10 @@ const LoadTickers = () => {
 
   const toggleDrawer = () => {
     toggleDrawerstate(!showdrawer)
+  }
+
+  const Signout = () => {
+    dispatch(SignOut())
   }
 
   useEffect(() => {
@@ -94,7 +98,7 @@ const LoadTickers = () => {
       <Grid container spacing={2}>
         <Grid item container xs={12}>
           <Grid item xs={12}>
-            <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate}/>
+            <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate} username={'username'} SignOut={Signout}/>
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={4}>

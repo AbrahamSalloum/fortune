@@ -12,7 +12,6 @@ import {fetchChart} from '../../redux/actions.js'
 
 const arrangedata = (plotdata, ticker) => {
   const data = []
-  console.log(typeof(plotdata))
   while(plotdata.length == 0){
     return []
   }

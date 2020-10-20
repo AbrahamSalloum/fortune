@@ -23,7 +23,6 @@ const Add = () => {
     const dateadded = Date.now()
     const pprce = new Date(selectedDate).getTime() / 1000
     dispatch(StartaddTicker({ticker,amount, pprce, purchaseprice, dateadded}))
-    dispatch(startsetTickers())
   }
 
   const onTickerChange = (val) => {

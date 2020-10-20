@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import {Switch, Route, BrowserRouter, useHistory, Redirect   } from "react-router-dom" //BrowserRouter as Router
 import { Provider, useSelector } from "react-redux";
@@ -7,56 +7,70 @@ import './index.css';
 import App from './App';
 import AddPage from './components/Add';
 import Details from './components/Details'
-import {startLogin, startsetTickers} from './redux/actions'
-import GoogleLogin from 'react-google-login';
+import { startLogin, startsetTickers, checkJWT, createJWT, } from './redux/actions'
+
+import {firebase, firebaseConfig} from './firebase/firebase';
+import Login from './components/LoginPage/Login'
+import Signup from './components/LoginPage/Signup'
+import {ReactReduxFirebaseProvider} from 'react-redux-firebase'
 
 
-const LoadGoogleLogin = () => {
+const rrfProps = {
+  firebase: firebase,
+  config: {
+    userProfile: 'users'
+  },
+  dispatch: store.dispatch
+}
 
-  const load = (response) => {
-    const userinfo = {userid: response.profileObj.googleId, username: response.profileObj.email, password: response.googleId}
-    store.dispatch(startLogin(JSON.stringify(userinfo)))
+const Start = () =>  {
 
-    ReactDOM.render(<Provider store={store}><Start /></Provider>, document.getElementById('root'));
+  let history = useHistory();
+  let jwt =  useSelector(state => state.AddTickers.jwt)
+  let uid = useSelector(state => state.AddTickers.uid)
+  let firebasedata = useSelector(state => state.firebase.auth.uid)
+  store.dispatch(checkJWT())
+
+
+  while (!firebasedata){
+    return <Login />
   }
 
-  const Start = () =>  {
-    let history = useHistory();
-    const jwt =  useSelector(state => state.AddTickers.jwt)
+  while (!jwt || !uid){
+    return false
+  }
 
-    while(!jwt){
-      return false
-    }
-    store.dispatch(startsetTickers())
+  store.dispatch(startsetTickers())
+
     return(
-      <Provider store={store}>
-        <BrowserRouter history={history}>
-          <Switch>
+      <BrowserRouter history={history}>
+       <Switch>
             <Route path='/dashboard' component={App} />
             <Route path='/add' component={AddPage} />
             <Route path='/details/:ticker' component={Details} />
             <Route path='/'>
               <Redirect to='/dashboard' />
             </Route>
-          </Switch>
-        </BrowserRouter>
-        </Provider>
+        </Switch>
+      </BrowserRouter>
     )
-
-  }
-
-  return(
-    <div style={{"backgroundColor": "#e2e4a5", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center","textAlign": "center","minHeight": "100vh"}}>
-      <GoogleLogin
-        clientId="653707267747-4vntcc7pvm0cc26t503u6trnt04da2bl.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={load}
-        onFailure={err => console.log('fail', err)}
-        isSignedIn={true}
-        cookiePolicy={'single_host_origin'}
-      />
-    </div>
-  )
 }
 
-ReactDOM.render(<LoadGoogleLogin />, document.getElementById('root'));
+const x = (
+  <ReactReduxFirebaseProvider {...rrfProps}>
+    <Provider store={store}>
+      <Start />
+    </Provider>
+  </ReactReduxFirebaseProvider>
+)
+
+let loadmain = false
+const load = () => {
+
+  if (!loadmain) {
+    ReactDOM.render(x, document.getElementById('root'));
+    loadmain = true
+  }
+
+}
+load()

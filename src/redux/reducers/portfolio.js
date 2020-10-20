@@ -9,7 +9,7 @@ const initialState = {
     linedata: [],
     logindata: [],
     jwt: false,
-    uid: ''
+    uid: false
 }
 
 export default function(state=initialState, action){
