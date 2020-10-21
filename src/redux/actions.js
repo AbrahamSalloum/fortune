@@ -1,11 +1,7 @@
 // import {firebase} from '../firebase/firebase'
 // import database from '../firebase/firebase'
 import moment from 'moment'
-
-
-  const serverhost = process.env.REACT_APP_SERVER_HOST
-
-
+const serverhost = process.env.REACT_APP_SERVER_HOST
 
 export const addTicker = (tickerinfo) => {
     // tickerinfo should be object of {id, ticker, quantity}
@@ -54,7 +50,6 @@ export const getLineData = (line) => {
         console.log(err)
       }
     })
-
   }
 }
 
@@ -273,15 +268,21 @@ export const login = (response) => ({
   payload: response
 })
 
+export const loginmsg = (msg) => ({
+  type: 'LOGIN_MSG',
+  payload: msg
+})
+
 export const SignUpEmail = (emailpass) => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     const database = firebase.database()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
-      console.log(result)
-    }).then(() => {
+      result.user.sendEmailVerification({url:"http://10.1.1.11.xip.io:3000/"})
       dispatch(createJWT())
+    }).catch((err) => {
+     dispatch(loginmsg(err.message))
     })
   }
 }
@@ -296,14 +297,36 @@ export const SignInEmail = (emailpass) => {
       if (!result.user.uid) {
         firebase.auth().signOut();
       }
+      if (!result.user.emailVerified) {
+        dispatch(SignOut())
+        dispatch(loginmsg("Plese verify your email (Check your inbox)"))
+      }
       return result
     }).then(() => {
       dispatch(createJWT())
     })
-    .catch(error => {
-      console.log(error)
-      })
+      .catch(err => {
+      dispatch(loginmsg(err.message))
+    })
+  }
 }
+
+
+export const googleSignin = () => {
+  return (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase()
+    const googleProvider = new firebase.auth.GoogleAuthProvider()
+
+    firebase.auth().signInWithPopup(googleProvider).then((result) => {
+      if (!result.user.emailVerified) {
+        dispatch(SignOut())
+        dispatch(loginmsg("Plese verify your email (Check your inbox)"))
+      }
+
+    }).catch((err) => {
+      dispatch(loginmsg(err.message))
+    })
+  }
 }
 
 export const setUid = (response) => ({
@@ -350,12 +373,14 @@ export const createJWT = () => {
 }
 
 
-export const SignOut= () => {
+export const SignOut = () => {
   return (dispatch, getState, { getFirebase }) => {
     let firebase = getFirebase()
+    dispatch(loginmsg(''))
     return firebase.auth().signOut();
   }
 }
+
 
 
 export const checkJWT = () => {
@@ -363,7 +388,6 @@ export const checkJWT = () => {
     const jwt = getState().AddTickers.jwt.access_token
     if(!jwt){
       dispatch(createJWT())
-      console.log("creating jwt")
       return
     }
     const now = new Date();

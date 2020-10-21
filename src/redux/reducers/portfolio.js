@@ -9,7 +9,8 @@ const initialState = {
     linedata: [],
     logindata: [],
     jwt: false,
-    uid: false
+    uid: false,
+    loginmsg: ''
 }
 
 export default function(state=initialState, action){
@@ -19,6 +20,14 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 tickerlist: [...state.tickerlist, {id,ticker, amount}]
+            }
+        }
+
+        case "LOGIN_MSG": {
+            const msg = action.payload
+            return {
+                ...state,
+                loginmsg: msg
             }
         }
 

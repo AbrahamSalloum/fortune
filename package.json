@@ -21,6 +21,7 @@
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
+    "react-google-button": "^0.7.1",
     "react-google-login": "^5.1.21",
     "react-redux": "^7.2.1",
     "react-redux-firebase": "^3.7.0",
