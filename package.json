@@ -39,7 +39,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://pi.heycitizen.com:8008/",
   "eslintConfig": {
     "extends": "react-app"
   },

@@ -1,7 +1,7 @@
-// import {firebase} from '../firebase/firebase'
-// import database from '../firebase/firebase'
+import history from '../history'
 import moment from 'moment'
 const serverhost = process.env.REACT_APP_SERVER_HOST
+
 
 export const addTicker = (tickerinfo) => {
     // tickerinfo should be object of {id, ticker, quantity}
@@ -281,29 +281,36 @@ export const SignUpEmail = (emailpass) => {
     .then((result) => {
       result.user.sendEmailVerification({url:"http://10.1.1.11.xip.io:3000/"})
       dispatch(createJWT())
-    }).catch((err) => {
+    })
+    .then(() => {
+      //history.replace("/dashboard");
+    })
+    .catch((err) => {
      dispatch(loginmsg(err.message))
     })
   }
 }
 
 export const SignInEmail = (emailpass) => {
-
   return (dispatch, getState, { getFirebase }) => {
+
     const firebase = getFirebase()
     const database = firebase.database()
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
     .then(result => {
-      if (!result.user.uid) {
-        firebase.auth().signOut();
-      }
+      // if (!result.user.uid) {
+      //   firebase.auth().signOut();
+      // }
       if (!result.user.emailVerified) {
         dispatch(SignOut())
         dispatch(loginmsg("Plese verify your email (Check your inbox)"))
       }
+
       return result
     }).then(() => {
-      dispatch(createJWT())
+      firebase.reloadAuth().then(() => {
+        dispatch(createJWT())
+      })
     })
       .catch(err => {
       dispatch(loginmsg(err.message))
@@ -323,7 +330,11 @@ export const googleSignin = () => {
         dispatch(loginmsg("Plese verify your email (Check your inbox)"))
       }
 
-    }).catch((err) => {
+    })
+    .then(() => {
+     // history.replace("/dashboard");
+    })
+    .catch((err) => {
       dispatch(loginmsg(err.message))
     })
   }
@@ -376,9 +387,18 @@ export const createJWT = () => {
 export const SignOut = () => {
   return (dispatch, getState, { getFirebase }) => {
     let firebase = getFirebase()
-    dispatch(loginmsg(''))
-    return firebase.auth().signOut();
-  }
+    firebase.auth().signOut().then(() => {
+      dispatch(loginmsg(''))
+    })
+    .then(() => {
+      dispatch(setUid(false))
+    })
+      .then(() => {
+        dispatch(storejwt(false))
+      })
+
+}
+
 }
 
 

@@ -37,9 +37,9 @@ const DetailsHeader = ({ ticker, header = "", istoggledrawer, toggleDrawer, clas
     </div>
     <div >
       <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography>
-      <div><Typography variant="caption" display="block">Updates every 10 mins</Typography></div>
-        <div><Typography variant="caption" display="block"><Button onClick={() => { SignOut()}}>Sign Out</Button></Typography></div>
+      <Typography variant="caption" display="block">Updates every 10 mins</Typography>
     </div>
+    <Typography variant="caption" display="block"><Button onClick={() => { SignOut()}}>Sign Out</Button></Typography>
     </Toolbar>
   </AppBar>
 )
@@ -85,6 +85,7 @@ const LoadTickers = () => {
   }
 
   useEffect(() => {
+    dispatch(startsetTickers())
     const interval = setInterval(() => {
       dispatch(startsetTickers())
     }, 600000);
