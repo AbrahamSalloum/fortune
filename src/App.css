@@ -119,23 +119,45 @@
 }
 
 .loginContainer {
-  display: grid;
+
+  display: flex;
   width: 25rem;
+  justify-content: center;
+  align-items: "center";
+  text-align: "center";
   background-color: white;
   flex-direction: column;
   padding: 2rem 2rem;
-
 }
 
-.loginf * {
-  position: relative;
-   width: 100%;
+.bgbg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  background-color: silver;
 }
+
 
 .loginf {
-  position: relative;
-  padding: 0rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.5rem 0rem 0rem 0rem;
 }
+
+.alignleft {
+  margin-left:0;
+  margin-right:auto;
+}
+
+.buttonlikelink {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

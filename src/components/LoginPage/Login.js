@@ -38,9 +38,9 @@ const Login = () => {
       [e.target.name]: e.target.value,
       error: '',
     })
-  };
+  }
 
-  const handleLoginSubmit = e => {
+  const handleLoginSubmit = (e) => {
     e.preventDefault();
     if(user.email == false || user.passord == false){
       setHint('Please type valid email and password to login')
@@ -51,12 +51,12 @@ const Login = () => {
 
   }
 
-  const handleGoogleSigninSubmit = e => {
+  const handleGoogleSigninSubmit = (e) => {
     e.preventDefault();
     dispatch(googleSignin())
   }
 
-  const SendPasswordResetEmail = e => {
+  const SendPasswordResetEmail = (e) => {
     e.preventDefault();
     if(user.email == false){
       setHint('Please type valid email and press \'reset password\'')
@@ -64,7 +64,7 @@ const Login = () => {
     dispatch(ResetPassword(user));
   }
 
-  const handleSignUpSubmit = e => {
+  const handleSignUpSubmit = (e) => {
     e.preventDefault();
 
     if (user.email == false || user.passord == false) {
@@ -75,42 +75,30 @@ const Login = () => {
     dispatch(SignUpEmail(user))
   }
 
-  const handlePassReset = e => {
-    e.preventDefault();
-  }
 
   return (
-    <div style={{
-    "display": "flex",
-    "flexDirection": "column",
-      "justifyContent": "center",
-    "alignItems": "center",
-    "textAlign": "center",
-    "minHeight": "100vh",
-    "backgroundColor": "silver",
-
-    }}>
+    <div className="bgbg">
       <div className="loginContainer ">
-        <div className="loginf center">
+        <div className="loginf ">
           <h1>Login</h1>
         </div>
 
-        <div className="loginf center">
-          <TextField  id="outlined-basic" label="Email" variant="outlined" type="text" placeholder="Email" name="email" onChange={handleChange} />
+        <div className="loginf">
+          <TextField  fullWidth={true} id="standard-basic" label="Email" variant="outlined" type="text" placeholder="Email" name="email" onChange={handleChange} />
           </div>
-        <div className="loginf center">
-          <TextField  id="outlined-basic" label="Password" variant="outlined" type="password" placeholder="Password" name="password" onChange={handleChange} />
+        <div className="loginf">
+          <TextField  fullWidth={true} id="standard-basic" label="Password" variant="outlined" type="password" placeholder="Password" name="password" onChange={handleChange} />
         </div>
-        <div className="loginf center">
-          <a href="#" onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</a>
+        <div className="loginf alignleft">
+          <button className="buttonlikelink" onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</button>
         </div>
-        <div className="loginf center">
+        <div className="loginf">
           <Button style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="primary" variant="contained" onClick={(e) => {handleLoginSubmit(e)}}>Log in</Button>
         </div>
-        <div className="loginf center">
+        <div className="loginf">
           <Button style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="secondary" variant="contained" onClick={(e) => {handleSignUpSubmit(e)}}>Register</Button>
         </div>
-        <div className="loginf center">
+        <div className="loginf">
           <GoogleButton style={{"width": "100%"}} onClick={handleGoogleSigninSubmit} />
         </div>
         <div>{loginmsg}</div>
