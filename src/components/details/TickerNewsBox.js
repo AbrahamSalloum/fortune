@@ -22,40 +22,48 @@ const NewsItems = ({title, link, summary, publisher}) => (
 
 const TickerNewsBox = ({ticker}) => {
   const dispatch = useDispatch()
-  useEffect(() => dispatch(fetchNews(ticker)), []);
+
+  useEffect(() => {
+    dispatch(fetchNews(ticker))
+  }, [dispatch, ticker])
+  
+
+  const tablecells = () => {
+    
+    for(let i in newslist){
+      if(newslist[i].ticker === ticker){
+        const newsl = newslist[i].news
+        return newsl.map(n => <NewsItems key={n.uuid} {...n}/>)
+      }
+    }
+  }
+
   const newslist= useSelector(state => state.AddTickers.news)
   return(
-  <Card style={{ height: '100%' }}>
-    <Typography color="textSecondary" gutterBottom>
-      News
-    </Typography>
-    <CardContent>
-    <div className="wrapper-article-content">
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>publisher</TableCell>
-              <TableCell>title</TableCell>
-              <TableCell>Summary</TableCell>
-            </TableRow>
-          </TableHead>
-            <TableBody>
-              {
-                newslist.map((i) => {
-                  if(i.ticker === ticker){
-                    const newsl = i.news
-                    return newsl.map(n => <NewsItems key={n.uuid} {...n}/>)
-                  }
-                })
-              }
-            </TableBody>
-          </Table>
-      </TableContainer>
-    </div>
-  </CardContent>
-  </Card>
+    <Card style={{ height: '100%' }}>
+      <Typography color="textSecondary" gutterBottom>
+        News
+      </Typography>
+      <CardContent>
+        <div className="wrapper-article-content">
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>publisher</TableCell>
+                  <TableCell>title</TableCell>
+                  <TableCell>Summary</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tablecells()}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </CardContent>
+    </Card>
   )
-            }
+}
 
 export default TickerNewsBox

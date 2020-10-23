@@ -11,29 +11,24 @@ import LoadTickers from './components/LoadTickers';
 
 const App = () => {
  let uid = useSelector(state => state.firebase.auth.uid)
-
-  //uid = true
-    return (
-<div>
-        <Switch>
-          <Route path='/' exact>
-            <Redirect to="/dashboard" />
-          </ Route>
-          <Route path='/dashboard'>
-            {!!uid ? <LoadTickers /> : <Redirect to="/login" /> }
-          </ Route>
-          <Route path='/add' >
-            {!!uid ? <AddPage /> : <Redirect to="/login" />}
-          </ Route>
-          <Route path='/details/:ticker'>
-            {!!uid ? <Details /> : <Redirect to="/login" />}
-          </ Route>
-          <Route path='/login' >
-            <Login />
-          </ Route>
-        </Switch>
-      </div>
-
+  return (
+      <Switch>
+        <Route path='/' exact>
+          <Redirect to="/dashboard" />
+        </Route>
+        <Route path='/dashboard'>
+          {!!uid ? <LoadTickers /> : <Redirect to="/login" /> }
+        </Route>
+        <Route path='/add' >
+          {!!uid ? <AddPage /> : <Redirect to="/login" />}
+        </Route>
+        <Route path='/details/:ticker'>
+          {!!uid ? <Details /> : <Redirect to="/login" />}
+        </Route>
+        <Route path='/login' >
+          <Login />
+        </Route>
+      </Switch>
     );
 }
 

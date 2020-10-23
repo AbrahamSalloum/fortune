@@ -15,16 +15,16 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
       )
     }
 
-
-     let data = tickerlist.map((item) => {
-        for(let j in price){
-          if (price[j]['ticker'] === item['ticker']){
-            return {...price[j], ...item}
-          }
+    let data = []
+    for(let item in tickerlist){
+      for(let j in price){
+        if (price[j]['ticker'] === tickerlist[item]['ticker']){
+          data.push({...price[j], ...tickerlist[item]})
         }
-    })
-    data = data.filter(i => i !== undefined);
+      }
+    }
 
+    data = data.filter(i => i !== undefined);
 
     const columns = [
       { field: 'ticker', headerName: 'Ticker', width: 150, renderCell: (params) => <RenderTicker params={params} />},

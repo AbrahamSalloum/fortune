@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {useDispatch, useSelector } from "react-redux";
-import {StartaddTicker, startsetTickers} from '../redux/actions.js'
+import {StartaddTicker} from '../redux/actions.js'
 import Autosuggest from 'react-autosuggest';
 import Chip from '@material-ui/core/Chip';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';

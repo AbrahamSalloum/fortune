@@ -80,6 +80,8 @@ export const ResetPassword = (email) => {
     const firebase = getFirebase()
     firebase.auth().sendPasswordResetEmail(email.email).then((r) => {
       dispatch(loginmsg("Please Check Inbox for reset instructions"))
+    }).catch((err) => {
+      dispatch(loginmsg(err.message))
     })
   }
 }

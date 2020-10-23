@@ -8,9 +8,10 @@ const SimpleLineChart = () => {
 
   const dispatch = useDispatch();
   const chartdata = useSelector(state => state.AddTickers.linedata)
+  
   useEffect(() => {
     dispatch(getLineData("^AXKO"))
-  }, []);
+  }, [dispatch]);
 
   	return (
       <ResponsiveContainer width="100%" height={300}>

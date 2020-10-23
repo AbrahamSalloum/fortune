@@ -42,7 +42,7 @@ const Login = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if(user.email == false || user.passord == false){
+    if(!!user.email === false || !!user.password === false){
       setHint('Please type valid email and password to login')
       return
     }
@@ -58,8 +58,9 @@ const Login = () => {
 
   const SendPasswordResetEmail = (e) => {
     e.preventDefault();
-    if(user.email == false){
+    if(!!user.email === false){
       setHint('Please type valid email and press \'reset password\'')
+      return 
     }
     dispatch(ResetPassword(user));
   }
@@ -67,7 +68,7 @@ const Login = () => {
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
 
-    if (user.email == false || user.passord == false) {
+    if (!!user.email === false || !!user.password === false) {
       setHint('Please type valid email and password to register')
       return
     }
@@ -103,11 +104,9 @@ const Login = () => {
         </div>
         <div>{loginmsg}</div>
         <div>{hints}</div>
-
-     </div>
-</div>
-
+      </div>
+    </div>
   )
-};
+}
 
 export default Login;

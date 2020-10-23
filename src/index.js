@@ -21,7 +21,6 @@ const rrfProps = {
 const Start = () =>  {
   let history = useHistory()
   return(
-  <React.StrictMode>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <Provider store={store}>
           <BrowserRouter history={history}>
@@ -29,8 +28,7 @@ const Start = () =>  {
           </BrowserRouter>
       </Provider>
     </ReactReduxFirebaseProvider>
-  </React.StrictMode>
-    )
+  )
 }
 
 

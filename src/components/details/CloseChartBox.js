@@ -12,7 +12,7 @@ import {fetchChart} from '../../redux/actions.js'
 
 const arrangedata = (plotdata, ticker) => {
   const data = []
-  while(plotdata.length == 0){
+  while(plotdata.length === 0){
     return []
   }
   try {
@@ -30,7 +30,9 @@ const arrangedata = (plotdata, ticker) => {
 
 const CloseChartBox = ({ticker}) => {
   const dispatch = useDispatch()
-  useEffect(() => dispatch(fetchChart("1d", ticker)), [])
+  useEffect(() => {
+    dispatch(fetchChart("1d", ticker))
+  }, [dispatch, ticker])
 
   const plotdata= useSelector(state => state.AddTickers.plotdata)
   
