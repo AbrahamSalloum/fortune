@@ -15,11 +15,11 @@ const Login = () => {
   const loginmsg = useSelector(state => state.AddTickers.loginmsg)
   const dispatch = useDispatch();
   let jwt = useSelector(state => state.AddTickers.jwt)
-  let uid = useSelector(state => state.firebase.auth.uid)
+  let uid = useSelector(state => state.firebase.auth.isEmpty)
 
   useEffect(() => {
 
-    if (!!jwt && !!uid) {
+    if (!!jwt === true && !!uid === false) {
       history.push("/dashboard");
     }
   });
@@ -48,7 +48,6 @@ const Login = () => {
     }
     setHint('')
     dispatch(SignInEmail(user))
-
   }
 
   const handleGoogleSigninSubmit = (e) => {

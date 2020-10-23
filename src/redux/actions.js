@@ -1,7 +1,6 @@
 import moment from 'moment'
 const serverhost = process.env.REACT_APP_SERVER_HOST
 
-
 export const addTicker = (tickerinfo) => {
     // tickerinfo should be object of {id, ticker, quantity}
     return {
@@ -10,6 +9,7 @@ export const addTicker = (tickerinfo) => {
     }
 }
 
+
 export const setTickers = (tickers) => {
   // tickerinfo should be object of {id, ticker, quantity}
   return {
@@ -17,6 +17,7 @@ export const setTickers = (tickers) => {
       payload: tickers
   }
 }
+
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
@@ -28,10 +29,11 @@ export const getLineData = (line) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
-
         }
-      }
-    ).then(plotdatareq => plotdatareq.json())
+    })
+    .then((plotdatareq) => {
+      return plotdatareq.json()
+    })
     .then((m) => {
       return m
     })
@@ -52,12 +54,14 @@ export const getLineData = (line) => {
   }
 }
 
+
 export const SetLineChartData = (line) => {
   return {
     type: "SET_LINECHART",
     payload: line
   }
 }
+
 
 export const StartaddTicker = (tickerinfo) => {
   return(dispatch, getState, {getFirebase}) => {
@@ -69,22 +73,26 @@ export const StartaddTicker = (tickerinfo) => {
         id: ref.key,
         ...tickerinfo
       }));
-    }).then(() => {
+    })
+    .then(() => {
       dispatch(startsetTickers())
     });
   }
 }
+
 
 export const ResetPassword = (email) => {
   return(dispatch, getState, {getFirebase}) => {
     const firebase = getFirebase()
     firebase.auth().sendPasswordResetEmail(email.email).then((r) => {
       dispatch(loginmsg("Please Check Inbox for reset instructions"))
-    }).catch((err) => {
+    })
+    .catch((err) => {
       dispatch(loginmsg(err.message))
     })
   }
 }
+
 
 export const startsetTickers = () => {
   const tickers = []
@@ -102,8 +110,7 @@ export const startsetTickers = () => {
           ...s.val()
         })
       })
-
-  })
+    })
     .then(() => {
       dispatch(fetchPrice(tickers))
     })
@@ -116,12 +123,14 @@ export const startsetTickers = () => {
   }
 }
 
+
 export const setTimeStamp = () => {
   return {
     type: "SET_TIMESTAMP",
     payload: Date.now()
   }
 }
+
 
 export const StorePrice = (ticker) => {
   return {
@@ -130,75 +139,74 @@ export const StorePrice = (ticker) => {
   }
 }
 
-  export const fetchPrice = (tickerlist) => {
-    const prices = []
-    return(dispatch, getState) => {
-      dispatch(checkJWT())
-      let commaedlist = ""
-      tickerlist.forEach((t) => {
-        commaedlist = commaedlist + t.ticker + ","
-      })
-      commaedlist = commaedlist.slice(0,-1)
-      fetch(`${serverhost}:5000/gettickerprices/${commaedlist}`,  {
-        withCredentials: true,
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
-        }
+
+export const fetchPrice = (tickerlist) => {
+  const prices = []
+  return(dispatch, getState) => {
+    dispatch(checkJWT())
+    let commaedlist = ""
+    tickerlist.forEach((t) => {
+      commaedlist = commaedlist + t.ticker + ","
+    })
+    commaedlist = commaedlist.slice(0,-1)
+    fetch(`${serverhost}:5000/gettickerprices/${commaedlist}`,  {
+      withCredentials: true,
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
       }
-    )
-      .then(res => res.json())
-      .then((r) => {
-
-        r.price.forEach((q) => {
-          let price = {
-            ticker: q.symbol,
-            price: q.ask,
-            dayopen: q.regularMarketOpen,
-            dayclose:q.regularMarketPreviousClose,
-            dayhigh:q.regularMarketDayHigh,
-            daylow:"2",
-            volume: q.regularMarketVolume,
-            daychange: q.regularMarketChangePercent,
-            additional: q
-          }
-          prices.push(price)
-        })
-
-
-      })
-        .then(() => {
-          dispatch(StorePrice(prices))
-        })
-      .catch(err => {
-        console.log(err);
-      });
-    }
-  }
-
-  export const fetchNews = (ticker) => {
-    return(dispatch, getState) => {
-      dispatch(checkJWT())
-      fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+    })
+    .then((res) => {
+      return res.json()
+    })
+    .then((r) => {
+      r.price.forEach((q) => {
+        let price = {
+          ticker: q.symbol,
+          price: q.ask,
+          dayopen: q.regularMarketOpen,
+          dayclose:q.regularMarketPreviousClose,
+          dayhigh:q.regularMarketDayHigh,
+          daylow:"2",
+          volume: q.regularMarketVolume,
+          daychange: q.regularMarketChangePercent,
+          additional: q
         }
-      }
-    )
-      .then(res => res.json())
-      .then((r) =>{
-        const news = r[0].items.result
-        const item = {ticker, news}
-        dispatch(StoreNews(item))
+        prices.push(price)
       })
-    }
+    })
+    .then(() => {
+      dispatch(StorePrice(prices))
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
+}
 
-  export const fetchChart = (range, ticker) => {
+export const fetchNews = (ticker) => {
+  return(dispatch, getState) => {
+    dispatch(checkJWT())
+    fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+      }
+    })
+    .then(res => res.json())
+    .then((r) =>{
+      const news = r[0].items.result
+      const item = {ticker, news}
+      dispatch(StoreNews(item))
+    })
+  }
+}
+
+
+export const fetchChart = (range, ticker) => {
     return(dispatch, getState) => {
       let interval = "15m"
       if(range === "3mo"){
@@ -212,14 +220,16 @@ export const StorePrice = (ticker) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
         }
-      }
-    )
-    .then(res => res.json())
-    .then((r) => {
-      dispatch(StorChart(r))
-    })
+      })
+      .then((res) => {
+        return res.json()
+      })
+      .then((r) => {
+        dispatch(StorChart(r))
+      })
     }
-  }
+}
+
 
 export const dodelticker = (id) => {
   return (dispatch, getState, { getFirebase }) => {
@@ -232,10 +242,12 @@ export const dodelticker = (id) => {
   }
 }
 
+
 export const delticker = (r) => ({
   type: 'DEL_TICKER',
   payload: r
 })
+
 
 export const fetchSummary = (ticker) => {
   return(dispatch, getState) => {
@@ -247,41 +259,50 @@ export const fetchSummary = (ticker) => {
         'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
       }
     })
-    .then(res => res.json())
+    .then((res) => {
+      return res.json()
+    })
     .then((r) => {
       dispatch(StoreSummary(r[0]))
     })
   }
 }
 
+
 export const StoreSummary = (r) => ({
   type: 'SET_SUMMARY',
   payload: r
 })
+
 
 export const StorChart = (r) => ({
   type: 'SET_CHART',
   payload: r
 })
 
+
 export const StoreNews = (news) => ({
   type: "SET_NEWS",
   payload: news
 })
 
+
 export const getlist = () => ({
   type: 'GET_LIST'
 })
+
 
 export const login = (response) => ({
   type: 'LOGIN',
   payload: response
 })
 
+
 export const loginmsg = (msg) => ({
   type: 'LOGIN_MSG',
   payload: msg
 })
+
 
 export const SignUpEmail = (emailpass) => {
   return (dispatch, getState, { getFirebase }) => {
@@ -291,16 +312,17 @@ export const SignUpEmail = (emailpass) => {
       result.user.sendEmailVerification({url:"http://10.1.1.11.xip.io:3000/"})
       return result
     })
-      .then((result) => {
+    .then((result) => {
       firebase.reloadAuth().then(() => {
         dispatch(createJWT())
       })
     })
     .catch((err) => {
-     dispatch(loginmsg(err.message))
+      dispatch(loginmsg(err.message))
     })
   }
 }
+
 
 export const SignInEmail = (emailpass) => {
   return (dispatch, getState, { getFirebase }) => {
@@ -317,7 +339,7 @@ export const SignInEmail = (emailpass) => {
       }
       return result
     })
-      .catch(err => {
+    .catch(err => {
       dispatch(loginmsg(err.message))
     })
   }
@@ -330,24 +352,28 @@ export const googleSignin = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
     firebase.auth().signInWithPopup(googleProvider).then((result) => {
-      dispatch(createJWT())
+      firebase.reloadAuth().then(() => {
+        dispatch(createJWT())
+      })
     })
     .catch((err) => {
-      console.log("GGE", err)
       dispatch(loginmsg(err.message))
     })
   }
 }
+
 
 export const setUid = (response) => ({
   type: 'SET_UID',
   payload: response
 })
 
+
 export const storejwt = (jwt) => ({
   type: 'STORE_JWT',
   payload: jwt
 })
+
 
 export const logout = () => ({
   type: 'LOGOUT',
@@ -366,19 +392,21 @@ export const createJWT = () => {
       method: 'POST',
       body: JSON.stringify(r)
     })
-    .then(jwt => jwt.json())
+    .then((jwt) => {
+      return jwt.json()
+    })
     .then((jwt) => {
       dispatch(storejwt(jwt))
     })
     .then(() => {
       dispatch(login(r))
     })
-      .then(() => {
-        dispatch(setUid(r.userid))
-      })
+    .then(() => {
+      dispatch(setUid(r.userid))
+    })
     .catch((err) => {
         console.log("ERROR CREATING JWT", err)
-      })
+    })
   }
 }
 
@@ -392,12 +420,11 @@ export const SignOut = (msg="") => {
     .then(() => {
       dispatch(setUid(false))
     })
-      .then(() => {
-        dispatch(storejwt(false))
-      })
+    .then(() => {
+      dispatch(storejwt(false))
+    })
   }
 }
-
 
 
 export const checkJWT = () => {

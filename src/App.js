@@ -8,23 +8,25 @@ import Login from './components/LoginPage/Login'
 import LoadTickers from './components/LoadTickers';
 
 
-
 const App = () => {
  let uid = useSelector(state => state.firebase.auth.uid)
+
+ const PrivateRoute = ({uid, ...props}) =>  uid ? props.children : <Redirect to="/login" />
+
   return (
       <Switch>
         <Route path='/' exact>
           <Redirect to="/dashboard" />
         </Route>
-        <Route path='/dashboard'>
-          {!!uid ? <LoadTickers /> : <Redirect to="/login" /> }
-        </Route>
-        <Route path='/add' >
-          {!!uid ? <AddPage /> : <Redirect to="/login" />}
-        </Route>
-        <Route path='/details/:ticker'>
-          {!!uid ? <Details /> : <Redirect to="/login" />}
-        </Route>
+        <PrivateRoute uid={uid} path='/dashboard'>
+          <LoadTickers />
+        </PrivateRoute>
+        <PrivateRoute uid={uid} path='/add' >
+         <AddPage />
+        </PrivateRoute>
+        <PrivateRoute uid={uid} path='/details/:ticker'>
+          <Details />
+        </PrivateRoute>
         <Route path='/login' >
           <Login />
         </Route>
