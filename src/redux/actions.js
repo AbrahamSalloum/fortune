@@ -1,4 +1,3 @@
-import history from '../history'
 import moment from 'moment'
 const serverhost = process.env.REACT_APP_SERVER_HOST
 
@@ -76,6 +75,15 @@ export const StartaddTicker = (tickerinfo) => {
   }
 }
 
+export const ResetPassword = (email) => {
+  return(dispatch, getState, {getFirebase}) => {
+    const firebase = getFirebase()
+    firebase.auth().sendPasswordResetEmail(email.email).then((r) => {
+      dispatch(loginmsg("Please Check Inbox for reset instructions"))
+    })
+  }
+}
+
 export const startsetTickers = () => {
   const tickers = []
   return (dispatch, getState, { getFirebase }) => {
@@ -94,16 +102,16 @@ export const startsetTickers = () => {
       })
 
   })
-      .then(() => {
-        dispatch(fetchPrice(tickers))
-      })
-      .then(() => {
-        dispatch(setTickers(tickers))
-      })
-      .then(() => {
-        dispatch(setTimeStamp())
-      })
-}
+    .then(() => {
+      dispatch(fetchPrice(tickers))
+    })
+    .then(() => {
+      dispatch(setTickers(tickers))
+    })
+    .then(() => {
+      dispatch(setTimeStamp())
+    })
+  }
 }
 
 export const setTimeStamp = () => {
@@ -276,14 +284,15 @@ export const loginmsg = (msg) => ({
 export const SignUpEmail = (emailpass) => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
-    const database = firebase.database()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
       result.user.sendEmailVerification({url:"http://10.1.1.11.xip.io:3000/"})
-      dispatch(createJWT())
+      return result
     })
-    .then(() => {
-      //history.replace("/dashboard");
+      .then((result) => {
+      firebase.reloadAuth().then(() => {
+        dispatch(createJWT())
+      })
     })
     .catch((err) => {
      dispatch(loginmsg(err.message))
@@ -295,22 +304,16 @@ export const SignInEmail = (emailpass) => {
   return (dispatch, getState, { getFirebase }) => {
 
     const firebase = getFirebase()
-    const database = firebase.database()
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
     .then(result => {
-      // if (!result.user.uid) {
-      //   firebase.auth().signOut();
-      // }
       if (!result.user.emailVerified) {
-        dispatch(SignOut())
-        dispatch(loginmsg("Plese verify your email (Check your inbox)"))
+        dispatch(SignOut("Plese verify your email (Check your inbox)"))
+      } else {
+        firebase.reloadAuth().then(() => {
+          dispatch(createJWT())
+        })
       }
-
       return result
-    }).then(() => {
-      firebase.reloadAuth().then(() => {
-        dispatch(createJWT())
-      })
     })
       .catch(err => {
       dispatch(loginmsg(err.message))
@@ -325,16 +328,10 @@ export const googleSignin = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
     firebase.auth().signInWithPopup(googleProvider).then((result) => {
-      if (!result.user.emailVerified) {
-        dispatch(SignOut())
-        dispatch(loginmsg("Plese verify your email (Check your inbox)"))
-      }
-
-    })
-    .then(() => {
-     // history.replace("/dashboard");
+      dispatch(createJWT())
     })
     .catch((err) => {
+      console.log("GGE", err)
       dispatch(loginmsg(err.message))
     })
   }
@@ -384,11 +381,11 @@ export const createJWT = () => {
 }
 
 
-export const SignOut = () => {
+export const SignOut = (msg="") => {
   return (dispatch, getState, { getFirebase }) => {
     let firebase = getFirebase()
     firebase.auth().signOut().then(() => {
-      dispatch(loginmsg(''))
+      dispatch(loginmsg(msg))
     })
     .then(() => {
       dispatch(setUid(false))
@@ -396,9 +393,7 @@ export const SignOut = () => {
       .then(() => {
         dispatch(storejwt(false))
       })
-
-}
-
+  }
 }
 
 

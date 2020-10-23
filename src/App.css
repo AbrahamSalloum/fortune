@@ -118,6 +118,24 @@
   }
 }
 
+.loginContainer {
+  display: grid;
+  width: 25rem;
+  background-color: white;
+  flex-direction: column;
+  padding: 2rem 2rem;
+
+}
+
+.loginf * {
+  position: relative;
+   width: 100%;
+}
+
+.loginf {
+  position: relative;
+  padding: 0rem 0.5rem 0.5rem 0.5rem;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
