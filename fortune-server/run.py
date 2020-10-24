@@ -7,6 +7,7 @@ from bson import json_util
 import time
 from flask import request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
+import datetime
 
 UPDATE_INTERVAL= 1200
 key = "1234567890"
@@ -20,6 +21,7 @@ news = db['news']
 chart = db['chart']
 summary = db['summary']
 users = db['users']
+banned = db['banned']
 
 app = Flask(__name__)
 
@@ -30,7 +32,6 @@ app.config['CORS_EXPOSE_HEADERS'] = ['Authorization']
 CORS(app)
 jwt = JWTManager(app)
 
-print(app.config)
 headers = {
     "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
     "x-rapidapi-key": "acf79a894fmsh38e96e215939adfp1aef8ejsn8f574aa46ecf"
@@ -41,28 +42,7 @@ y = news.create_index([("symbol", "text")], unique=True, language_override="en")
 z = summary.create_index([("symbol", "text")], unique=True, language_override="en")
 
 
-@app.route('/storelogin', methods=['POST'])
-def addlogin():
-    global users
-    content = request.get_json()
-    isuser = users.find_one({"userid": content["userid"]})
-    if isuser:
-        pass
-    else:
-        content = users.insert(content)
-    isuser = users.find_one({"userid": content["userid"]})
-    return json_util.dumps(isuser)
 
-@app.route('/auth', methods=['POST'])
-def authtoken():
-    content = request.get_json()
-    print(content)
-    #isuser = users.find_one({"userid": content["userid"]})
-    if True: #isuser
-        access_token = create_access_token(identity=content['userid'])
-        print(access_token)
-        return jsonify(access_token=access_token), 200
-    return jsonify({"msg": "Bad username or password"}), 401
 
 
 def fetch(url):
@@ -193,6 +173,35 @@ def getlinedata(line):
     res = checkchartcollection("1WK", "MAX", line, url)
     return res
 #
+
+@app.route('/storelogin', methods=['POST'])
+def addlogin():
+    global users
+    global banned
+    content = request.get_json()
+    isbanneduser = banned.find_one({"userid": content["userid"]})
+    if isbanneduser:
+        pass
+    else:
+        adduser = users.insert(content)
+        isuser = users.find_one({"userid": adduser})
+        return jsonify(isuser), 200
+    return jsonify({"msg": "Forbidden, maybe banned"}), 403
+
+
+@app.route('/auth', methods=['POST'])
+def authtoken():
+    content = request.get_json()
+    isuser = users.find_one({"userid": content["userid"]})
+    if isuser: 
+        expires = datetime.timedelta(minutes=30)
+        access_token = create_access_token(identity=content['userid'], expires_delta=expires)
+        print("NEW AUTH", access_token)
+        return jsonify(access_token=access_token), 200
+    return jsonify({"msg": "Bad username or password"}), 403
+
+
+
 @app.route('/')
 def defaultroute():
     return "Quoth the Server 404"

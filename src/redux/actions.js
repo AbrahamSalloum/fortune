@@ -21,7 +21,7 @@ export const setTickers = (tickers) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-    dispatch(checkJWT())
+    await Wcheckjwt(dispatch)
     fetch(`${serverhost}:5000/getlinedata/${line}`, {
       withCredentials: true,
       credentials: 'include',
@@ -142,8 +142,8 @@ export const StorePrice = (ticker) => {
 
 export const fetchPrice = (tickerlist) => {
   const prices = []
-  return(dispatch, getState) => {
-    dispatch(checkJWT())
+  return async (dispatch, getState) => {
+    await Wcheckjwt(dispatch)
     let commaedlist = ""
     tickerlist.forEach((t) => {
       commaedlist = commaedlist + t.ticker + ","
@@ -186,34 +186,39 @@ export const fetchPrice = (tickerlist) => {
   }
 }
 
+
+const Wcheckjwt = async (dispatch) => {
+  await dispatch(checkJWT())
+}
+
 export const fetchNews = (ticker) => {
-  return(dispatch, getState) => {
-    dispatch(checkJWT())
-    fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
-      }
-    })
-    .then(res => res.json())
-    .then((r) =>{
-      const news = r[0].items.result
-      const item = {ticker, news}
-      dispatch(StoreNews(item))
-    })
+  return async (dispatch, getState) => {
+    await Wcheckjwt(dispatch)
+      fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+        }
+      })
+      .then(res => res.json())
+      .then((r) =>{
+        const news = r[0].items.result
+        const item = {ticker, news}
+        dispatch(StoreNews(item))
+      }).catch(err => console.log(err))
   }
 }
 
 
 export const fetchChart = (range, ticker) => {
-    return(dispatch, getState) => {
+    return async (dispatch, getState) => {
       let interval = "15m"
       if(range === "3mo"){
         interval = "1d"
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
-      dispatch(checkJWT())
+      await Wcheckjwt(dispatch)
       fetch(`${serverhost}:5000/getfetchchart/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
         headers: {
@@ -250,8 +255,8 @@ export const delticker = (r) => ({
 
 
 export const fetchSummary = (ticker) => {
-  return(dispatch, getState) => {
-    dispatch(checkJWT())
+  return async (dispatch, getState) => {
+    await Wcheckjwt(dispatch)
     fetch(`${serverhost}:5000/gettickersummary/${ticker}`, {
       method: 'GET',
       headers: {
@@ -305,7 +310,7 @@ export const loginmsg = (msg) => ({
 
 
 export const SignUpEmail = (emailpass) => {
-  return (dispatch, getState, { getFirebase }) => {
+  return async (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
@@ -313,8 +318,8 @@ export const SignUpEmail = (emailpass) => {
       return result
     })
     .then((result) => {
-      firebase.reloadAuth().then(() => {
-        dispatch(createJWT())
+      firebase.reloadAuth().then(async () => {
+        await WcreateJWT(dispatch)
       })
     })
     .catch((err) => {
@@ -325,7 +330,7 @@ export const SignUpEmail = (emailpass) => {
 
 
 export const SignInEmail = (emailpass) => {
-  return (dispatch, getState, { getFirebase }) => {
+  return async (dispatch, getState, { getFirebase }) => {
 
     const firebase = getFirebase()
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
@@ -333,8 +338,8 @@ export const SignInEmail = (emailpass) => {
       if (!result.user.emailVerified) {
         dispatch(SignOut("Plese verify your email (Check your inbox)"))
       } else {
-        firebase.reloadAuth().then(() => {
-          dispatch(createJWT())
+        firebase.reloadAuth().then(async () => {
+          await WcreateJWT(dispatch)
         })
       }
       return result
@@ -347,13 +352,13 @@ export const SignInEmail = (emailpass) => {
 
 
 export const googleSignin = () => {
-  return (dispatch, getState, { getFirebase }) => {
+  return async (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
     firebase.auth().signInWithPopup(googleProvider).then((result) => {
-      firebase.reloadAuth().then(() => {
-        dispatch(createJWT())
+      firebase.reloadAuth().then(async () => {
+        await WcreateJWT(dispatch)
       })
     })
     .catch((err) => {
@@ -381,10 +386,10 @@ export const logout = () => ({
 
 
 export const createJWT = () => {
-  return(dispatch, getState) => {
+  return async (dispatch, getState) => {
     const logindetaails =  getState().firebase.auth
     let r = { username: logindetaails.email, password: logindetaails.uid, userid: logindetaails.uid}
-    fetch(`${serverhost}:5000/auth`, {
+    await fetch(`${serverhost}:5000/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer NONE`
@@ -392,20 +397,41 @@ export const createJWT = () => {
       method: 'POST',
       body: JSON.stringify(r)
     })
-    .then((jwt) => {
-      return jwt.json()
+    .then((s) => {
+      if(s.status == 403){
+        throw new Error("Forbidden, Probably banned")
+         
+      }
+      return s
     })
-    .then((jwt) => {
-      dispatch(storejwt(jwt))
-    })
-    .then(() => {
-      dispatch(login(r))
-    })
-    .then(() => {
-      dispatch(setUid(r.userid))
+    .then((z) => {
+        fetch(`${serverhost}:5000/auth`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer NONE`
+          },
+          method: 'POST',
+          body: JSON.stringify(r)
+        })
+        .then((jwt) => {
+          return jwt.json()
+        })
+        .then((jwt) => {
+          dispatch(storejwt(jwt))
+        })
+        .then(() => {
+          dispatch(login(r))
+        })
+        .then(() => {
+          dispatch(setUid(r.userid))
+        })
+        .catch((err) => {
+          console.log("ERROR CREATING JWT", err)
+        })
     })
     .catch((err) => {
-        console.log("ERROR CREATING JWT", err)
+      console.log(err.toString())
+      dispatch(SignOut(err.toString()))
     })
   }
 }
@@ -426,20 +452,28 @@ export const SignOut = (msg="") => {
   }
 }
 
+const WcreateJWT = async (dispatch) => {
+  await dispatch(createJWT())
+}
 
 export const checkJWT = () => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
+    console.log("CHECK JWT")
     const jwt = getState().AddTickers.jwt.access_token
     if(!jwt){
-      dispatch(createJWT())
+      console.log('No JWT')
+      await WcreateJWT(dispatch)
       return
     }
     const now = new Date();
     const time = Math.round(now.getTime() / 1000)
     const jwt_part = jwt.split(".")
-    const data = atob(jwt_part[1])
-    if (data['exp'] > (time - 300) ){
-      dispatch(createJWT())
+    const data = JSON.parse(atob(jwt_part[1]))
+    if (data['exp'] < (time - 300) ){
+      console.log("JWT expired, making new JWT....")
+     await WcreateJWT(dispatch)
+    } else if (time > data['exp']){
+      dispatch(SignOut("logged out after 30mins of inactivity"))
     }
   }
 }

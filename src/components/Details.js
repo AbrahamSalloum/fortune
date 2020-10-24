@@ -46,7 +46,7 @@ const Details = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {ticker} = useParams(); 
-  
+
   useEffect(() => {
     dispatch(fetchSummary(ticker))
   }, [dispatch, ticker]); 
@@ -54,7 +54,7 @@ const Details = () => {
   const summary= useSelector(state => state.AddTickers.summary)
  
   if (!summary.length) {
-      return ("loading...")
+      return (`loading ${ticker}...`)
   }
 
     return(

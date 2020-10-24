@@ -11,7 +11,7 @@ import LoadTickers from './components/LoadTickers';
 const App = () => {
  let uid = useSelector(state => state.firebase.auth.uid)
 
- const PrivateRoute = ({uid, ...props}) =>  uid ? props.children : <Redirect to="/login" />
+ const PrivateRoute = ({uid, ...props}) =>  uid ? <Route {...props}>{props.children}</Route> : <Redirect to="/login" />
 
   return (
       <Switch>
