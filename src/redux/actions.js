@@ -314,7 +314,7 @@ export const SignUpEmail = (emailpass) => {
     const firebase = getFirebase()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
-      result.user.sendEmailVerification({url:"http://10.1.1.11.xip.io:3000/"})
+      result.user.sendEmailVerification({url:serverhost})
       return result
     })
     .then((result) => {
@@ -398,7 +398,7 @@ export const createJWT = () => {
       body: JSON.stringify(r)
     })
     .then((s) => {
-      if(s.status == 403){
+      if(s.status === 403){
         throw new Error("Forbidden, Probably banned")
          
       }

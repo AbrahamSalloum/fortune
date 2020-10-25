@@ -17,12 +17,8 @@ import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
-  root: {
-  }
-})
+
 
 const DetailsHeader = ({ticker}) => (
   <AppBar position="static">
@@ -43,7 +39,7 @@ const DetailsHeader = ({ticker}) => (
 
 const Details = () => {
   
-  const classes = useStyles();
+  
   const dispatch = useDispatch();
   const {ticker} = useParams(); 
 
@@ -59,7 +55,7 @@ const Details = () => {
 
     return(
       <Container maxWidth="lg">
-        <Grid container spacing={2} justify="space-evenly" className={classes.summaryrow}>
+        <Grid container spacing={2} justify="space-evenly">
           <Grid item container spacing={2}>
             <Grid item xs={12}>
               <DetailsHeader ticker={ticker} header="Details" />
@@ -70,7 +66,7 @@ const Details = () => {
               <CloseChartBox ticker={ticker}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <CompanyProfileBox/>
+              <CompanyProfileBox ticker={ticker} />
             </Grid>
           </Grid>
           <Grid item container spacing={2}>
