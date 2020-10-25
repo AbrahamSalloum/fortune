@@ -1,0 +1,8 @@
+setup.py
+fortune-server/__init__.py
+fortune_server.egg-info/PKG-INFO
+fortune_server.egg-info/SOURCES.txt
+fortune_server.egg-info/dependency_links.txt
+fortune_server.egg-info/not-zip-safe
+fortune_server.egg-info/requires.txt
+fortune_server.egg-info/top_level.txt

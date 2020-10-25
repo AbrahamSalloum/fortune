@@ -3,7 +3,7 @@ from flask import Flask
 import requests
 import json
 from flask_cors import CORS
-#from bson import json_util
+from bson import json_util
 import time
 from flask import request, jsonify, current_app
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
