@@ -8,6 +8,7 @@ import time
 from flask import request, jsonify, current_app
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
 import datetime
+from waitress import serve
 
 
 UPDATE_INTERVAL= 1200
@@ -185,9 +186,11 @@ def create_app():
         if isbanneduser:
             pass
         else:
-            adduser = users.insert(content)
-            isuser = users.find_one({"userid": adduser})
-            return jsonify(isuser), 200
+            adduser = users.insert_one(content)
+            print(adduser)
+            isuser = users.find_one({'userid':content['userid']})
+            isuser = json.loads(json_util.dumps(isuser))
+            return isuser, 200
         return jsonify({"msg": "Forbidden, maybe banned"}), 403
 
 
@@ -212,4 +215,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()   
+    serve(app, listen="0.0.0.0:5000", url_scheme='https')

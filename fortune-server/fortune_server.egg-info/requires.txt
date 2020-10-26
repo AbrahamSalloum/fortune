@@ -1,4 +1,0 @@
-Flask>=1.1
-flask_jwt_extended
-pymongo
-requests

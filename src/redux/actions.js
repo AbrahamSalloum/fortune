@@ -22,7 +22,7 @@ export const setTickers = (tickers) => {
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
     await Wcheckjwt(dispatch)
-    fetch(`${serverhost}:5000/getlinedata/${line}`, {
+    fetch(`${serverhost}/getlinedata/${line}`, {
       withCredentials: true,
       credentials: 'include',
         method: 'GET',
@@ -149,7 +149,7 @@ export const fetchPrice = (tickerlist) => {
       commaedlist = commaedlist + t.ticker + ","
     })
     commaedlist = commaedlist.slice(0,-1)
-    fetch(`${serverhost}:5000/gettickerprices/${commaedlist}`,  {
+    fetch(`${serverhost}/gettickerprices/${commaedlist}`,  {
       withCredentials: true,
       credentials: 'include',
       method: 'GET',
@@ -194,7 +194,7 @@ const Wcheckjwt = async (dispatch) => {
 export const fetchNews = (ticker) => {
   return async (dispatch, getState) => {
     await Wcheckjwt(dispatch)
-      fetch(`${serverhost}:5000/gettickernews/${ticker}`, {
+      fetch(`${serverhost}/gettickernews/${ticker}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ export const fetchChart = (range, ticker) => {
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
       await Wcheckjwt(dispatch)
-      fetch(`${serverhost}:5000/getfetchchart/${interval[range]}/${range}/${ticker}`, {
+      fetch(`${serverhost}/getfetchchart/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -257,7 +257,7 @@ export const delticker = (r) => ({
 export const fetchSummary = (ticker) => {
   return async (dispatch, getState) => {
     await Wcheckjwt(dispatch)
-    fetch(`${serverhost}:5000/gettickersummary/${ticker}`, {
+    fetch(`${serverhost}/gettickersummary/${ticker}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -389,7 +389,7 @@ export const createJWT = () => {
   return async (dispatch, getState) => {
     const logindetaails =  getState().firebase.auth
     let r = { username: logindetaails.email, password: logindetaails.uid, userid: logindetaails.uid}
-    await fetch(`${serverhost}:5000/storelogin`, {
+    await fetch(`${serverhost}/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer NONE`
@@ -400,12 +400,12 @@ export const createJWT = () => {
     .then((s) => {
       if(s.status === 403){
         throw new Error("Forbidden, Probably banned")
-         
+
       }
       return s
     })
     .then((z) => {
-        fetch(`${serverhost}:5000/auth`, {
+        fetch(`${serverhost}/auth`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer NONE`

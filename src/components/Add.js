@@ -18,6 +18,7 @@ const Add = () => {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
   const jwt =  useSelector(state => state.AddTickers.jwt)
+
   const onSubmit = (e) => {
     e.preventDefault()
     const dateadded = Date.now()
@@ -46,7 +47,7 @@ const Add = () => {
       addsuggestions([])
       return
     }
-    fetch(`${serverhost}:5000/getsuggestions/${value}`, {
+    fetch(`${serverhost}/getsuggestions/${value}`, {
       withCredentials: true,
       credentials: 'include',
         method: 'GET',
