@@ -188,7 +188,7 @@ export const fetchPrice = (tickerlist) => {
 
 
 const Wcheckjwt = async (dispatch) => {
-  await dispatch(checkJWT())
+  return await dispatch(checkJWT())
 }
 
 export const fetchNews = (ticker) => {
@@ -310,7 +310,7 @@ export const loginmsg = (msg) => ({
 
 
 export const SignUpEmail = (emailpass) => {
-  return async (dispatch, getState, { getFirebase }) => {
+  return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
@@ -330,7 +330,7 @@ export const SignUpEmail = (emailpass) => {
 
 
 export const SignInEmail = (emailpass) => {
-  return async (dispatch, getState, { getFirebase }) => {
+  return (dispatch, getState, { getFirebase }) => {
 
     const firebase = getFirebase()
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
@@ -352,7 +352,7 @@ export const SignInEmail = (emailpass) => {
 
 
 export const googleSignin = () => {
-  return async (dispatch, getState, { getFirebase }) => {
+  return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
@@ -386,10 +386,10 @@ export const logout = () => ({
 
 
 export const createJWT = () => {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     const logindetaails =  getState().firebase.auth
     let r = { username: logindetaails.email, password: logindetaails.uid, userid: logindetaails.uid}
-    await fetch(`${serverhost}/storelogin`, {
+    fetch(`${serverhost}/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer NONE`
