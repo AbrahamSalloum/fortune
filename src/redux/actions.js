@@ -1,5 +1,6 @@
 import moment from 'moment'
 const serverhost = process.env.REACT_APP_SERVER_HOST
+const mainurl = process.env.REACT_APP_MAIN_URL
 
 export const addTicker = (tickerinfo) => {
     // tickerinfo should be object of {id, ticker, quantity}
@@ -28,21 +29,18 @@ export const getLineData = (line) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+          'Authorization': `Bearer ${getState().AddTickers.jwt.token}`
         }
     })
     .then((plotdatareq) => {
       return plotdatareq.json()
     })
-    .then((m) => {
-      return m
-    })
     .then((plotdata) => {
       const data = []
       try {
-        for (let i in plotdata[line]["timestamp"]) {
-          let t = moment.unix(plotdata[line]["timestamp"][i])
-          let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[line]["close"][i] }
+        for (let i in plotdata[0]["timestamp"]) {
+          let t = moment.unix(plotdata[0]["timestamp"][i])
+          let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0]["close"][i] }
           data.push(o)
         }
         dispatch(SetLineChartData(data))
@@ -155,7 +153,7 @@ export const fetchPrice = (tickerlist) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getState().AddTickers.jwt.access_token}`
+        Authorization: `Bearer ${getState().AddTickers.jwt.token}`
       }
     })
     .then((res) => {
@@ -165,13 +163,13 @@ export const fetchPrice = (tickerlist) => {
       r.price.forEach((q) => {
         let price = {
           ticker: q.symbol,
-          price: q.ask,
+          price: q.regularMarketPrice,
           dayopen: q.regularMarketOpen,
           dayclose:q.regularMarketPreviousClose,
           dayhigh:q.regularMarketDayHigh,
-          daylow:"2",
+          daylow: q.regularMarketDayLow || 0,
           volume: q.regularMarketVolume,
-          daychange: q.regularMarketChangePercent,
+          daychange: q.regularMarketChangePercent || 0,
           additional: q
         }
         prices.push(price)
@@ -198,7 +196,7 @@ export const fetchNews = (ticker) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+          'Authorization': `Bearer ${getState().AddTickers.jwt.token}`
         }
       })
       .then(res => res.json())
@@ -219,18 +217,18 @@ export const fetchChart = (range, ticker) => {
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
       await Wcheckjwt(dispatch)
-      fetch(`${serverhost}/getfetchchart/${interval[range]}/${range}/${ticker}`, {
+      fetch(`${serverhost}/getlinedata/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+          'Authorization': `Bearer ${getState().AddTickers.jwt.token}`
         }
       })
       .then((res) => {
         return res.json()
       })
       .then((r) => {
-        dispatch(StorChart(r))
+        dispatch(StorChart(r[0]))
       })
     }
 }
@@ -261,7 +259,7 @@ export const fetchSummary = (ticker) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getState().AddTickers.jwt.access_token}`
+        'Authorization': `Bearer ${getState().AddTickers.jwt.token}`
       }
     })
     .then((res) => {
@@ -314,7 +312,10 @@ export const SignUpEmail = (emailpass) => {
     const firebase = getFirebase()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
-      result.user.sendEmailVerification({url:serverhost})
+      result.user.sendEmailVerification({ url: mainurl}).then((r) => {
+        console.log("email ver", r)
+      }).catch((err) => console.log("err", err))
+
       return result
     })
     .then((result) => {
@@ -459,7 +460,7 @@ const WcreateJWT = async (dispatch) => {
 export const checkJWT = () => {
   return async (dispatch, getState) => {
     console.log("CHECK JWT")
-    const jwt = getState().AddTickers.jwt.access_token
+    const jwt = getState().AddTickers.jwt.token
     if(!jwt){
       console.log('No JWT')
       await WcreateJWT(dispatch)

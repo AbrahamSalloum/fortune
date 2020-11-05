@@ -16,9 +16,9 @@ const arrangedata = (plotdata, ticker) => {
     return []
   }
   try {
-    for(let i in plotdata[0][ticker]["timestamp"]){
-      let t = moment.unix(plotdata[0][ticker]["timestamp"][i])
-      let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0][ticker]["close"][i]}
+    for(let i in plotdata[0]["timestamp"]){
+      let t = moment.unix(plotdata[0]["timestamp"][i])
+      let o = { timestamp: t.format("DD/MM/YY hh:mm"), close: plotdata[0]["close"][i]}
       data.push(o)
     }
   }

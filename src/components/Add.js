@@ -16,7 +16,7 @@ const Add = () => {
   const [amount, setamount] = useState('')
   const [purchaseprice, setpurchaseprice] = useState('')
   const dispatch = useDispatch();
-  const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const jwt =  useSelector(state => state.AddTickers.jwt)
 
   const onSubmit = (e) => {
@@ -53,7 +53,7 @@ const Add = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt.access_token}`
+          Authorization: `Bearer ${jwt.token}`
         }
     })
     .then(res => res.json())

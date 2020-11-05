@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const PositionSummary = ({price, tickerlist}) => {
-  
+
   const CurrentValue = () => {
     let curr = 0
     for(let ticker in tickerlist){
@@ -17,7 +17,7 @@ const PositionSummary = ({price, tickerlist}) => {
         if(tickerlist[ticker]["ticker"] === price[p]['ticker']){
           curr += price[p]['price'] * tickerlist[ticker]['amount']
         }
-      }  
+      }
     }
     return curr
   }
@@ -45,7 +45,7 @@ const PositionSummary = ({price, tickerlist}) => {
             </TableRow>
             <TableRow>
               <TableCell>Gain</TableCell>
-              <TableCell>{Math.round((pchasevalue-CurrentValue()/pchasevalue)*100 * 1000)/1000}% (${pchasevalue-CurrentValue()})</TableCell>
+              <TableCell>${(CurrentValue() - pchasevalue).toFixed(3)} ({(((CurrentValue() - pchasevalue) / pchasevalue) * 100).toFixed(3)}%)</TableCell>
             </TableRow>
           </TableBody>
         </Table>

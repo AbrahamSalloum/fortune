@@ -12,30 +12,30 @@ import Box from '@material-ui/core/Box'
 const Totals = ({showbox}) => {
   const prices = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
-  
+
   if(!showbox){
     return false
   }
 
   const getsummaries = (tickerlist, prices) => {
-    let a = 0
-    let d = 0
-    let p = 0
+    let purchasevalue = 0
+    let units = 0
+    let currentprice = 0
 
     for(let t in tickerlist){
       if(tickerlist[t]['ticker'] === showbox.data.ticker){
-        a = a + (Number(tickerlist[t]['amount']) * Number(tickerlist[t]['purchaseprice']))
-        d = d + (Number(tickerlist[t]['amount']))
+        purchasevalue = purchasevalue + (Number(tickerlist[t]['amount']) * Number(tickerlist[t]['purchaseprice']))
+        units = units + (Number(tickerlist[t]['amount']))
       }
     }
 
     for(let i in prices){
       if(prices[i]["ticker"] === showbox.data.ticker){
-        p = Number(prices[i]['price'])
+        currentprice = Number(prices[i]['price'])
         break
       }
     }
-    return [a,d,p]
+    return { "purchasevalue": purchasevalue, "units": units, "currentprice": currentprice}
   }
 
   const amounts = getsummaries(tickerlist, prices)
@@ -53,19 +53,23 @@ const Totals = ({showbox}) => {
             <TableBody>
               <TableRow>
                 <TableCell>Total Units</TableCell>
-                <TableCell>{amounts[1]}</TableCell>
+                <TableCell>{amounts["units"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Avg. Purchase Price</TableCell>
-                <TableCell>${amounts[0]/amounts[1]}</TableCell>
+              <TableCell>${(amounts["purchasevalue"] / amounts["units"]).toFixed(3)}</TableCell>
               </TableRow>
+            <TableRow>
+              <TableCell>Total Value</TableCell>
+              <TableCell>${(amounts["currentprice"] * amounts["units"]).toFixed(3)}</TableCell>
+            </TableRow>
               <TableRow>
-                <TableCell>Total Value</TableCell>
-                <TableCell>${amounts[0]}</TableCell>
+                <TableCell>Total Purchase Value</TableCell>
+              <TableCell>${(amounts["purchasevalue"]).toFixed(3)}</TableCell>
               </TableRow>
               <TableRow>
               <TableCell>Gain</TableCell>
-              <TableCell>${amounts[2]*amounts[1] - amounts[0]}</TableCell>
+              <TableCell>${((amounts["currentprice"] * amounts["units"]) - amounts["purchasevalue"]).toFixed(3)}</TableCell>
             </TableRow>
             </TableBody>
           </Table>

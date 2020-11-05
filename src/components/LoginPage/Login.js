@@ -77,6 +77,8 @@ const Login = () => {
 
 
   return (
+    <form>
+    
     <div className="bgbg">
       <div className="loginContainer ">
         <div className="loginf ">
@@ -90,13 +92,13 @@ const Login = () => {
           <TextField  fullWidth={true} id="standard-basic" label="Password" variant="outlined" type="password" placeholder="Password" name="password" onChange={handleChange} />
         </div>
         <div className="loginf alignleft">
-          <button className="buttonlikelink" onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</button>
+          <button type="button" className="buttonlikelink" onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</button>
         </div>
         <div className="loginf">
-          <Button style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="primary" variant="contained" onClick={(e) => {handleLoginSubmit(e)}}>Log in</Button>
+          <Button type="submit" style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="primary" variant="contained" onClick={(e) => {handleLoginSubmit(e)}}>Log in</Button>
         </div>
         <div className="loginf">
-          <Button style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="secondary" variant="contained" onClick={(e) => {handleSignUpSubmit(e)}}>Register</Button>
+          <Button  type="button" style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="secondary" variant="contained" onClick={(e) => {handleSignUpSubmit(e)}}>Register</Button>
         </div>
         <div className="loginf">
           <GoogleButton style={{"width": "100%"}} onClick={handleGoogleSigninSubmit} />
@@ -105,6 +107,7 @@ const Login = () => {
         <div>{hints}</div>
       </div>
     </div>
+    </form>
   )
 }
 
