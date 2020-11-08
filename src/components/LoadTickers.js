@@ -70,6 +70,7 @@ const useStyles = makeStyles({
 const LoadTickers = () => {
   const price = useSelector(state => state.AddTickers.price)
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
+  const uid = useSelector(state => state.firebase.auth)
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
@@ -83,14 +84,15 @@ const LoadTickers = () => {
   const Signout = () => {
     dispatch(SignOut())
   }
-
+  
   useEffect(() => {
+    dispatch(startsetTickers())
     dispatch(startsetTickers())
     const interval = setInterval(() => {
       dispatch(startsetTickers())
     }, 600000);
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [uid]);
 
   const classes = useStyles();
 

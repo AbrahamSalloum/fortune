@@ -89,6 +89,7 @@ router.get('/getlinedata/:interval?/:range?/:ticker', verifyToken, async (req, r
 
 router.get('/gettickernews/:ticker', verifyToken, async (req, res) => {
     try {
+        const ticker = req.params.ticker
         const db = req.app.locals.db
         const now = Date.now()
         const findstoredsymbol = await db.collection('news').find({"symbol": ticker})
@@ -100,7 +101,6 @@ router.get('/gettickernews/:ticker', verifyToken, async (req, res) => {
             return
         }
         console.log(findstoredsymbol_count)
-        const ticker = req.params.ticker
         const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-news?region=US&category=${ticker}`
         const data = await fetchurl(url)
         data['dateupdated'] = now

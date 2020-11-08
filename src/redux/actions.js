@@ -20,6 +20,16 @@ export const setTickers = (tickers) => {
 }
 
 
+export const isloggedin = (status) => {
+  // tickerinfo should be object of {id, ticker, quantity}
+  return {
+      type: "TRIGGER_LOGGED",
+      payload: status
+  }
+}
+
+
+
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
     await Wcheckjwt(dispatch)
@@ -74,7 +84,8 @@ export const StartaddTicker = (tickerinfo) => {
     })
     .then(() => {
       dispatch(startsetTickers())
-    });
+    })
+    .catch((e) => console.log(e));
   }
 }
 
@@ -94,8 +105,10 @@ export const ResetPassword = (email) => {
 
 export const startsetTickers = () => {
   const tickers = []
-  return (dispatch, getState, { getFirebase }) => {
+  return async (dispatch, getState, { getFirebase }) => {
+   await Wcheckjwt(dispatch)
     const uid = getState().AddTickers.uid
+
     const firebase = getFirebase()
     const database = firebase.database()
     database.ref(`users/${uid}/tickers`)
@@ -118,6 +131,7 @@ export const startsetTickers = () => {
     .then(() => {
       dispatch(setTimeStamp())
     })
+    .catch((e) => console.log(e));
   }
 }
 
@@ -185,13 +199,15 @@ export const fetchPrice = (tickerlist) => {
 }
 
 
-const Wcheckjwt = async (dispatch) => {
-  return await dispatch(checkJWT())
-}
+const Wcheckjwt = (dispatch) => new Promise((resolve, reject) => {
+  // do anything here
+  dispatch(checkJWT())
+  resolve();
+})
 
 export const fetchNews = (ticker) => {
   return async (dispatch, getState) => {
-    await Wcheckjwt(dispatch)
+    
       fetch(`${serverhost}/gettickernews/${ticker}`, {
         method: 'GET',
         headers: {
@@ -241,7 +257,8 @@ export const dodelticker = (id) => {
     const uid = getState().AddTickers.uid
     database.ref(`users/${uid}/tickers/${id}`).remove().then((ref) => {
       dispatch(delticker(id));
-    });
+    })
+    .catch((e) => console.log(e));
   }
 }
 
@@ -307,7 +324,7 @@ export const loginmsg = (msg) => ({
 })
 
 
-export const SignUpEmail = (emailpass) => {
+export const SignUpEmail = (emailpass, history) => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
@@ -319,9 +336,15 @@ export const SignUpEmail = (emailpass) => {
       return result
     })
     .then((result) => {
-      firebase.reloadAuth().then(async () => {
-        await WcreateJWT(dispatch)
-      })
+      firebase.reloadAuth()
+      return result
+    })
+    .then(() => {
+      dispatch(createJWT())
+      dispatch(isloggedin(true))
+    })
+    .then(() => {
+      history.push('/dashboard')
     })
     .catch((err) => {
       dispatch(loginmsg(err.message))
@@ -330,7 +353,7 @@ export const SignUpEmail = (emailpass) => {
 }
 
 
-export const SignInEmail = (emailpass) => {
+export const SignInEmail = (emailpass, history) => {
   return (dispatch, getState, { getFirebase }) => {
 
     const firebase = getFirebase()
@@ -339,28 +362,45 @@ export const SignInEmail = (emailpass) => {
       if (!result.user.emailVerified) {
         dispatch(SignOut("Plese verify your email (Check your inbox)"))
       } else {
-        firebase.reloadAuth().then(async () => {
-          await WcreateJWT(dispatch)
-        })
+        firebase.reloadAuth()
       }
       return result
     })
+    .then(() => {
+      dispatch(createJWT())
+      dispatch(isloggedin(true))
+    })
+    .then(() => {
+      history.push('/dashboard')
+    })
+    .then(() => {
+      dispatch(loginmsg("Login OK, Redirecting..."))
+    })
     .catch(err => {
-      dispatch(loginmsg(err.message))
+      dispatch(SignOut())
     })
   }
 }
 
 
-export const googleSignin = () => {
+export const googleSignin = (history) => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
     firebase.auth().signInWithPopup(googleProvider).then((result) => {
-      firebase.reloadAuth().then(async () => {
-        await WcreateJWT(dispatch)
-      })
+      firebase.reloadAuth()
+      return result
+    })
+    .then(() => {
+      dispatch(createJWT())
+      dispatch(isloggedin(true))
+    })
+    .then(() => {
+      history.push('/dashboard')
+    })
+    .then(() => {
+      dispatch(loginmsg("Login OK, Redirecting..."))
     })
     .catch((err) => {
       dispatch(loginmsg(err.message))
@@ -387,10 +427,10 @@ export const logout = () => ({
 
 
 export const createJWT = () => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const logindetaails =  getState().firebase.auth
     let r = { username: logindetaails.email, password: logindetaails.uid, userid: logindetaails.uid}
-    fetch(`${serverhost}/storelogin`, {
+    let s = await fetch(`${serverhost}/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer NONE`
@@ -398,15 +438,12 @@ export const createJWT = () => {
       method: 'POST',
       body: JSON.stringify(r)
     })
-    .then((s) => {
-      if(s.status === 403){
-        throw new Error("Forbidden, Probably banned")
+    
+    if(s.status === 403){
+      throw new Error("Forbidden, Probably banned")
+    }
 
-      }
-      return s
-    })
-    .then((z) => {
-        fetch(`${serverhost}/auth`, {
+    let jwtf = await fetch(`${serverhost}/auth`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer NONE`
@@ -414,35 +451,33 @@ export const createJWT = () => {
           method: 'POST',
           body: JSON.stringify(r)
         })
-        .then((jwt) => {
-          return jwt.json()
-        })
-        .then((jwt) => {
-          dispatch(storejwt(jwt))
-        })
-        .then(() => {
-          dispatch(login(r))
-        })
-        .then(() => {
-          dispatch(setUid(r.userid))
-        })
-        .catch((err) => {
-          console.log("ERROR CREATING JWT", err)
-        })
-    })
-    .catch((err) => {
-      console.log(err.toString())
-      dispatch(SignOut(err.toString()))
-    })
+
+    let jwt = await jwtf.json()
+
+    if(!!jwt.token){
+        sessionStorage.setItem('jwtstore', JSON.stringify(jwt))
+    }
+    
+    dispatch(storejwt(jwt))
+    dispatch(login(r))
+    if(!!r.userid){
+      sessionStorage.setItem('uid', r.userid)
+      dispatch(setUid(r.userid))
+    }
+    
   }
-}
+  }
 
 
 export const SignOut = (msg="") => {
+  sessionStorage.clear()
   return (dispatch, getState, { getFirebase }) => {
     let firebase = getFirebase()
     firebase.auth().signOut().then(() => {
       dispatch(loginmsg(msg))
+    })
+    .then(() => {
+      dispatch(isloggedin(false))
     })
     .then(() => {
       dispatch(setUid(false))
@@ -453,17 +488,13 @@ export const SignOut = (msg="") => {
   }
 }
 
-const WcreateJWT = async (dispatch) => {
-  await dispatch(createJWT())
-}
 
 export const checkJWT = () => {
   return async (dispatch, getState) => {
-    console.log("CHECK JWT")
     const jwt = getState().AddTickers.jwt.token
+
     if(!jwt){
-      console.log('No JWT')
-      await WcreateJWT(dispatch)
+      await dispatch(createJWT())
       return
     }
     const now = new Date();
@@ -472,9 +503,9 @@ export const checkJWT = () => {
     const data = JSON.parse(atob(jwt_part[1]))
     if (data['exp'] < (time - 300) ){
       console.log("JWT expired, making new JWT....")
-     await WcreateJWT(dispatch)
+      await dispatch(createJWT())
     } else if (time > data['exp']){
-      dispatch(SignOut("logged out after 30mins of inactivity"))
+      return dispatch(SignOut("logged out after 30mins of inactivity"))
     }
   }
 }

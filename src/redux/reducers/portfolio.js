@@ -8,9 +8,10 @@ const initialState = {
     lastpriceupdate: '',
     linedata: [],
     logindata: [],
-    jwt: false,
-    uid: false,
-    loginmsg: ''
+    jwt: sessionStorage.getItem('jwtstore') || false,
+    uid: sessionStorage.getItem('uid') || false,
+    loginmsg: '',
+    notloggedout: true
 }
 
 export default function(state=initialState, action){
@@ -28,6 +29,14 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 loginmsg: msg
+            }
+        }
+
+        case "TRIGGER_LOGGED": {
+            const status = action.payload
+            return {
+                ...state,
+                notloggedout: status
             }
         }
 

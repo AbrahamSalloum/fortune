@@ -14,15 +14,14 @@ const Login = () => {
   let history = useHistory()
   const loginmsg = useSelector(state => state.AddTickers.loginmsg)
   const dispatch = useDispatch();
-  let jwt = useSelector(state => state.AddTickers.jwt)
-  let uid = useSelector(state => state.firebase.auth.isEmpty)
+  
+  //sessionStorage.clear()
+  let jwtstore = useSelector(state => state.AddTickers.jwt)
+  //let uid = sessionStorage.getItem('jwtstore')
+  let uid = useSelector(state => state.AddTickers.uid)
+  
+  
 
-  useEffect(() => {
-
-    if (!!jwt === true && !!uid === false) {
-      history.push("/dashboard");
-    }
-  });
 
   const [hints, setHint] = useState('')
   const [user, setUser] = useState({
@@ -40,26 +39,26 @@ const Login = () => {
     })
   }
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if(!!user.email === false || !!user.password === false){
       setHint('Please type valid email and password to login')
       return
     }
     setHint('')
-    dispatch(SignInEmail(user))
+    dispatch(SignInEmail(user, history))
   }
 
   const handleGoogleSigninSubmit = (e) => {
     e.preventDefault();
-    dispatch(googleSignin())
+    dispatch(googleSignin(history))
   }
 
   const SendPasswordResetEmail = (e) => {
     e.preventDefault();
     if(!!user.email === false){
       setHint('Please type valid email and press \'reset password\'')
-      return 
+      return
     }
     dispatch(ResetPassword(user));
   }
@@ -72,7 +71,7 @@ const Login = () => {
       return
     }
     setHint('')
-    dispatch(SignUpEmail(user))
+    dispatch(SignUpEmail(user, history))
   }
 
 
@@ -84,22 +83,55 @@ const Login = () => {
             <h1>Login</h1>
           </div>
           <div className="loginf">
-            <TextField  fullWidth={true} id="standard-basic" label="Email" variant="outlined" type="text" placeholder="Email" name="email" onChange={handleChange} />
+            <TextField  
+              fullWidth={true} 
+              id="standard-basic" 
+              label="Email" 
+              variant="outlined" 
+              type="text" 
+              placeholder="Email" 
+              name="email" onChange={handleChange} 
+            />
             </div>
           <div className="loginf">
-            <TextField  fullWidth={true} id="standard-basic" label="Password" variant="outlined" type="password" placeholder="Password" name="password" onChange={handleChange} />
+            <TextField 
+              fullWidth={true} 
+              id="standard-basic" 
+              label="Password" 
+              variant="outlined" 
+              type="password" 
+              placeholder="Password" 
+              name="password" 
+              onChange={handleChange} 
+            />
           </div>
           <div className="loginf alignleft">
-            <button type="button" className="buttonlikelink" onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</button>
+            <button 
+              type="button" 
+              className="buttonlikelink" 
+              onClick={(e) => { SendPasswordResetEmail(e)}}>reset password...</button>
           </div>
           <div className="loginf">
-            <Button type="submit" style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="primary" variant="contained" onClick={(e) => {handleLoginSubmit(e)}}>Log in</Button>
+            <Button 
+              type="submit" 
+              style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} 
+              color="primary" 
+              variant="contained" 
+              onClick={(e) => {handleLoginSubmit(e)}}>Log in</Button>
           </div>
           <div className="loginf">
-            <Button  type="button" style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} color="secondary" variant="contained" onClick={(e) => {handleSignUpSubmit(e)}}>Register</Button>
+            <Button 
+              type="button" 
+              style={{ "height": "50px", "borderRadius": 0, "width": "100%"}} 
+              color="secondary" 
+              variant="contained" 
+              onClick={(e) => {handleSignUpSubmit(e)}}>Register</Button>
           </div>
           <div className="loginf">
-            <GoogleButton style={{"width": "100%"}} onClick={handleGoogleSigninSubmit} />
+            <GoogleButton 
+              style={{"width": "100%"}} 
+              onClick={handleGoogleSigninSubmit} 
+            />
           </div>
           <div>{loginmsg}</div>
           <div>{hints}</div>
