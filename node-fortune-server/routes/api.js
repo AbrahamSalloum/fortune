@@ -154,7 +154,9 @@ router.post('/storelogin',  async (req, res) => {
 
 
 router.post('/auth', async(req,res) => {
+    expiry = Math.floor(Date.now() / 1000) + (60 * 20) // 20mins
     const userdata = req.body
+    userdata['exp'] =  expiry
     checkusers = 1
     if(checkusers == 0){
         res.status(403).json({msg: "You appear to be not logged in. Email Admin for info"})

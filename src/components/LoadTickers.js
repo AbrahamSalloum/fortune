@@ -87,12 +87,11 @@ const LoadTickers = () => {
   
   useEffect(() => {
     dispatch(startsetTickers())
-    dispatch(startsetTickers())
     const interval = setInterval(() => {
       dispatch(startsetTickers())
     }, 600000);
     return () => clearInterval(interval);
-  }, [uid]);
+  }, [uid, dispatch]);
 
   const classes = useStyles();
 

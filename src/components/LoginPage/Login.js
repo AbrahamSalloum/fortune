@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {SignInEmail} from '../../redux/actions'
 import {SignUpEmail} from '../../redux/actions'
@@ -15,13 +15,6 @@ const Login = () => {
   const loginmsg = useSelector(state => state.AddTickers.loginmsg)
   const dispatch = useDispatch();
   
-  //sessionStorage.clear()
-  let jwtstore = useSelector(state => state.AddTickers.jwt)
-  //let uid = sessionStorage.getItem('jwtstore')
-  let uid = useSelector(state => state.AddTickers.uid)
-  
-  
-
 
   const [hints, setHint] = useState('')
   const [user, setUser] = useState({

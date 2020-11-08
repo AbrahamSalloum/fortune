@@ -492,7 +492,6 @@ export const SignOut = (msg="") => {
 export const checkJWT = () => {
   return async (dispatch, getState) => {
     const jwt = getState().AddTickers.jwt.token
-
     if(!jwt){
       await dispatch(createJWT())
       return
@@ -503,9 +502,9 @@ export const checkJWT = () => {
     const data = JSON.parse(atob(jwt_part[1]))
     if (data['exp'] < (time - 300) ){
       console.log("JWT expired, making new JWT....")
-      await dispatch(createJWT())
+      dispatch(createJWT())
     } else if (time > data['exp']){
-      return dispatch(SignOut("logged out after 30mins of inactivity"))
+      dispatch(SignOut(""))
     }
   }
 }
