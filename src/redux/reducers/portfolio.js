@@ -11,7 +11,7 @@ const initialState = {
     jwt: sessionStorage.getItem('jwtstore') || false,
     uid: sessionStorage.getItem('uid') || false,
     loginmsg: '',
-    notloggedout: true
+    loggedin: false
 }
 
 export default function(state=initialState, action){
@@ -36,7 +36,7 @@ export default function(state=initialState, action){
             const status = action.payload
             return {
                 ...state,
-                notloggedout: status
+                loggedin: status
             }
         }
 

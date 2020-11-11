@@ -32,7 +32,7 @@ export const isloggedin = (status) => {
 
 export const getLineData = (line) => {
   return async (dispatch, getState) =>  {
-    await Wcheckjwt(dispatch)
+    dispatch(checkJWT())
     fetch(`${serverhost}/getlinedata/${line}`, {
       withCredentials: true,
       credentials: 'include',
@@ -56,6 +56,7 @@ export const getLineData = (line) => {
         dispatch(SetLineChartData(data))
 
       } catch (err) {
+        dispatch(SetLineChartData([]))
         console.log(err)
       }
     })
@@ -106,7 +107,7 @@ export const ResetPassword = (email) => {
 export const startsetTickers = () => {
   const tickers = []
   return async (dispatch, getState, { getFirebase }) => {
-   await Wcheckjwt(dispatch)
+    dispatch(checkJWT())
     const uid = getState().AddTickers.uid
 
     const firebase = getFirebase()
@@ -155,7 +156,7 @@ export const StorePrice = (ticker) => {
 export const fetchPrice = (tickerlist) => {
   const prices = []
   return async (dispatch, getState) => {
-    await Wcheckjwt(dispatch)
+    dispatch(checkJWT())
     let commaedlist = ""
     tickerlist.forEach((t) => {
       commaedlist = commaedlist + t.ticker + ","
@@ -199,15 +200,9 @@ export const fetchPrice = (tickerlist) => {
 }
 
 
-const Wcheckjwt = (dispatch) => new Promise((resolve, reject) => {
-  // do anything here
-  dispatch(checkJWT())
-  resolve();
-})
-
 export const fetchNews = (ticker) => {
   return async (dispatch, getState) => {
-    
+    dispatch(checkJWT())
       fetch(`${serverhost}/gettickernews/${ticker}`, {
         method: 'GET',
         headers: {
@@ -232,7 +227,7 @@ export const fetchChart = (range, ticker) => {
         interval = "1d"
       }
       interval = {"1d": "15m", "5d": "15m", "3mo": "1d", "6mo": "1d", "1y": "1wk", "5y": "1wk", "max": "1wk"}
-      await Wcheckjwt(dispatch)
+      dispatch(checkJWT())
       fetch(`${serverhost}/getlinedata/${interval[range]}/${range}/${ticker}`, {
         method: 'GET',
         headers: {
@@ -271,7 +266,7 @@ export const delticker = (r) => ({
 
 export const fetchSummary = (ticker) => {
   return async (dispatch, getState) => {
-    await Wcheckjwt(dispatch)
+    dispatch(checkJWT())
     fetch(`${serverhost}/gettickersummary/${ticker}`, {
       method: 'GET',
       headers: {
@@ -438,7 +433,7 @@ export const createJWT = () => {
       method: 'POST',
       body: JSON.stringify(r)
     })
-    
+
     if(s.status === 403){
       throw new Error("Forbidden, Probably banned")
     }
@@ -457,33 +452,35 @@ export const createJWT = () => {
     if(!!jwt.token){
         sessionStorage.setItem('jwtstore', JSON.stringify(jwt))
     }
-    
+
     dispatch(storejwt(jwt))
     dispatch(login(r))
     if(!!r.userid){
+      console.log('setting uid..')
       sessionStorage.setItem('uid', r.userid)
       dispatch(setUid(r.userid))
     }
-    
   }
-  }
+}
 
 
 export const SignOut = (msg="") => {
-  sessionStorage.clear()
+
   return (dispatch, getState, { getFirebase }) => {
+    sessionStorage.clear()
     let firebase = getFirebase()
     firebase.auth().signOut().then(() => {
       dispatch(loginmsg(msg))
     })
     .then(() => {
+      dispatch(storejwt(false))
       dispatch(isloggedin(false))
     })
     .then(() => {
       dispatch(setUid(false))
     })
     .then(() => {
-      dispatch(storejwt(false))
+
     })
   }
 }
@@ -493,6 +490,7 @@ export const checkJWT = () => {
   return async (dispatch, getState) => {
     const jwt = getState().AddTickers.jwt.token
     if(!jwt){
+      console.log("jwt not found....")
       await dispatch(createJWT())
       return
     }
@@ -500,11 +498,12 @@ export const checkJWT = () => {
     const time = Math.round(now.getTime() / 1000)
     const jwt_part = jwt.split(".")
     const data = JSON.parse(atob(jwt_part[1]))
-    if (data['exp'] < (time - 300) ){
-      console.log("JWT expired, making new JWT....")
+    if (time > data['exp']) {
+      dispatch(SignOut("signing out.."))
+    } else
+    if (data['exp'] -300 > time){
+      console.log("JWT almost expired, making new JWT....")
       dispatch(createJWT())
-    } else if (time > data['exp']){
-      dispatch(SignOut(""))
     }
   }
 }

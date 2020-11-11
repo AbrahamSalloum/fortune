@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const apiroute = require('./routes/api')
 
 var corsOptions = {
-  origin: 'http://10.1.1.11.xip.io:3000',
+  origin: process.env.URL_ORIGIN,
   optionsSuccessStatus: 200,
   credentials: true
 }
@@ -19,5 +19,5 @@ MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 .then(client => {
   const db = client.db('fortunedb');
   app.locals.db = db
-  app.listen(5000, "0.0.0.0", () => console.info(`REST API running on port 5000`));
+  app.listen(5000, "0.0.0.0", () => console.info(`running...`));
 }).catch(error => console.error(error));

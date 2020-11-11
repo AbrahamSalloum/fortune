@@ -84,7 +84,7 @@ const LoadTickers = () => {
   const Signout = () => {
     dispatch(SignOut())
   }
-  
+
   useEffect(() => {
     dispatch(startsetTickers())
     const interval = setInterval(() => {

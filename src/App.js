@@ -9,11 +9,11 @@ import LoadTickers from './components/LoadTickers';
 
 
 const App = () => {
-  let notloggedout = useSelector(state => state.AddTickers.notloggedout)
+  let loggedin = useSelector(state => state.AddTickers.loggedin)
   const PrivateRoute = ({...props}) => {
-    
+
     let uid = sessionStorage.getItem('uid')
-    return (!!uid || !!notloggedout) ? <Route {...props}>{props.children}</Route> : <Redirect to="/login" />
+    return (!!uid || !!loggedin) ? <Route {...props}>{props.children}</Route> : <Redirect to="/login" />
   }
 
   return (
@@ -34,7 +34,7 @@ const App = () => {
         <Login />
       </Route>
     </Switch>
-   );
+  );
 }
 
 export default App;
