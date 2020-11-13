@@ -10,17 +10,23 @@ const CompanyProfileBox = ({ticker}) => {
   const summary= useSelector(state => state.AddTickers.summary)
 
   const GetTickerSummary = ({ticker}) => {
-    for(let i in summary){
-      if (summary[i]['symbol'] === ticker){
-        console.log(summary[i])
-        return (
-          <div>
-          {summary[i]["summaryProfile"]['longBusinessSummary']}
-          </div>
-        )
+    try{
+      for(let i in summary){
+        if (summary[i]['symbol'] === ticker){
+          console.log(summary[i])
+          return (
+            <div>
+            {summary[i]["summaryProfile"]['longBusinessSummary']}
+            </div>
+          )
+        }
+        return (<div>loading..</div>)
       }
+    } catch {
+      return (<div>loading..</div>)
     }
-    return (<div>loading..</div>)
+
+    
   }
 
   

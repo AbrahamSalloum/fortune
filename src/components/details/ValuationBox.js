@@ -14,6 +14,29 @@ import {useSelector} from 'react-redux';
 
 const ValuationBox = () => {
   const summary= useSelector(state => state.AddTickers.summary)
+
+  const getsummary = (summary) => {
+    let summary_data = {
+    "trailingPE": "NA", 
+    "pegRatio": "NA", 
+    "priceToBook": "NA", 
+    "priceToSalesTrailing12Months": "NA",
+    "dividendYield": "NA",
+    "payoutRatio": "NA"
+  }
+    if(!!summary[0]){ 
+      summary_data['trailingPE'] = !!summary[0]["summaryDetail"]["trailingPE"] ? summary[0]["summaryDetail"]["trailingPE"]["fmt"] : "NA"
+      summary_data['pegRatio'] = !!summary[0]["defaultKeyStatistics"]["pegRatio"] ? summary[0]["defaultKeyStatistics"]["pegRatio"]["fmt"] : "NA"
+      summary_data['priceToBook'] = !!summary[0]["defaultKeyStatistics"]["priceToBook"] ? summary[0]["defaultKeyStatistics"]["priceToBook"]["fmt"] : "NA"
+      summary_data['priceToSalesTrailing12Months'] = !!summary[0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"] ? summary[0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"]["fmt"] : "NA"
+      summary_data['dividendYield'] = !!summary[0]["summaryDetail"]["dividendYield"] ? summary[0]["summaryDetail"]["dividendYield"]["fmt"] : "NA"
+      summary_data['payoutRatio'] = !!summary[0]["summaryDetail"]["payoutRatio"] ? summary[0]["summaryDetail"]["payoutRatio"]["fmt"] : "NA"
+    } 
+  return summary_data
+  }
+
+  const summary_data = getsummary(summary)  
+
   return (
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
@@ -31,27 +54,27 @@ const ValuationBox = () => {
             <TableBody>
               <TableRow>
                 <TableCell>Trailing PE </TableCell>
-                <TableCell>{summary[0]["summaryDetail"]["trailingPE"] ? summary[0]["summaryDetail"]["trailingPE"]["fmt"] : "NA"}</TableCell>
+                <TableCell>{summary_data["trailingPE"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>PEG Ratio </TableCell>
-                <TableCell>{summary[0]["defaultKeyStatistics"]["pegRatio"] ? summary[0]["defaultKeyStatistics"]["pegRatio"]["fmt"] : "NA"}</TableCell>
+                <TableCell>{summary_data["pegRatio"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Price to Book</TableCell>
-                <TableCell>{summary[0]["defaultKeyStatistics"]["priceToBook"] ? summary[0]["defaultKeyStatistics"]["priceToBook"]["fmt"] : "NA"}</TableCell>
+                <TableCell>{summary_data["priceToBook"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Price To Sales (12M)</TableCell>
-                <TableCell> {summary[0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"] ? summary[0]["defaultKeyStatistics"]["priceToSalesTrailing12Months"]["fmt"] : "NA"}</TableCell>
+                <TableCell> {summary_data["priceToSalesTrailing12Months"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Dividend Yield </TableCell>
-                <TableCell>{summary[0]["summaryDetail"]["dividendYield"] ? summary[0]["summaryDetail"]["dividendYield"]['fmt'] : "NA"}</TableCell>
+                <TableCell>{summary_data["dividendYield"]}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Payout Ratio</TableCell>
-                <TableCell>{summary[0]["summaryDetail"]["payoutRatio"] ? summary[0]["summaryDetail"]["payoutRatio"]["fmt"] : "NA"}</TableCell>
+                <TableCell>{summary_data["payoutRatio"]}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

@@ -114,7 +114,7 @@ export default function(state=initialState, action){
             const summary = action.payload
             return {
                 ...state,
-                summary: [...state.summary, summary]
+                summary: [summary]
             }
         }
 

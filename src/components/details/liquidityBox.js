@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,22 @@ import {useSelector} from 'react-redux';
 
 const LiquidityBox = () => {
   const summary= useSelector(state => state.AddTickers.summary)
+  
+  console.log(summary)
+  
+  const getsummary = (summary) => {
+    let summary_data = {"currentRatio": "NA", "quickRatio": "NA", "debtToEquity": "NA"}
+    if(summary[0]){ 
+      summary_data['currentRatio'] = !!summary[0]["financialData"]["currentRatio"]["fmt"] ? summary[0]["financialData"]["currentRatio"]["fmt"] : "OK"
+      summary_data['quickRatio'] = !!summary[0]["financialData"]["quickRatio"]["fmt"] ? summary[0]["financialData"]["quickRatio"]["fmt"] : "NA"
+      summary_data['debtToEquity'] = !!summary[0]["financialData"]["debtToEquity"]["fmt"] ? summary[0]["financialData"]["debtToEquity"]["fmt"] : "NA"
+    } 
+  return summary_data
+  }
+
+  const summary_data = getsummary(summary)
+
+
   return(
     <Card style={{ height: '100%' }}>
       <Typography color="textSecondary" gutterBottom>
@@ -30,15 +46,15 @@ const LiquidityBox = () => {
           <TableBody>
             <TableRow>
               <TableCell>Current Ratio </TableCell>
-              <TableCell>{summary[0]["financialData"]["currentRatio"]["fmt"]}</TableCell>
+              <TableCell>{summary_data["currentRatio"]}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Quick Ratio</TableCell>
-              <TableCell>{summary[0]["financialData"]["quickRatio"]["fmt"]}</TableCell>
+              <TableCell>{summary_data["quickRatio"]}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Debt To Equity</TableCell>
-              <TableCell>{summary[0]["financialData"]["debtToEquity"]["fmt"]}</TableCell>
+              <TableCell>{summary_data["debtToEquity"]}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

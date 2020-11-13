@@ -56,10 +56,10 @@ export const getLineData = (line) => {
         dispatch(SetLineChartData(data))
 
       } catch (err) {
-        dispatch(SetLineChartData([]))
+        //dispatch(SetLineChartData([]))
         console.log(err)
       }
-    })
+    }).catch((e) => console.log(e))
   }
 }
 
@@ -240,7 +240,7 @@ export const fetchChart = (range, ticker) => {
       })
       .then((r) => {
         dispatch(StorChart(r[0]))
-      })
+      }).catch((e) => console.log(e))
     }
 }
 
@@ -280,6 +280,7 @@ export const fetchSummary = (ticker) => {
     .then((r) => {
       dispatch(StoreSummary(r[0]))
     })
+    .catch((err) => console.log(err))
   }
 }
 
@@ -336,7 +337,7 @@ export const SignUpEmail = (emailpass, history) => {
     })
     .then(() => {
       dispatch(createJWT())
-      dispatch(isloggedin(true))
+      //dispatch(isloggedin(true))
     })
     .then(() => {
       history.push('/dashboard')
@@ -357,13 +358,13 @@ export const SignInEmail = (emailpass, history) => {
       if (!result.user.emailVerified) {
         dispatch(SignOut("Plese verify your email (Check your inbox)"))
       } else {
-        firebase.reloadAuth()
+        //firebase.reloadAuth()
       }
       return result
     })
     .then(() => {
       dispatch(createJWT())
-      dispatch(isloggedin(true))
+
     })
     .then(() => {
       history.push('/dashboard')
@@ -388,8 +389,12 @@ export const googleSignin = (history) => {
       return result
     })
     .then(() => {
-      dispatch(createJWT())
-      dispatch(isloggedin(true))
+      if (!!getState().firebase.auth.uid){
+        console.log(getState().firebase.auth.uid)
+        dispatch(createJWT())
+        //dispatch(isloggedin(true))
+      }
+
     })
     .then(() => {
       history.push('/dashboard')
@@ -423,8 +428,16 @@ export const logout = () => ({
 
 export const createJWT = () => {
   return async (dispatch, getState) => {
-    const logindetaails =  getState().firebase.auth
-    let r = { username: logindetaails.email, password: logindetaails.uid, userid: logindetaails.uid}
+    try {
+    const logindetaails = getState().firebase.auth
+
+    let r = {
+      username: logindetaails.email,
+      password: logindetaails.uid,
+      userid: logindetaails.uid
+    }
+
+    console.log(r)
     let s = await fetch(`${serverhost}/storelogin`, {
       headers: {
         'Content-Type': 'application/json',
@@ -460,6 +473,10 @@ export const createJWT = () => {
       sessionStorage.setItem('uid', r.userid)
       dispatch(setUid(r.userid))
     }
+  } catch (err) {
+    console.log(err)
+  }
+    dispatch(isloggedin(true))
   }
 }
 

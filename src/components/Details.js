@@ -42,7 +42,7 @@ const Details = () => {
   
   const dispatch = useDispatch();
   const {ticker} = useParams(); 
-
+  
   useEffect(() => {
     dispatch(fetchSummary(ticker))
   }, [dispatch, ticker]); 
