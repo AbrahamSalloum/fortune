@@ -1,13 +1,26 @@
 import React from 'react'
-import  { PieChart, Pie, Cell, Tooltip, ResponsiveContainer} from 'recharts';
+import  { Treemap, PieChart, Pie, Cell, Tooltip, ResponsiveContainer} from 'recharts';
 import {useSelector} from 'react-redux';
+import { set } from 'date-fns';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const createData = (tickerlist) => {
   const data = []
+  const keys = []
   for(let ticker in tickerlist){
-    data.push({name: tickerlist[ticker]['ticker'], value:Number(tickerlist[ticker]['amount'])*Number(tickerlist[ticker]['purchaseprice'])})
+    keys.push(tickerlist[ticker]['ticker'])
+  }
+  const kk = [...new Set(keys)]
+  for( let k in kk){
+    let item = {name: kk[k], size: 0}
+    for(let ticker in tickerlist){
+      if(tickerlist[ticker]['ticker'] == kk[k]){
+        item["size"] = item["size"] + Number(tickerlist[ticker]['amount'])*Number(tickerlist[ticker]['purchaseprice'])
+      }
+    }
+    data.push(item)
+    console.log(data)
   }
   return data
 }
@@ -17,21 +30,14 @@ const SimplePieChart = () => {
   const data = createData(tickerlist)
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <PieChart>
-        <Pie
-          isAnimationActive={false}
-          label={(entry) => entry.name}
-          data={data} 
-          fill="#536A6D"
-          nameKey="name"
-          dataKey="value"
-          labelLine={true}>
-          {
-            data.map((entry, index) => <Cell key={entry.name} fill={COLORS[index % COLORS.length]}/>)
-          }
-        </Pie>
-          <Tooltip/>
-      </PieChart>
+      <Treemap
+      height={300}
+      data={data}
+      dataKey="size"
+      ratio={16/9}
+      stroke="#fff"
+      fill="#8884d8"
+    />
     </ResponsiveContainer>
   );
 }
