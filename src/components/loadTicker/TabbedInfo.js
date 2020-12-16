@@ -1,4 +1,4 @@
-import React, {useState } from 'react'
+import React, {useState} from 'react'
 
 import SimpleLineChartfrom from './tickerlinechart.js'
 
@@ -42,7 +42,7 @@ const TabbedInfo = () => {
     <div>
       <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
         <Tab label="Line Chart" {...a11yProps(0)} />
-        <Tab label="Pie Chart" {...a11yProps(1)} />
+        <Tab label="Weights" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={tabValue} index={0}>
         <SimpleLineChartfrom />
@@ -55,5 +55,3 @@ const TabbedInfo = () => {
 }
 
 export default TabbedInfo;
-
-

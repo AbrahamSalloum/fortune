@@ -36,10 +36,9 @@ const DetailsHeader = ({ ticker, header = "", istoggledrawer, toggleDrawer, clas
       <Button color="inherit">{ticker}</Button>
     </div>
     <div >
-      <Typography variant="caption" display="block">Last Updated: {Intl.DateTimeFormat('en', { hour: "numeric", minute: "numeric", hour12: true }).format(lastpriceupdate)}</Typography>
-      <Typography variant="caption" display="block">Updates every 10 mins</Typography>
+      <Typography variant="caption" display="block">{username}</Typography>
     </div>
-    <Typography variant="caption" display="block"><Button onClick={() => { SignOut()}}>Sign Out</Button></Typography>
+    <Typography variant="caption" display="block"><Button onClick={() => {SignOut()}}>Sign Out</Button></Typography>
     </Toolbar>
   </AppBar>
 )
@@ -72,6 +71,7 @@ const LoadTickers = () => {
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
   const uid = useSelector(state => state.AddTickers.uid)
   const lastpriceupdate = useSelector(state => state.AddTickers.lastpriceupdate)
+  const username = useSelector(state => state.firebase.auth.email)
   const [showbox, toggleshowbox] = useState(false)
   const [showdrawer, toggleDrawerstate] = useState(false)
 
@@ -100,7 +100,7 @@ const LoadTickers = () => {
       <Grid container spacing={2}>
         <Grid item container xs={12}>
           <Grid item xs={12}>
-            <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate} username={'username'} SignOut={Signout}/>
+            <DetailsHeader ticker="Dashboard" istoggledrawer={showdrawer} toggleDrawer={toggleDrawer} classes={classes} lastpriceupdate={lastpriceupdate} username={username} SignOut={Signout}/>
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={4}>

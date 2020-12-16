@@ -326,7 +326,6 @@ export const SignUpEmail = (emailpass, history) => {
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
       result.user.sendEmailVerification({ url: mainurl}).then((r) => {
-        console.log("email ver", r)
       }).catch((err) => console.log("err", err))
 
       return result
@@ -390,7 +389,6 @@ export const googleSignin = (history) => {
     })
     .then(() => {
       if (!!getState().firebase.auth.uid){
-        console.log(getState().firebase.auth.uid)
         dispatch(createJWT())
         //dispatch(isloggedin(true))
       }
@@ -437,7 +435,6 @@ export const createJWT = () => {
       userid: logindetaails.uid
     }
 
-    console.log(r)
     let s = await fetch(`${serverhost}/storelogin`, {
       headers: {
         'Content-Type': 'application/json',

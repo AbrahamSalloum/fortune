@@ -38,6 +38,6 @@ const ToggleBox = ({showbox, toggleshowbox}) => {
         </div>
       </div>
     )
-  }
+}
 
 export default ToggleBox

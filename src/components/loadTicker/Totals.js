@@ -21,6 +21,7 @@ const Totals = ({showbox}) => {
     let purchasevalue = 0
     let units = 0
     let currentprice = 0
+    let purchasevalue_total = 0
 
     for(let t in tickerlist){
       if(tickerlist[t]['ticker'] === showbox.data.ticker){
@@ -29,13 +30,17 @@ const Totals = ({showbox}) => {
       }
     }
 
+    for(let t in tickerlist){
+        purchasevalue_total = purchasevalue_total + (Number(tickerlist[t]['amount']) * Number(tickerlist[t]['purchaseprice']))
+    }
+
     for(let i in prices){
       if(prices[i]["ticker"] === showbox.data.ticker){
         currentprice = Number(prices[i]['price'])
         break
       }
     }
-    return { "purchasevalue": purchasevalue, "units": units, "currentprice": currentprice}
+    return { "purchasevalue": purchasevalue, "units": units, "currentprice": currentprice, "totalvalue": purchasevalue_total}
   }
 
   const amounts = getsummaries(tickerlist, prices)
@@ -71,6 +76,10 @@ const Totals = ({showbox}) => {
               <TableCell>Gain</TableCell>
               <TableCell>${((amounts["currentprice"] * amounts["units"]) - amounts["purchasevalue"]).toFixed(3)}</TableCell>
             </TableRow>
+            <TableRow>
+            <TableCell>Weight</TableCell>
+            <TableCell>{((amounts["purchasevalue"]/amounts["totalvalue"])*100).toFixed(3)}%</TableCell>
+          </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

@@ -1,9 +1,6 @@
 import React from 'react'
-import  { Treemap, PieChart, Pie, Cell, Tooltip, ResponsiveContainer} from 'recharts';
+import  { Treemap, ResponsiveContainer} from 'recharts';
 import {useSelector} from 'react-redux';
-import { set } from 'date-fns';
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const createData = (tickerlist) => {
   const data = []
@@ -37,6 +34,7 @@ const SimplePieChart = () => {
       ratio={16/9}
       stroke="#fff"
       fill="#8884d8"
+      isAnimationActive={false}
     />
     </ResponsiveContainer>
   );
