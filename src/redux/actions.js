@@ -326,8 +326,7 @@ export const SignUpEmail = (emailpass, history) => {
     firebase.auth().createUserWithEmailAndPassword(emailpass.email, emailpass.password)
     .then((result) => {
       result.user.sendEmailVerification({ url: mainurl}).then((r) => {
-      }).catch((err) => console.log("err", err))
-
+      })
       return result
     })
     .then((result) => {
@@ -355,9 +354,9 @@ export const SignInEmail = (emailpass, history) => {
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
     .then(result => {
       if (!result.user.emailVerified) {
-        dispatch(SignOut("Plese verify your email (Check your inbox)"))
+        throw { message: "Plese verify your email (Check your inbox)"}
       } else {
-        //firebase.reloadAuth()
+        firebase.reloadAuth()
       }
       return result
     })
@@ -371,8 +370,8 @@ export const SignInEmail = (emailpass, history) => {
     .then(() => {
       dispatch(loginmsg("Login OK, Redirecting..."))
     })
-    .catch(err => {
-      dispatch(SignOut())
+    .catch((err) => {
+      dispatch(SignOut(err.message))
     })
   }
 }
@@ -401,6 +400,7 @@ export const googleSignin = (history) => {
       dispatch(loginmsg("Login OK, Redirecting..."))
     })
     .catch((err) => {
+      console.log(err)
       dispatch(loginmsg(err.message))
     })
   }

@@ -10,6 +10,7 @@ import TickerNewsBox from './details/TickerNewsBox'
 import ValuationBox from './details/ValuationBox'
 import FinSummaryBox from './details/FinSummaryBox'
 import CompanyProfileBox from './details/CompanyProfileBox'
+import ChatBox from './details/ChatBox.js'
 import CloseChartBox from './details/CloseChartBox'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -84,7 +85,10 @@ const Details = () => {
             </Grid>
           </Grid>
           <Grid item container spacing={2}>
-            <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
+          <ChatBox ticker={ticker} />
+        </Grid>
+            <Grid item xs={12} sm={6}>
               <TickerNewsBox ticker={ticker} />
             </Grid>
           </Grid>
