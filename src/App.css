@@ -32,6 +32,14 @@
 .AddHeader {
   min-height: 150px;
   background-color: #adc6d2;
+   
+}
+
+.SearchSuggestion {
+  padding: 2px;
+  border: 1px solid black;
+  background-color: #adc6d2;
+  margin: 4px 4px 4px 4px;
 }
 
 .flex-container {
@@ -103,12 +111,15 @@
   width: 90%;
   display:flex;
   align-items: center;
-  justify-content: center;
+  justify-content:center;
   flex-direction: row;
-
 }
 
-@media only screen and (max-width: 600px) {
+.form-item {
+  margin: 2px 2px 2px 2px;
+}
+
+@media only screen and (max-width: 1024px) {
   .form-box {
     width: 90%;
     display:flex;

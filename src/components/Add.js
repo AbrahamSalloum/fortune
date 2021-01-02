@@ -42,7 +42,7 @@ const Add = () => {
     setpurchaseprice(e.target.value)
   }
 
-  const onSuggestionsFetchRequested = ({ value }) => {
+  const onSuggestionsFetchRequested = ({value}) => {
     if(value.length < 3){
       addsuggestions([])
       return
@@ -59,7 +59,9 @@ const Add = () => {
     .then(res => res.json())
     .then((r) => {
       if(r.quotes){
-        addsuggestions(r.quotes)
+        console.log(r.quotes)
+        const rasx = r.quotes.filter(t => t.exchange == "ASX")
+        addsuggestions(rasx)
       }
     })
     .catch(err => {
@@ -77,10 +79,13 @@ const Add = () => {
 
   const renderSuggestion = (suggestion) => {
     return(
-      <div>
-        <Chip
-          label={`${suggestion.shortname} - ${suggestion.symbol} (${suggestion.exchange})`}
-        />
+      <div className="SearchSuggestion">
+        <div>
+          {`${suggestion.symbol} (${suggestion.exchange})`}
+        </div>
+        <div>
+        {`${suggestion.longname}`}
+        </div>
       </div>
     )
   }
@@ -99,13 +104,11 @@ const Add = () => {
 
     return(
     <div>
-      <div>
-        <h1>Add</h1>
-      </div>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <form onSubmit={onSubmit}>
         <div className="form-box">
-          <div>
+        <h1>Add</h1>
+          <div className="form-item">
             <Autosuggest
               suggestions={suggestion}
               onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -115,13 +118,13 @@ const Add = () => {
               inputProps={inputProps}
             />
           </div>
-          <div>
+          <div className="form-item">
            <TextField name="amount" id="outlined-basic" type="number" label="Amount" variant="outlined" onChange={onAmountChange} />
           </div>
-          <div>
+          <div className="form-item">
             <TextField name="purchaseprice" id="outlined-basic" label="Purchase Price" variant="outlined" onChange={onPurPriceChange} />
           </div>
-          <div>
+          <div className="form-item">
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"
@@ -132,7 +135,7 @@ const Add = () => {
               KeyboardButtonProps={{'aria-label': 'change date',}}
             />
           </div>
-          <div>
+          <div className="form-item">
             <Button variant="contained" color="Primary" type="submit">Save</Button>
           </div>
         </div>
