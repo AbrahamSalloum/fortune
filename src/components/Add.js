@@ -6,6 +6,8 @@ import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const Add = () => {
   const serverhost = process.env.REACT_APP_SERVER_HOST
@@ -14,6 +16,7 @@ const Add = () => {
   const [ticker, setticker] = useState('')
   const [amount, setamount] = useState('')
   const [purchaseprice, setpurchaseprice] = useState('')
+  const [asxonly, setasxonly] = useState(true)
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const jwt =  useSelector(state => state.AddTickers.jwt)
@@ -37,6 +40,10 @@ const Add = () => {
     setSelectedDate(date)
   }
 
+  const setASXcheckbox = (v) => {
+    setasxonly(!asxonly)
+  }
+
   const onPurPriceChange = (e) => {
     setpurchaseprice(e.target.value)
   }
@@ -58,8 +65,14 @@ const Add = () => {
     .then(res => res.json())
     .then((r) => {
       if(r.quotes){
-        const rasx = r.quotes.filter(t => t.exchange === "ASX")
-        addsuggestions(rasx)
+        if(asxonly){
+          const rasx = r.quotes.filter(t => t.exchange === "ASX")
+          addsuggestions(rasx)
+        }
+        else {
+          const rasx  = r.quotes
+          addsuggestions(rasx)
+        }
       }
     })
     .catch(err => {
@@ -107,7 +120,7 @@ const Add = () => {
         <div className="form-box">
         <h1>Add</h1>
           <div className="form-item">
-            <Autosuggest
+          <Autosuggest
               suggestions={suggestion}
               onSuggestionsFetchRequested={onSuggestionsFetchRequested}
               onSuggestionsClearRequested={onSuggestionsClearRequested}
@@ -116,6 +129,12 @@ const Add = () => {
               inputProps={inputProps}
             />
           </div>
+          <div className="form-item">
+        <FormControlLabel
+          control={<Checkbox checked={asxonly} onChange={setASXcheckbox} name="checkedB" color="primary"/>}
+          label="ASX Only"
+        />
+        </div>
           <div className="form-item">
            <TextField name="amount" id="outlined-basic" type="number" label="Amount" variant="outlined" onChange={onAmountChange} />
           </div>

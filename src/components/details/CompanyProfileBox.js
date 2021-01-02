@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
+import Chip from '@material-ui/core/Chip';
 
 const CompanyProfileBox = ({ticker}) => {
   
@@ -15,8 +15,14 @@ const CompanyProfileBox = ({ticker}) => {
         if (summary[i]['symbol'] === ticker){
           console.log(summary[i])
           return (
-            <div>
-            {summary[i]["summaryProfile"]['longBusinessSummary']}
+            <div className="summdata">
+              <div className="profiledata">
+                {summary[i]["summaryProfile"]['longBusinessSummary']}
+              </div>
+              <div className="profiledata">
+                <a href={summary[i]["summaryProfile"]['website']} target="_blank"><Chip label={summary[i]["summaryProfile"]['website']}/></a>
+                <Chip label={summary[i]["summaryProfile"]['industry']} />
+              </div>
             </div>
           )
         }

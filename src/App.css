@@ -50,6 +50,8 @@
   align-self: center;
 }
 
+
+
 .addBtn {
   background-color: #4CAF50; /* Green */
   border: none;
@@ -69,6 +71,19 @@
   align-items: center ;
   justify-content: space-around;
 }
+
+.profiledata{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  
+}
+
+.summdata{
+  display: flex;
+  flex-direction: column;
+}
+
 
 .header {
   background-color: grey !important;
