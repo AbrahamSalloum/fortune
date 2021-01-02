@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import {useDispatch, useSelector } from "react-redux";
 import {StartaddTicker} from '../redux/actions.js'
 import Autosuggest from 'react-autosuggest';
-import Chip from '@material-ui/core/Chip';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
@@ -59,8 +58,7 @@ const Add = () => {
     .then(res => res.json())
     .then((r) => {
       if(r.quotes){
-        console.log(r.quotes)
-        const rasx = r.quotes.filter(t => t.exchange == "ASX")
+        const rasx = r.quotes.filter(t => t.exchange === "ASX")
         addsuggestions(rasx)
       }
     })

@@ -12,7 +12,7 @@ const createData = (tickerlist) => {
   for( let k in kk){
     let item = {name: kk[k], size: 0}
     for(let ticker in tickerlist){
-      if(tickerlist[ticker]['ticker'] == kk[k]){
+      if(tickerlist[ticker]['ticker'] === kk[k]){
         item["size"] = item["size"] + Number(tickerlist[ticker]['amount'])*Number(tickerlist[ticker]['purchaseprice'])
       }
     }

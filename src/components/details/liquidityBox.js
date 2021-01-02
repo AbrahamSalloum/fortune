@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -13,9 +13,6 @@ import {useSelector} from 'react-redux';
 
 const LiquidityBox = () => {
   const summary= useSelector(state => state.AddTickers.summary)
-  
-  console.log(summary)
-  
   const getsummary = (summary) => {
     let summary_data = {"currentRatio": "NA", "quickRatio": "NA", "debtToEquity": "NA"}
     if(summary[0]){ 
