@@ -25,6 +25,7 @@ const TickerNewsBox = ({ticker}) => {
 
   useEffect(() => {
     dispatch(fetchNews(ticker))
+    
   }, [dispatch, ticker])
   
 

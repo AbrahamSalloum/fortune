@@ -41,14 +41,14 @@ const TabbedInfo = () => {
   return(
     <div>
       <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
-        <Tab label="Line Chart" {...a11yProps(0)} />
-        <Tab label="Weights" {...a11yProps(1)} />
+        <Tab label="Weights" {...a11yProps(0)} />
+        <Tab label="Line Chart" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <SimpleLineChartfrom />
+        <SimplePieChart/>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-      <SimplePieChart/>
+      <SimpleLineChartfrom />
       </TabPanel>
     </div>
   )

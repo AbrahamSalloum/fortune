@@ -10,6 +10,7 @@ import TickerNewsBox from './details/TickerNewsBox'
 import ValuationBox from './details/ValuationBox'
 import FinSummaryBox from './details/FinSummaryBox'
 import CompanyProfileBox from './details/CompanyProfileBox'
+import StockHistory from './details/StockHistory'
 import ChatBox from './details/ChatBox.js'
 import CloseChartBox from './details/CloseChartBox'
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
+import { startsetTickers, SignOut} from '../redux/actions.js'
 
 
 const DetailsHeader = ({ticker}) => (
@@ -46,6 +47,7 @@ const Details = () => {
   
   useEffect(() => {
     dispatch(fetchSummary(ticker))
+    dispatch(startsetTickers())
   }, [dispatch, ticker]); 
   
   const summary= useSelector(state => state.AddTickers.summary)
@@ -89,6 +91,7 @@ const Details = () => {
           <ChatBox ticker={ticker} />
         </Grid>
             <Grid item xs={12} sm={6}>
+            <StockHistory ticker={ticker}/>
               <TickerNewsBox ticker={ticker} />
             </Grid>
           </Grid>

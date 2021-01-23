@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { MenuItem } from '@material-ui/core';
+import { Link } from "react-router-dom"
 
 const Add = () => {
   const serverhost = process.env.REACT_APP_SERVER_HOST
@@ -89,10 +91,13 @@ const Add = () => {
   }
 
   const renderSuggestion = (suggestion) => {
+    const detailsurl = `/details/${suggestion.symbol}`
     return(
       <div className="SearchSuggestion">
         <div>
-          {`${suggestion.symbol} (${suggestion.exchange})`}
+          <div>
+          {`${suggestion.symbol} (${suggestion.exchange})`} {<Link to={detailsurl}>Details...</Link>} 
+          </div>
         </div>
         <div>
         {`${suggestion.longname}`}
@@ -146,7 +151,7 @@ const Add = () => {
               margin="normal"
               id="date-picker-dialog"
               label="Select Purchase Date"
-              format="MM/dd/yyyy"
+              format="dd/MM/yyyy"
               value={selectedDate}
               onChange={onDateChange}
               KeyboardButtonProps={{'aria-label': 'change date',}}
