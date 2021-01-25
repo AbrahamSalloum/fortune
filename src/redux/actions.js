@@ -354,7 +354,7 @@ export const SignInEmail = (emailpass, history) => {
     firebase.auth().signInWithEmailAndPassword(emailpass.email, emailpass.password)
     .then(result => {
       if (!result.user.emailVerified) {
-        throw { message: "Plese verify your email (Check your inbox)"}
+        throw  new Error("Plese verify your email (Check your inbox)")
       } else {
         firebase.reloadAuth()
       }

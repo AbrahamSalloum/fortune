@@ -13,56 +13,54 @@ import {useSelector} from 'react-redux';
 
 
 const NewsItems = ({ticker, amount, purchaseprice, pprce}) => {
-
-return (
-  <TableRow>
-    <TableCell>{ticker}</TableCell>
-    <TableCell>{amount}</TableCell>
-    <TableCell>{purchaseprice}</TableCell>
-    <TableCell>{new Date(pprce * 1000).toLocaleDateString('en-GB')} {new Date(pprce * 1000).toLocaleTimeString('en-GB')}</TableCell>
-  </TableRow>
-)
+  return (
+    <TableRow>
+      <TableCell>{ticker}</TableCell>
+      <TableCell>{amount}</TableCell>
+      <TableCell>{purchaseprice}</TableCell>
+      <TableCell>{new Date(pprce * 1000).toLocaleDateString('en-GB')} {new Date(pprce * 1000).toLocaleTimeString('en-GB')}</TableCell>
+    </TableRow>
+  )
 }
+
 
 const GetPurchases = ({ticker}) => {
   const t = []
   const tickerlist = useSelector(state => state.AddTickers.tickerlist)
     for(let item in tickerlist){ 
-      if(tickerlist[item].ticker == ticker){
+      if(tickerlist[item].ticker === ticker){
         t.push(tickerlist[item])
       }
     }
     return t.map(n => <NewsItems key={n.id} {...n}/>)
 }
 
-const StockHistory = ({ticker}) => {
 
+const StockHistory = ({ticker}) => {
   return (
     <Card>
       <Typography color="textSecondary" gutterBottom>
         Purchase History
       </Typography>
       <CardContent>
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Symbol</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Purchase Price</TableCell>
-              <TableCell>Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          <GetPurchases ticker={ticker} />
-          </TableBody>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Symbol</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Purchase Price</TableCell>
+                <TableCell>Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <GetPurchases ticker={ticker} />
+            </TableBody>
           </Table>
-          
-      </TableContainer>
-     
+        </TableContainer>
       </CardContent>
     </Card>
   )
 }
 
-  export default StockHistory;
+export default StockHistory;

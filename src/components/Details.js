@@ -19,7 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { startsetTickers, SignOut} from '../redux/actions.js'
+import { startsetTickers} from '../redux/actions.js'
 
 
 const DetailsHeader = ({ticker}) => (
@@ -44,7 +44,7 @@ const Details = () => {
   
   const dispatch = useDispatch();
   const {ticker} = useParams(); 
-  
+  console.log("ZZZZ", ticker)
   useEffect(() => {
     dispatch(fetchSummary(ticker))
     dispatch(startsetTickers())
@@ -91,7 +91,7 @@ const Details = () => {
           <ChatBox ticker={ticker} />
         </Grid>
             <Grid item xs={12} sm={6}>
-            <StockHistory ticker={ticker}/>
+              <StockHistory ticker={ticker}/>
               <TickerNewsBox ticker={ticker} />
             </Grid>
           </Grid>

@@ -20,7 +20,7 @@ const Login = () => {
     if(!!loggedin){
       history.push('/dashboard')
     }
-  }, [loggedin]);
+  }, [loggedin, history]);
 
   const [hints, setHint] = useState('')
   const [user, setUser] = useState({

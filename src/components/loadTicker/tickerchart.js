@@ -17,7 +17,6 @@ const createData = (tickerlist) => {
       }
     }
     data.push(item)
-    console.log(data)
   }
   return data
 }

@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
-
 import SimpleLineChartfrom from './tickerlinechart.js'
-
 import SimplePieChart from './tickerchart.js'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';

@@ -20,7 +20,7 @@ const CompanyProfileBox = ({ticker}) => {
                 {summary[i]["summaryProfile"]['longBusinessSummary']}
               </div>
               <div className="profiledata">
-                <a href={summary[i]["summaryProfile"]['website']} target="_blank"><Chip label={summary[i]["summaryProfile"]['website']}/></a>
+                <a href={summary[i]["summaryProfile"]['website']} rel="noopener noreferrer" target="_blank"><Chip label={summary[i]["summaryProfile"]['website']}/></a>
                 <Chip label={summary[i]["summaryProfile"]['industry']} />
               </div>
             </div>

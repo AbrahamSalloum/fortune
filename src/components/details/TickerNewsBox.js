@@ -25,7 +25,7 @@ const TickerNewsBox = ({ticker}) => {
 
   useEffect(() => {
     dispatch(fetchNews(ticker))
-    
+
   }, [dispatch, ticker])
   
 
@@ -41,7 +41,7 @@ const TickerNewsBox = ({ticker}) => {
 
   const newslist= useSelector(state => state.AddTickers.news)
   return(
-    <Card style={{ height: '100%' }}>
+    <Card>
       <Typography color="textSecondary" gutterBottom>
         News
       </Typography>

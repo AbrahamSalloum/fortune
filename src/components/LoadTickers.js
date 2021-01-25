@@ -91,7 +91,7 @@ const LoadTickers = () => {
       dispatch(startsetTickers())
     }, 600000);
     return () => clearInterval(interval);
-  }, [uid]);
+  }, [uid, dispatch]);
 
   const classes = useStyles();
 
