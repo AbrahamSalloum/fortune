@@ -382,16 +382,18 @@ export const googleSignin = (history) => {
     const firebase = getFirebase()
     const googleProvider = new firebase.auth.GoogleAuthProvider()
 
-    firebase.auth().signInWithPopup(googleProvider).then((result) => {
+    firebase.auth().signInWithPopup(googleProvider)
+    .then((result) => {
       firebase.reloadAuth()
       return result
     })
     .then(() => {
-      if (!!getState().firebase.auth.uid){
-        dispatch(createJWT())
-        //dispatch(isloggedin(true))
-      }
-
+      // if (!!getState().firebase.auth.uid){
+      //   dispatch(createJWT())
+      //   dispatch(isloggedin(true))
+      // }
+      dispatch(createJWT())
+      dispatch(isloggedin(true))
     })
     .then(() => {
       history.push('/dashboard')

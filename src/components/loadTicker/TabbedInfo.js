@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import SimpleLineChartfrom from './tickerlinechart.js'
 import SimplePieChart from './tickerchart.js'
+import Rankings from './Rankings.js'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
@@ -41,12 +42,16 @@ const TabbedInfo = () => {
       <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
         <Tab label="Weights" {...a11yProps(0)} />
         <Tab label="Line Chart" {...a11yProps(1)} />
+        <Tab label="Performers" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={tabValue} index={0}>
         <SimplePieChart/>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
       <SimpleLineChartfrom />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+      <Rankings />
       </TabPanel>
     </div>
   )

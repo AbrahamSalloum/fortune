@@ -26,7 +26,6 @@ router.get('/gettickersummary/:ticker', verifyToken, async (req, res) => {
         const findstoredsummary_count = await findstoredsummary.count()
 
         if(findstoredsummary_count > 0){
-            console.log("findstoredsummary_count", findstoredsummary_count)
             const rows = await findstoredsummary.toArray()
             res.send(rows)
             return
@@ -49,7 +48,7 @@ router.get('/gettickersummary/:ticker', verifyToken, async (req, res) => {
 
 
 router.get('/getlinedata/:interval?/:range?/:ticker', verifyToken, async (req, res) => {
-    try {
+	try {
         const now = Date.now()
         const ticker = req.params.ticker
         const interval = req.params.interval || "1WK"
@@ -62,12 +61,10 @@ router.get('/getlinedata/:interval?/:range?/:ticker', verifyToken, async (req, r
         const findlinedata = await db.collection('chart').find({...filterquery, "nextupdate":{"$gt": now}})
         const findlinedata_count = await findlinedata.count()
         if(findlinedata_count > 0){
-            console.log("findlinedata_count", findlinedata_count)
             const rows = await findlinedata.toArray()
             res.send(rows)
             return
         }
-        console.log(findlinedata_count)
         const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-spark?interval=${interval}&range=${range}&symbols=${ticker}`
         const data = await fetchurl(url)
         data[ticker]['dateupdated'] = now
@@ -95,12 +92,10 @@ router.get('/gettickernews/:ticker', verifyToken, async (req, res) => {
         const findstoredsymbol = await db.collection('news').find({"symbol": ticker})
         const findstoredsymbol_count = await findstoredsymbol.count()
         if(findstoredsymbol_count > 0){
-            console.log("findstoredsymbol_count", findstoredsymbol_count)
             const rows = await findstoredsymbol.toArray()
             res.send(rows)
             return
         }
-        console.log(findstoredsymbol_count)
         const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-news?region=US&category=${ticker}`
         const data = await fetchurl(url)
         data['dateupdated'] = now
@@ -122,7 +117,7 @@ router.get('/gettickernews/:ticker', verifyToken, async (req, res) => {
 router.get('/getsuggestions/:ticker',  verifyToken, async (req, res) => {
     try {
         const ticker = req.params.ticker
-        const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=US&q=${ticker}`
+        const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?region=AU&q=${ticker}`
         const data = await fetchurl(url)
         res.send(data)
     } catch(error){
@@ -181,17 +176,14 @@ router.get('/gettickerprices/:tickerlist', verifyToken, async (req, res) => {
 
         const found_cache_tickers = []
         for (let row in rows){
-            console.log(rows[row]['symbol'])
             found_cache_tickers.push(rows[row]['symbol'])
         }
         const found_cache_tickers_set = new Set(found_cache_tickers)
         const tickerlist_arr_set = new Set(tickerlist_arr)
         const  difference = new Set([...tickerlist_arr_set].filter(x => !found_cache_tickers_set.has(x)))
         const tickerlist_new = [...difference].join(',')
-        console.log([...difference])
-        if (tickerlist_new.length > 0){
-            console.log("hello")
-            const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols=${tickerlist_new}`
+        if(tickerlist_new.length > 0){
+	    const url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-quotes?region=US&lang=en&symbols=${tickerlist_new}`
             const priceslist = await fetchurl(url)
             for (let price in priceslist['quoteResponse']["result"]) {
                 oneprice = priceslist['quoteResponse']["result"][price]
@@ -200,8 +192,7 @@ router.get('/gettickerprices/:tickerlist', verifyToken, async (req, res) => {
                 symbol = oneprice['symbol']
                 status = await db.collection('prices').findOneAndReplace({ "symbol": symbol }, oneprice, { "upsert": true, upsert: true })
             }
-
-        }
+    	}
         findstatus = await db.collection('prices').find({ 'symbol': { "$in": tickerlist_arr } })
         rows = await findstatus.toArray()
         const s = {}
@@ -219,9 +210,8 @@ router.get('/', (req, res) => {
 })
 
 function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization']
+	const bearerHeader = req.headers['authorization']
     if(!bearerHeader){
-        console.log(bearerHeader)
         res.status(403).json({msg: "no token"})
         return
     }
