@@ -15,20 +15,37 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
       )
     }
 
-    let data = []
+    let dataA = []
+    let ismatch = false
     for(let item in tickerlist){
+      ismatch = false
+      for(let d in dataA){
+        if(dataA[d]['ticker'] == tickerlist[item]['ticker']){
+          ismatch = true
+          dataA[d]['amounttotal'] = Number(dataA[d]['amounttotal']) + Number(tickerlist[item]['amount'])
+        } 
+      }
+      
+      if(!ismatch){
+        dataA.push({...tickerlist[item], "amounttotal": Number(tickerlist[item]['amount'])})
+      }
+    }
+  
+  let data = []
+  for(let item in dataA){
       for(let j in price){
-        if (price[j]['ticker'] === tickerlist[item]['ticker']){
-          data.push({...price[j], ...tickerlist[item]})
+        if (price[j]['ticker'] === dataA[item]['ticker']){
+          data.push({...price[j], ...dataA[item]})
         }
       }
     }
-
+    
+    console.log(data)
     data = data.filter(i => i !== undefined);
 
     const columns = [
       { field: 'ticker', headerName: 'Ticker', width: 100, renderCell: (params) => <RenderTicker params={params} />},
-      { field: 'amount', headerName: 'Units' , width: 100, },
+      { field: 'amounttotal', headerName: 'Units' , width: 100, },
       { field: 'price', headerName: 'Price' , width: 100},
       { field: 'purchaseprice', headerName: 'Purchase Price' , width: 140},
       { field: 'dayopen', headerName: 'Day Open' ,width: 100},

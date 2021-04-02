@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -10,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {useSelector} from 'react-redux';
-
+import Box from '@material-ui/core/Box'
 
 const NewsItems = ({ticker, amount, purchaseprice, pprce}) => {
   return (
@@ -18,7 +17,7 @@ const NewsItems = ({ticker, amount, purchaseprice, pprce}) => {
       <TableCell>{ticker}</TableCell>
       <TableCell>{amount}</TableCell>
       <TableCell>{purchaseprice}</TableCell>
-      <TableCell>{new Date(pprce * 1000).toLocaleDateString('en-GB')} {new Date(pprce * 1000).toLocaleTimeString('en-GB')}</TableCell>
+      <TableCell>{new Date(pprce * 1000).toLocaleDateString('en-GB')}</TableCell>
     </TableRow>
   )
 }
@@ -38,7 +37,7 @@ const GetPurchases = ({ticker}) => {
 
 const StockHistory = ({ticker}) => {
   return (
-    <Card>
+    <Box style={{"width": "100%"}}>
       <Typography color="textSecondary" gutterBottom>
         Purchase History
       </Typography>
@@ -49,7 +48,7 @@ const StockHistory = ({ticker}) => {
               <TableRow>
                 <TableCell>Symbol</TableCell>
                 <TableCell>Quantity</TableCell>
-                <TableCell>Purchase Price</TableCell>
+                <TableCell>Price</TableCell>
                 <TableCell>Date</TableCell>
               </TableRow>
             </TableHead>
@@ -59,7 +58,7 @@ const StockHistory = ({ticker}) => {
           </Table>
         </TableContainer>
       </CardContent>
-    </Card>
+    </Box>
   )
 }
 

@@ -9,15 +9,17 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from "react-router-dom"
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 
 const Add = () => {
   const serverhost = process.env.REACT_APP_SERVER_HOST
   const [suggestion, addsuggestions] = useState([])
   const [searchticker, savesearchticker] = useState('')
   const [ticker, setticker] = useState('')
-  const [amount, setamount] = useState('')
+  const [amount, setamount] = useState(0)
   const [purchaseprice, setpurchaseprice] = useState('')
   const [asxonly, setasxonly] = useState(true)
+  const [error, seterror] = useState(false)
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const jwt =  useSelector(state => state.AddTickers.jwt)
@@ -26,7 +28,12 @@ const Add = () => {
     e.preventDefault()
     const dateadded = Date.now()
     const pprce = new Date(selectedDate).getTime() / 1000
-    dispatch(StartaddTicker({ticker,amount, pprce, purchaseprice, dateadded}))
+    if(error){
+      return
+    } else {
+      dispatch(StartaddTicker({ticker,amount, pprce, purchaseprice, dateadded}))
+    }
+    
   }
 
   const onTickerChange = (val) => {
@@ -34,7 +41,13 @@ const Add = () => {
   }
 
   const onAmountChange = (e) => {
-    setamount(e.target.value)
+    seterror(false)
+    if(isNaN(e.target.value)){
+      seterror("Not a Valid Number")
+    } else {
+      setamount(e.target.value)
+    }
+    
   }
 
   const onDateChange = (date) => {
@@ -140,10 +153,10 @@ const Add = () => {
         />
         </div>
           <div className="form-item">
-           <TextField name="amount" id="outlined-basic" type="number" label="Amount" variant="outlined" onChange={onAmountChange} />
+           <TextField name="amount" id="outlined-basic" currencySymbol="" label="Amount"  variant="outlined" step={0.5}  onChange={onAmountChange} error={!!error} helperText={error} />
           </div>
           <div className="form-item">
-            <TextField name="purchaseprice" id="outlined-basic" label="Purchase Price" variant="outlined" onChange={onPurPriceChange} />
+            <CurrencyTextField  name="purchaseprice" id="outlined-basic" label="Purchase Price" variant="outlined" decimalCharacter="." digitGroupSeparator="," outputFormat="string" onChange={onPurPriceChange} />
           </div>
           <div className="form-item">
             <KeyboardDatePicker

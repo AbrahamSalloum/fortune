@@ -1598,7 +1598,7 @@
     "@types/yargs" "^15.0.0"
     "chalk" "^3.0.0"
 
-"@material-ui/core@^4.11.0":
+"@material-ui/core@^4.11.0", "@material-ui/core@>= 4.3.0":
   "integrity" "sha512-bYo9uIub8wGhZySHqLQ833zi4ZML+XCBE1XwJ8EuUVSpTWWG57Pm+YugQToJNFsEyiKFhPh8DPD0bgupz8n01g=="
   "resolved" "https://registry.npmjs.org/@material-ui/core/-/core-4.11.0.tgz"
   "version" "4.11.0"
@@ -2138,6 +2138,13 @@
     "semver" "^7.3.2"
     "tsutils" "^3.17.1"
 
+"@unicef/material-ui-currency-textfield@^0.8.6":
+  "integrity" "sha512-zXhwJbz8mRa4xVZ6zkkyn9UyXHT4CXFn1JuvkVhDFqtqPkjQXBg+/dWMlJAfX6m1CvwfxwiF9giJxJqFEsTUqg=="
+  "resolved" "https://registry.npmjs.org/@unicef/material-ui-currency-textfield/-/material-ui-currency-textfield-0.8.6.tgz"
+  "version" "0.8.6"
+  dependencies:
+    "autonumeric" "^4.5.4"
+
 "@webassemblyjs/ast@1.8.5":
   "integrity" "sha512-aJMfngIZ65+t71C3y2nBBg5FFG0Okt9m0XEgWZ7Ywgn1oMAT8cNwx00Uv1cQyHtidq0Xn94R4TAywO+LCQ+ZAQ=="
   "resolved" "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.8.5.tgz"
@@ -2672,6 +2679,11 @@
   "integrity" "sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg=="
   "resolved" "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
   "version" "2.1.2"
+
+"autonumeric@^4.5.4":
+  "integrity" "sha512-bYnD2oD9UMZBTxSWcvXH1MTcp0w+CUBfXe4HI1QJLGzJu+O27Ny5gqzRcFuDsZB9jrZ5SJjqAG0PieJsaUdTcg=="
+  "resolved" "https://registry.npmjs.org/autonumeric/-/autonumeric-4.6.0.tgz"
+  "version" "4.6.0"
 
 "autoprefixer@^9.6.1":
   "integrity" "sha512-XrvP4VVHdRBCdX1S3WXVD8+RyG9qeb1D5Sn1DeLiG2xfSpzellk5k54xbUERJ3M5DggQxes39UGOTP8CFrEGbg=="
@@ -3337,7 +3349,6 @@
     "anymatch" "^2.0.0"
     "async-each" "^1.0.1"
     "braces" "^2.3.2"
-    "fsevents" "^1.2.7"
     "glob-parent" "^3.1.0"
     "inherits" "^2.0.3"
     "is-binary-path" "^1.0.0"
@@ -3356,7 +3367,6 @@
   dependencies:
     "anymatch" "~3.1.1"
     "braces" "~3.0.2"
-    "fsevents" "~2.1.2"
     "glob-parent" "~5.1.0"
     "is-binary-path" "~2.1.0"
     "is-glob" "~4.0.1"
@@ -5556,16 +5566,6 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@^1.2.7":
-  "integrity" "sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-1.2.13.tgz"
-  "version" "1.2.13"
-
-"fsevents@~2.1.2", "fsevents@2.1.2":
-  "integrity" "sha512-R4wDiBwZ0KzpgOWetKDug1FZcYhqYnUYKtfZYt4mD5SBz76q0KR4Q9o7GIPamsVPGmW3EYPPJ0dOOjvx32ldZA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.1.2.tgz"
-  "version" "2.1.2"
-
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -6865,7 +6865,6 @@
     "@jest/types" "^24.9.0"
     "anymatch" "^2.0.0"
     "fb-watchman" "^2.0.0"
-    "fsevents" "^1.2.7"
     "graceful-fs" "^4.1.15"
     "invariant" "^2.2.4"
     "jest-serializer" "^24.9.0"
@@ -9783,7 +9782,7 @@
     "strip-ansi" "6.0.0"
     "text-table" "0.2.0"
 
-"react-dom@^15.6.1 || ^16.0.0", "react-dom@^16.13.1":
+"react-dom@^15.6.1 || ^16.0.0", "react-dom@^16.13.1", "react-dom@^16.8.6":
   "integrity" "sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz"
   "version" "16.14.0"
@@ -9911,7 +9910,6 @@
     "eslint-plugin-react-hooks" "^1.6.1"
     "file-loader" "4.3.0"
     "fs-extra" "^8.1.0"
-    "fsevents" "2.1.2"
     "html-webpack-plugin" "4.0.0-beta.11"
     "identity-obj-proxy" "3.0.0"
     "jest" "24.9.0"
@@ -9980,7 +9978,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@^15.6.1 || ^16.0.0", "react@^16.13.1":
+"react@^15.6.1 || ^16.0.0", "react@^16.13.1", "react@^16.8.6":
   "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
   "version" "16.14.0"
@@ -11998,13 +11996,6 @@
   dependencies:
     "makeerror" "1.0.x"
 
-"watchpack-chokidar2@^2.0.0":
-  "integrity" "sha512-9TyfOyN/zLUbA288wZ8IsMZ+6cbzvsNyEzSBp6e/zkifi6xxbl8SmQ/CxQq32k8NNqrdVEVUVSEf56L4rQ/ZxA=="
-  "resolved" "https://registry.npmjs.org/watchpack-chokidar2/-/watchpack-chokidar2-2.0.0.tgz"
-  "version" "2.0.0"
-  dependencies:
-    "chokidar" "^2.1.8"
-
 "watchpack@^1.6.0":
   "integrity" "sha512-aWAgTW4MoSJzZPAicljkO1hsi1oKj/RRq/OJQh2PKI2UKL04c2Bs+MBOB+BBABHTXJpf9mCwHN7ANCvYsvY2sg=="
   "resolved" "https://registry.npmjs.org/watchpack/-/watchpack-1.7.4.tgz"
@@ -12013,7 +12004,6 @@
     "chokidar" "^3.4.1"
     "graceful-fs" "^4.1.2"
     "neo-async" "^2.5.0"
-    "watchpack-chokidar2" "^2.0.0"
   optionalDependencies:
     "watchpack-chokidar2" "^2.0.0"
 

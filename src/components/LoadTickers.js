@@ -22,7 +22,6 @@ import ToggleBox from './loadTicker/ToggleBox.js'
 import PositionSummary from './loadTicker/PositionSummary';
 import Totals from './loadTicker/Totals'
 
-
 const DetailsHeader = ({ ticker, header = "", istoggledrawer, toggleDrawer, classes, lastpriceupdate, username, SignOut}) => (
   <AppBar position="static">
     <Toolbar>
