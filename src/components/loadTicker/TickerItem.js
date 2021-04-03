@@ -20,35 +20,36 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
     for(let item in tickerlist){
       ismatch = false
       for(let d in dataA){
-        if(dataA[d]['ticker'] == tickerlist[item]['ticker']){
+        if(dataA[d]['ticker'] === tickerlist[item]['ticker']){
           ismatch = true
           dataA[d]['amounttotal'] = Number(dataA[d]['amounttotal']) + Number(tickerlist[item]['amount'])
+          dataA[d]['sumPprice'] = Number(dataA[d]['sumPprice']) + Number(tickerlist[item]['purchaseprice'])
+          dataA[d]['tpvalue'] =  dataA[d]['tpvalue'] + Number(tickerlist[item]['amount']) * Number(tickerlist[item]['purchaseprice'])
         } 
       }
       
       if(!ismatch){
-        dataA.push({...tickerlist[item], "amounttotal": Number(tickerlist[item]['amount'])})
+        dataA.push({...tickerlist[item], "amounttotal": Number(tickerlist[item]['amount']), "tpvalue": Number(tickerlist[item]['amount']) * Number(tickerlist[item]['purchaseprice'])})
       }
     }
   
-  let data = []
-  for(let item in dataA){
+    let data = []
+    for(let item in dataA){
       for(let j in price){
         if (price[j]['ticker'] === dataA[item]['ticker']){
           data.push({...price[j], ...dataA[item]})
         }
       }
     }
-    
-    console.log(data)
-    data = data.filter(i => i !== undefined);
 
+
+    
+    data = data.filter(i => i !== undefined);
     const columns = [
       { field: 'ticker', headerName: 'Ticker', width: 100, renderCell: (params) => <RenderTicker params={params} />},
       { field: 'amounttotal', headerName: 'Units' , width: 100, },
       { field: 'price', headerName: 'Price' , width: 100},
-      { field: 'purchaseprice', headerName: 'Purchase Price' , width: 140},
-      { field: 'dayopen', headerName: 'Day Open' ,width: 100},
+      { field: 'purchaseprice', headerName: 'Purchase Price' , width: 140, renderCell: (params) => (params.data.tpvalue/params.data.amounttotal).toFixed(3)},
       { field: 'dayclose', headerName: 'Day Close' ,width: 100},
       { field: 'dayhigh', headerName: 'Day High' , width: 100},
       { field: 'daylow', headerName: 'Day Low' , width: 100},
@@ -74,7 +75,6 @@ const TickerItem = ({price, tickerlist, toggleshowbox, classes}) => {
         />
       </div>
     )
-  }
+}
 
-
-  export default TickerItem
+export default TickerItem
