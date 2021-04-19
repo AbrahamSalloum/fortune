@@ -1,4 +1,4 @@
-react  app to track equities/crypto.
+react  app to track an equities/crypto portfolio.
 
 frontend: React, redux/thunk, material-ui, react-router-dom, firebase, 
 backend: node, express, mongodb
