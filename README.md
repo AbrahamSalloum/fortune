@@ -1,7 +1,7 @@
 react  app to track equities/crypto.
 
-frontend: node, redux/thunk, material-ui, 
-backend: node, express, mongodb, jwts
+frontend: React, redux/thunk, material-ui, react-router-dom, firebase, 
+backend: node, express, mongodb
 
 This is now decommsioned as the market API was too expensive to maintain for my usecase. 
 
